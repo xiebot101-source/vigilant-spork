@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GEN 008 Networking Terms Quiz</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(135deg,#0f172a,#1e293b);color:#e5e7eb;min-height:100vh}
+.container{max-width:900px;margin:auto;padding:28px 16px 50px}
+header{text-align:center;margin-bottom:24px}
+h1{margin:0 0 8px;font-size:clamp(26px,5vw,42px)}
+.subtitle{color:#94a3b8}
+.progress-wrap{background:#334155;border-radius:999px;height:10px;overflow:hidden;margin:18px 0 28px}
+.progress{height:100%;width:0;background:#38bdf8;transition:.25s}
+.card{background:#f8fafc;color:#0f172a;border-radius:18px;padding:24px;box-shadow:0 15px 40px rgba(0,0,0,.25)}
+.question-number{color:#0284c7;font-weight:700;margin-bottom:10px}
+.question{font-size:21px;font-weight:700;line-height:1.4;margin-bottom:20px}
+.option{display:block;width:100%;text-align:left;border:2px solid #cbd5e1;background:white;border-radius:12px;padding:14px 16px;margin:10px 0;font-size:16px;cursor:pointer;transition:.15s}
+.option:hover{border-color:#38bdf8;background:#f0f9ff}
+.option.selected{border-color:#0284c7;background:#e0f2fe}
+.option.correct{border-color:#16a34a;background:#dcfce7}
+.option.wrong{border-color:#dc2626;background:#fee2e2}
+.controls{display:flex;gap:10px;justify-content:space-between;margin-top:22px}
+button{border:0;border-radius:10px;padding:12px 18px;font-weight:700;cursor:pointer;font-size:15px}
+#prev{background:#e2e8f0;color:#0f172a}
+#next,#submit{background:#0284c7;color:white}
+#submit{display:none}
+button:disabled{opacity:.45;cursor:not-allowed}
+#result{display:none;text-align:center;margin-top:20px}
+.score{font-size:48px;font-weight:800;color:#0284c7}
+.review{margin-top:20px;text-align:left}
+.review-item{padding:12px;border-radius:10px;background:#f1f5f9;margin:8px 0}
+.small{color:#64748b;font-size:14px}
+</style>
+</head>
+<body>
+<div class="container">
+<header>
+<h1>GEN 008: Networking Terms</h1>
+<div class="subtitle">50-Question Multiple Choice Quiz</div>
+</header>
+<div class="progress-wrap"><div class="progress" id="progress"></div></div>
+<div class="card" id="quizCard">
+<div class="question-number" id="qNumber"></div>
+<div class="question" id="question"></div>
+<div id="options"></div>
+<div class="controls">
+<button id="prev" onclick="previousQuestion()">Previous</button>
+<button id="next" onclick="nextQuestion()">Next</button>
+<button id="submit" onclick="finishQuiz()">Submit Quiz</button>
+</div>
+</div>
+<div class="card" id="result">
+<h2>Quiz Complete!</h2>
+<div class="score" id="score"></div>
+<p id="message"></p>
+<div class="review" id="review"></div>
+<button onclick="restartQuiz()" style="background:#0284c7;color:white">Try Again</button>
+</div>
+</div>
+<script>
+const questions = [["What is an open system?", ["A system connected to a network and prepared for communication", "A system with no network connection", "A network packet", "A physical network address"], "A"], ["What is a closed system?", ["A system connected to Wi-Fi", "A system not connected to a network and unable to communicate through it", "A device receiving an IP address", "A router forwarding packets"], "B"], ["What does IP stand for?", ["Internet Protocol", "Internal Port", "Internet Packet", "Interface Protocol"], "A"], ["What type of address is an IP address?", ["Physical address", "Logical address", "Hardware serial number", "Communication channel"], "B"], ["What does a MAC address identify?", ["An internet provider", "A network packet", "A network interface/host at the hardware level", "A communication port"], "C"], ["What is a port?", ["A physical computer", "A communication channel through which data is sent and received", "A public IP address", "An ISP"], "B"], ["What is a node?", ["A computing device that sends or receives network packets", "A packet of data", "A port number", "A type of ISP"], "A"], ["What are network packets?", ["Network cables", "Data sent to and from nodes", "Physical addresses", "Internet providers"], "B"], ["What is the main job of a router?", ["Assign MAC addresses", "Provide electricity to devices", "Determine where network packets should be sent", "Create computer hardware"], "C"], ["What does NAT stand for?", ["Network Address Translation", "Network Access Technology", "Network Allocation Transfer", "Node Address Type"], "A"], ["What is NAT mainly used for?", ["To identify a NIC physically", "To allow more devices to access the internet using fewer public IPs", "To replace routers", "To assign MAC addresses"], "B"], ["What does DHCP stand for?", ["Dynamic Host Configuration Protocol", "Digital Host Communication Program", "Dynamic Hardware Control Protocol", "Device Host Connection Process"], "A"], ["What does DHCP do?", ["Automatically assigns dynamic IP addresses to hosts", "Identifies a NIC physically", "Provides internet service itself", "Carries data packets"], "A"], ["What does ISP stand for?", ["Internet Service Provider", "Internet System Port", "Internal Service Protocol", "Internet Security Provider"], "A"], ["What does an ISP provide?", ["Internet connectivity", "MAC addresses only", "Computer processors", "Network packets only"], "A"], ["Which is a logical address?", ["MAC address", "IP address", "NIC", "Port"], "B"], ["Which is associated with the physical network interface?", ["IP address", "DHCP", "MAC address", "NAT"], "C"], ["Which term describes a device that can send and receive network packets?", ["Node", "Port", "ISP", "NAT"], "A"], ["Which term describes data traveling across a network?", ["MAC address", "Network packet", "Router", "DHCP"], "B"], ["Which device manages and forwards network packets?", ["Router", "Port", "MAC address", "ISP"], "A"], ["A phone joins Wi-Fi and automatically receives an IP address. What is most directly involved?", ["NAT", "DHCP", "MAC replacement", "ISP hardware"], "B"], ["Several home devices use private IPs while accessing the internet through a public IP. What is involved?", ["NAT", "DHCP only", "MAC addressing only", "Closed system"], "A"], ["Which pair is correctly matched?", ["MAC—logical address", "DHCP—assigns IP addresses", "Port—provides internet service", "ISP—physical address"], "B"], ["Which pair is incorrectly matched?", ["IP—logical address", "MAC—physical interface identity", "Router—packet forwarding", "DHCP—physical hardware identity"], "D"], ["Which term is most closely related to a NIC?", ["MAC address", "Network packet", "ISP", "NAT"], "A"], ["A computer has no network connection. Which term best describes its network state?", ["Open system", "Closed system", "Router", "Node"], "B"], ["A computer connected to a network and ready to communicate is a:", ["Closed system", "Open system", "Packet", "Port"], "B"], ["Which item is NOT a computing device?", ["Computer", "Phone", "Network packet", "Network-connected device"], "C"], ["Which item is NOT an address?", ["IP address", "MAC address", "Port", "Both IP and MAC"], "C"], ["Which term is a company rather than a device or protocol?", ["Router", "DHCP", "ISP", "NAT"], "C"], ["Which technology can make private IP addresses usable for internet access through public addressing?", ["NAT", "MAC", "Port", "Node"], "A"], ["Which technology dynamically provides IP addresses?", ["DHCP", "NAT", "MAC", "ISP"], "A"], ["Which term identifies a communication channel?", ["Port", "Node", "Router", "ISP"], "A"], ["Which term identifies the physical network interface?", ["MAC address", "IP address", "Port", "NAT"], "A"], ["Which term identifies the logical network address?", ["MAC address", "IP address", "Router", "NIC"], "B"], ["Which term refers to hardware that directs network traffic?", ["Router", "DHCP", "Port", "ISP"], "A"], ["Which term refers to data sent between network devices?", ["Network packet", "MAC address", "Router", "Port"], "A"], ["Which technology is associated with private and public IP addresses?", ["NAT", "DHCP", "MAC", "Node"], "A"], ["Which service provider connects customers to the internet?", ["ISP", "Router", "Node", "Port"], "A"], ["Which statement about a MAC address is correct?", ["It is associated with the NIC", "It is assigned by NAT", "It is a packet", "It is an ISP"], "A"], ["Which statement about DHCP is correct?", ["It automatically assigns IP addresses", "It identifies physical hardware", "It forwards every packet", "It provides a MAC address"], "A"], ["Which statement about routers is correct?", ["They determine where packets should be sent", "They are network packets", "They are logical addresses", "They are ISPs"], "A"], ["Which statement about NAT is correct?", ["It can let multiple private-IP devices share public internet access", "It creates the NIC", "It replaces DHCP in every network", "It is a physical address"], "A"], ["Which statement about nodes is correct?", ["Nodes are computing devices that send or receive network packets", "Nodes are only IP addresses", "Nodes are only ports", "Nodes are ISPs"], "A"], ["Which sequence is most logical for a device joining a typical home network?", ["DHCP assigns an IP, device communicates, router forwards traffic, NAT may translate addressing", "MAC assigns an IP, ISP creates packets, DHCP becomes router", "Port assigns an IP, NAT creates hardware, ISP becomes node", "Router creates the MAC, packet creates the IP, DHCP becomes ISP"], "A"], ["A device's IP address changes while its hardware interface remains the same. Which concept best explains the hardware identity that remains associated with the interface?", ["MAC address", "Network packet", "ISP", "Port"], "A"], ["A user wants to know which company supplies their home internet connection. Which term should they identify?", ["ISP", "NAT", "DHCP", "MAC"], "A"], ["A network administrator needs to distinguish data traveling across the network from the devices sending it. Which pair is correct?", ["Network packets = data; nodes = devices", "Nodes = data; packets = devices", "Ports = devices; routers = addresses", "ISP = data; MAC = packets"], "A"], ["Which combination contains only concepts from the provided networking terms?", ["IP, MAC, DHCP, NAT", "CPU, RAM, GPU, SSD", "Keyboard, mouse, monitor, printer", "Browser, app, file, folder"], "A"], ["A home router has a public IP while devices behind it have private IPs. Which term best describes the technique involved?", ["NAT", "DHCP", "MAC", "Port"], "A"], ["A student says, 'My laptop gets an IP automatically, has a MAC address, sends packets, and uses a router to reach the internet.' Which set of terms is represented?", ["DHCP, MAC, network packets, router", "NAT, ISP, port, closed system only", "ISP, MAC, closed system, port only", "Port, packet, ISP, closed system only"], "A"]];
+let current=0;
+let answers=Array(questions.length).fill(null);
+
+function render(){
+ const q=questions[current];
+ document.getElementById('qNumber').textContent=`Question ${current+1} of ${questions.length}`;
+ document.getElementById('question').textContent=q[0];
+ const options=document.getElementById('options');
+ options.innerHTML='';
+ q[1].forEach((text,i)=>{
+   const b=document.createElement('button');
+   b.className='option'+(answers[current]===i?' selected':'');
+   b.textContent=String.fromCharCode(65+i)+'. '+text;
+   b.onclick=()=>{answers[current]=i;render()};
+   options.appendChild(b);
+ });
+ document.getElementById('prev').disabled=current===0;
+ document.getElementById('next').style.display=current===questions.length-1?'none':'inline-block';
+ document.getElementById('submit').style.display=current===questions.length-1?'inline-block':'none';
+ document.getElementById('progress').style.width=((current+1)/questions.length*100)+'%';
+ window.scrollTo({top:0,behavior:'smooth'});
+}
+function nextQuestion(){if(answers[current]===null){alert('Please choose an answer first.');return}current++;render()}
+function previousQuestion(){if(current>0){current--;render()}}
+function finishQuiz(){
+ if(answers[current]===null){alert('Please choose an answer first.');return}
+ let score=0;
+ questions.forEach((q,i)=>{if(String.fromCharCode(65+answers[i])===q[2])score++});
+ document.getElementById('quizCard').style.display='none';
+ document.getElementById('result').style.display='block';
+ document.getElementById('score').textContent=`${score} / ${questions.length}`;
+ let pct=score/questions.length*100;
+ document.getElementById('message').textContent=pct>=90?'Excellent!':pct>=75?'Great job!':pct>=60?'Good effort—review the missed terms.':'Keep studying and try again!';
+ let review='';
+ questions.forEach((q,i)=>{
+   const yours=answers[i]===null?'Not answered':String.fromCharCode(65+answers[i]);
+   const correct=q[2];
+   if(yours!==correct) review+=`<div class="review-item"><b>Q${i+1}</b> — Your answer: ${yours} | Correct: ${correct}<br><span class="small">${q[1][correct.charCodeAt(0)-65]}</span></div>`;
+ });
+ document.getElementById('review').innerHTML=review||'<p>Perfect score! 🎉</p>';
+ window.scrollTo({top:0,behavior:'smooth'});
+}
+function restartQuiz(){current=0;answers=Array(questions.length).fill(null);document.getElementById('quizCard').style.display='block';document.getElementById('result').style.display='none';render()}
+render();
+</script>
+</body>
+</html>
