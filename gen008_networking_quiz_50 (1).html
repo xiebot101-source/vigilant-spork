@@ -3,108 +3,659 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GEN 008 Networking Terms Quiz</title>
+<title>Nova Values</title>
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root{
+  --bg:#070b18;
+  --panel:#10182b;
+  --panel2:#131e34;
+  --border:#263653;
+  --text:#e6edf7;
+  --muted:#8290a8;
+  --accent:#ff6b35;
+  --accent2:#ff3d81;
+  --cyan:#32d7cf;
+}
+
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(135deg,#0f172a,#1e293b);color:#e5e7eb;min-height:100vh}
-.container{max-width:900px;margin:auto;padding:28px 16px 50px}
-header{text-align:center;margin-bottom:24px}
-h1{margin:0 0 8px;font-size:clamp(26px,5vw,42px)}
-.subtitle{color:#94a3b8}
-.progress-wrap{background:#334155;border-radius:999px;height:10px;overflow:hidden;margin:18px 0 28px}
-.progress{height:100%;width:0;background:#38bdf8;transition:.25s}
-.card{background:#f8fafc;color:#0f172a;border-radius:18px;padding:24px;box-shadow:0 15px 40px rgba(0,0,0,.25)}
-.question-number{color:#0284c7;font-weight:700;margin-bottom:10px}
-.question{font-size:21px;font-weight:700;line-height:1.4;margin-bottom:20px}
-.option{display:block;width:100%;text-align:left;border:2px solid #cbd5e1;background:white;border-radius:12px;padding:14px 16px;margin:10px 0;font-size:16px;cursor:pointer;transition:.15s}
-.option:hover{border-color:#38bdf8;background:#f0f9ff}
-.option.selected{border-color:#0284c7;background:#e0f2fe}
-.option.correct{border-color:#16a34a;background:#dcfce7}
-.option.wrong{border-color:#dc2626;background:#fee2e2}
-.controls{display:flex;gap:10px;justify-content:space-between;margin-top:22px}
-button{border:0;border-radius:10px;padding:12px 18px;font-weight:700;cursor:pointer;font-size:15px}
-#prev{background:#e2e8f0;color:#0f172a}
-#next,#submit{background:#0284c7;color:white}
-#submit{display:none}
-button:disabled{opacity:.45;cursor:not-allowed}
-#result{display:none;text-align:center;margin-top:20px}
-.score{font-size:48px;font-weight:800;color:#0284c7}
-.review{margin-top:20px;text-align:left}
-.review-item{padding:12px;border-radius:10px;background:#f1f5f9;margin:8px 0}
-.small{color:#64748b;font-size:14px}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  min-height:100vh;
+  color:var(--text);
+  font-family:Inter,Arial,sans-serif;
+  background:
+    radial-gradient(circle at 15% 15%,rgba(255,107,53,.11),transparent 26%),
+    radial-gradient(circle at 85% 20%,rgba(50,215,207,.10),transparent 25%),
+    radial-gradient(circle at 60% 85%,rgba(255,61,129,.08),transparent 30%),
+    linear-gradient(135deg,#07101f 0%,#0a1428 48%,#130d24 100%);
+  overflow-x:hidden;
+}
+body:before{
+  content:"";
+  position:fixed;inset:0;pointer-events:none;opacity:.28;
+  background-image:radial-gradient(#7f8ba4 1px,transparent 1px);
+  background-size:120px 120px;
+  mask-image:linear-gradient(to bottom,black,transparent 90%);
+}
+
+.topbar{
+  position:sticky;top:0;z-index:20;
+  height:68px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 18px;
+  background:rgba(5,10,21,.76);
+  border-bottom:1px solid rgba(75,92,122,.25);
+  backdrop-filter:blur(16px);
+}
+.brand{display:flex;align-items:center;gap:11px;min-width:210px}
+.logo{
+  width:34px;height:34px;border-radius:9px;
+  display:grid;place-items:center;
+  color:#fff;font-weight:900;font-style:italic;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  box-shadow:0 8px 25px rgba(255,76,72,.25);
+}
+.brand-text strong{display:block;font-size:15px;letter-spacing:-.3px}
+.brand-text span{display:block;font-size:7px;color:#68758d;font-weight:800;margin-top:2px}
+.menu{
+  display:flex;gap:4px;padding:5px;
+  background:rgba(11,18,33,.86);
+  border:1px solid #1e2c43;border-radius:14px;
+}
+.menu a{
+  text-decoration:none;color:#91a0b6;font-size:13px;font-weight:700;
+  padding:9px 17px;border-radius:9px;transition:.2s;
+}
+.menu a:hover,.menu a.active{color:#fff;background:linear-gradient(135deg,var(--accent),var(--accent2));}
+
+.page{width:min(1080px,calc(100% - 34px));margin:0 auto;padding:42px 0 70px}
+.hero{text-align:center;margin-bottom:32px}
+.hero h1{
+  margin:0;font-family:"Barlow Condensed",sans-serif;
+  font-size:42px;letter-spacing:2px;text-transform:uppercase;
+}
+.hero p{margin:7px 0 0;color:var(--muted);font-size:14px}
+
+.section-title{
+  font-family:"Barlow Condensed",sans-serif;text-transform:uppercase;
+  letter-spacing:1px;font-size:20px;color:#d8e1ed;
+  margin:26px 0 10px;display:flex;align-items:center;gap:8px;
+}
+.count{font:700 10px Inter;background:#17273a;color:#6e8da4;padding:3px 7px;border-radius:8px}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  gap:8px;
+}
+.card{
+  min-height:112px;
+  border:1px solid #344364;
+  border-radius:10px;
+  background:linear-gradient(145deg,rgba(27,38,64,.94),rgba(17,24,44,.96));
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:8px;
+  text-align:center;
+  box-shadow:inset 0 1px rgba(255,255,255,.025);
+}
+.card:nth-child(3n){border-color:#3b4c61}
+.item-img{
+  width:62px;height:55px;object-fit:contain;
+  filter:drop-shadow(0 5px 7px rgba(0,0,0,.35));
+  margin-bottom:3px;
+}
+.item-name{font-size:9px;font-weight:800;color:#e5a7ff;white-space:nowrap}
+.item-value{font-size:10px;font-weight:800;color:#40cfff;margin-top:6px}
+.diamond{font-size:9px}
+
+.searchbar{
+  display:flex;gap:8px;max-width:620px;margin:0 auto 25px;
+}
+.searchbar input{
+  flex:1;padding:12px 15px;border-radius:10px;border:1px solid #263653;
+  outline:none;background:#0b1426;color:white;font-size:13px;
+}
+.searchbar button,.primary{
+  border:0;border-radius:10px;padding:0 17px;
+  background:linear-gradient(135deg,var(--cyan),#24b7d6);
+  color:#06121b;font-weight:900;cursor:pointer;
+}
+
+.server-list,.news-wrap,.swap-wrap{max-width:650px;margin:0 auto}
+.server{
+  background:rgba(13,24,40,.92);border:1px solid #20344d;
+  border-radius:12px;margin-bottom:10px;overflow:hidden;
+}
+.server-head{padding:14px 16px;font-weight:800;display:flex;justify-content:space-between}
+.server-row{
+  display:grid;grid-template-columns:1fr 75px 55px;align-items:center;
+  padding:10px 15px;border-top:1px solid #20344d;font-size:11px;
+}
+.ping{color:#39df87}
+.join{border:0;border-radius:7px;background:var(--cyan);padding:5px 11px;font-weight:900;font-size:10px}
+
+.news-card{
+  padding:20px;border:1px solid #234052;border-radius:14px;
+  background:linear-gradient(145deg,#13263a,#141d35);margin-bottom:13px;
+}
+.badge{
+  display:inline-block;background:var(--cyan);color:#062025;
+  border-radius:20px;padding:5px 10px;font-size:9px;font-weight:900;
+}
+.news-card h2{margin:12px 0 8px;color:#46cbd7;font-size:18px}
+.news-card p,.news-card li{font-size:12px;color:#91a1b5;line-height:1.6}
+.news-card ul{padding-left:18px}.news-card li::marker{color:#27df85}
+
+.swap-grid{display:grid;grid-template-columns:1fr 120px 1fr;gap:18px;align-items:center}
+.trade-box{
+  background:linear-gradient(145deg,#101b2e,#0e1628);
+  border:1px solid #203652;border-radius:16px;padding:17px;
+}
+.trade-title{font-family:"Barlow Condensed";font-size:22px;letter-spacing:1px}
+.trade-value{float:right;color:#40cfff;font-weight:800}
+.slots{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:14px}
+.slot{
+  height:145px;border:2px dashed #214154;border-radius:14px;
+  display:grid;place-items:center;color:#287287;font-size:22px;
+}
+.swap-middle{text-align:center}
+.swap-icon{font-size:38px;color:var(--cyan);margin-bottom:12px}
+.swap-btn{
+  width:100%;height:48px;border:0;border-radius:12px;
+  background:linear-gradient(135deg,var(--cyan),#2ac4da);
+  color:#06141a;font-size:16px;font-weight:900;
+}
+.hint{font-size:9px;color:#667890;margin-top:12px}
+
+.swap-picker{
+  margin:18px auto 0;max-width:900px;background:linear-gradient(145deg,#101b2e,#0e1628);
+  border:1px solid #203652;border-radius:16px;padding:14px;
+}
+.picker-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px}
+.picker-head strong{font-size:12px;letter-spacing:.5px}.picker-head span{font-size:10px;color:#718198}
+.picker-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:7px;max-height:220px;overflow:auto;padding-right:3px}
+.picker-grid::-webkit-scrollbar{width:5px}.picker-grid::-webkit-scrollbar-thumb{background:#263653;border-radius:10px}
+.pick-card{min-height:74px;border:1px solid #263a55;border-radius:9px;background:#121e31;padding:7px;text-align:center;cursor:pointer;transition:.15s}
+.pick-card:hover{transform:translateY(-1px);border-color:#35d8c8}
+.pick-card .pick-img{font-size:20px}.pick-card .pick-name{font-size:8px;color:#d6c7ee;font-weight:800;margin-top:3px}.pick-card .pick-val{font-size:8px;color:#40cfff;font-weight:900;margin-top:3px}
+.trade-box{cursor:pointer}.trade-box.selected{border-color:#35d8c8;box-shadow:0 0 0 1px #35d8c8aa}
+.slot.filled{display:flex;flex-direction:column;gap:3px;padding:8px;color:#dfe8f5;font-size:10px;text-align:center;background:#13223a;border-style:solid}
+.slot.filled b{font-size:10px}.slot.filled small{color:#40cfff;font-weight:900}
+@media(max-width:850px){.picker-grid{grid-template-columns:repeat(4,1fr)}}
+@media(max-width:520px){.picker-grid{grid-template-columns:repeat(3,1fr)}.swap-grid{gap:8px}.slot{height:105px}}
+
+footer{text-align:center;color:#5e6d84;font-size:10px;margin-top:45px}
+
+
+/* BOOK-STYLE PAGES: only one section is visible at a time */
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
+
+.topbar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+}
+
+.page {
+  width: 100%;
+  height: 100vh;
+  margin: 0;
+  padding: 92px 30px 25px;
+  overflow: hidden;
+}
+
+.page-section {
+  display: none;
+  width: 100%;
+  height: calc(100vh - 117px);
+  overflow: hidden;
+  padding: 0 !important;
+}
+
+.page-section.active-page {
+  display: block;
+}
+
+.page-section .hero {
+  margin-bottom: 22px;
+}
+
+.page-section#values {
+  overflow: hidden;
+  padding-right: 10px !important;
+}
+
+.page-section#values::-webkit-scrollbar {
+  width: 5px;
+}
+.page-section#values::-webkit-scrollbar-thumb {
+  background: #263653;
+  border-radius: 10px;
+}
+
+.menu .nav-btn {
+  appearance: none;
+  border: 0;
+  font: inherit;
+  text-decoration: none;
+  color: #91a0b6;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 9px 17px;
+  border-radius: 9px;
+  background: transparent;
+  cursor: pointer;
+  transition: .2s;
+}
+
+.menu .nav-btn:hover,
+.menu .nav-btn.active {
+  color: #fff;
+  background: linear-gradient(135deg,var(--accent),var(--accent2));
+}
+
+@media(max-width:850px){
+ .grid{grid-template-columns:repeat(4,1fr)}
+ .swap-grid{grid-template-columns:1fr}
+ .swap-middle{order:2}
+}
+@media(max-width:560px){
+ .topbar{height:auto;gap:10px;flex-wrap:wrap}
+ .brand{min-width:auto}.menu{width:100%;justify-content:space-between}.menu a{flex:1;text-align:center;padding:9px 5px;font-size:11px}
+ .page{width:100%;height:100vh;padding:82px 10px 15px}
+ .hero h1{font-size:34px}
+ .grid{grid-template-columns:repeat(2,1fr)}
+ .card{min-height:120px}
+ .server-row{grid-template-columns:1fr 58px 48px}
+}
+
+/* Safe account-connect modal */
+.modal-backdrop{display:none;position:fixed;inset:0;z-index:100;background:rgba(2,6,16,.76);backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:20px}
+.modal-backdrop.show{display:flex}
+.login-modal{width:min(430px,100%);background:linear-gradient(160deg,#111d33,#0c1425);border:1px solid #29405f;border-radius:20px;padding:28px;box-shadow:0 25px 80px rgba(0,0,0,.5);text-align:center}
+.login-modal .modal-icon{width:54px;height:54px;margin:0 auto 14px;border-radius:15px;display:grid;place-items:center;background:linear-gradient(135deg,var(--accent),var(--accent2));font-size:24px}
+.login-modal h2{margin:0 0 8px;font-family:"Barlow Condensed",sans-serif;font-size:30px;letter-spacing:1px}
+.login-modal p{margin:0 auto 20px;color:var(--muted);font-size:13px;line-height:1.6;max-width:340px}
+.login-modal .roblox-link{display:flex;align-items:center;justify-content:center;width:100%;height:46px;border-radius:11px;text-decoration:none;color:#fff;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent2));box-shadow:0 10px 28px rgba(255,61,129,.18)}
+.login-modal .cancel-btn{margin-top:10px;width:100%;height:42px;border:1px solid #293b57;border-radius:10px;background:#0b1526;color:#9aa8bd;font-weight:700;cursor:pointer}
+.godly-modal{width:min(560px,100%);background:linear-gradient(160deg,#111d33,#0c1425);border:1px solid #29405f;border-radius:20px;padding:22px;box-shadow:0 25px 80px rgba(0,0,0,.5);text-align:left}
+.godly-modal .picker-head{margin-bottom:14px}
+.godly-modal .picker-head strong{font-size:16px;font-family:"Barlow Condensed",sans-serif;letter-spacing:1px}
+.godly-modal .picker-grid{grid-template-columns:repeat(6,1fr)}
+.godly-modal .cancel-btn{margin-top:14px;width:100%;height:42px;border:1px solid #293b57;border-radius:10px;background:#0b1526;color:#9aa8bd;font-weight:700;cursor:pointer}
+#godlyScroll{max-height:400px;overflow-y:auto;padding-right:6px}
+#godlyScroll::-webkit-scrollbar{width:5px}
+#godlyScroll::-webkit-scrollbar-thumb{background:#263653;border-radius:10px}
+.godly-tier-title{font-size:11px;font-weight:800;letter-spacing:.5px;color:#40cfff;margin:14px 0 7px}
+.godly-tier-title:first-child{margin-top:0}
+@media(max-width:520px){.godly-modal .picker-grid{grid-template-columns:repeat(3,1fr)}}
+.login-note{font-size:11px!important;margin-top:12px!important;margin-bottom:0!important;color:#687890!important}
 </style>
 </head>
 <body>
-<div class="container">
-<header>
-<h1>GEN 008: Networking Terms</h1>
-<div class="subtitle">50-Question Multiple Choice Quiz</div>
-</header>
-<div class="progress-wrap"><div class="progress" id="progress"></div></div>
-<div class="card" id="quizCard">
-<div class="question-number" id="qNumber"></div>
-<div class="question" id="question"></div>
-<div id="options"></div>
-<div class="controls">
-<button id="prev" onclick="previousQuestion()">Previous</button>
-<button id="next" onclick="nextQuestion()">Next</button>
-<button id="submit" onclick="finishQuiz()">Submit Quiz</button>
-</div>
-</div>
-<div class="card" id="result">
-<h2>Quiz Complete!</h2>
-<div class="score" id="score"></div>
-<p id="message"></p>
-<div class="review" id="review"></div>
-<button onclick="restartQuiz()" style="background:#0284c7;color:white">Try Again</button>
-</div>
-</div>
-<script>
-const questions = [["What is an open system?", ["A system connected to a network and prepared for communication", "A system with no network connection", "A network packet", "A physical network address"], "A"], ["What is a closed system?", ["A system connected to Wi-Fi", "A system not connected to a network and unable to communicate through it", "A device receiving an IP address", "A router forwarding packets"], "B"], ["What does IP stand for?", ["Internet Protocol", "Internal Port", "Internet Packet", "Interface Protocol"], "A"], ["What type of address is an IP address?", ["Physical address", "Logical address", "Hardware serial number", "Communication channel"], "B"], ["What does a MAC address identify?", ["An internet provider", "A network packet", "A network interface/host at the hardware level", "A communication port"], "C"], ["What is a port?", ["A physical computer", "A communication channel through which data is sent and received", "A public IP address", "An ISP"], "B"], ["What is a node?", ["A computing device that sends or receives network packets", "A packet of data", "A port number", "A type of ISP"], "A"], ["What are network packets?", ["Network cables", "Data sent to and from nodes", "Physical addresses", "Internet providers"], "B"], ["What is the main job of a router?", ["Assign MAC addresses", "Provide electricity to devices", "Determine where network packets should be sent", "Create computer hardware"], "C"], ["What does NAT stand for?", ["Network Address Translation", "Network Access Technology", "Network Allocation Transfer", "Node Address Type"], "A"], ["What is NAT mainly used for?", ["To identify a NIC physically", "To allow more devices to access the internet using fewer public IPs", "To replace routers", "To assign MAC addresses"], "B"], ["What does DHCP stand for?", ["Dynamic Host Configuration Protocol", "Digital Host Communication Program", "Dynamic Hardware Control Protocol", "Device Host Connection Process"], "A"], ["What does DHCP do?", ["Automatically assigns dynamic IP addresses to hosts", "Identifies a NIC physically", "Provides internet service itself", "Carries data packets"], "A"], ["What does ISP stand for?", ["Internet Service Provider", "Internet System Port", "Internal Service Protocol", "Internet Security Provider"], "A"], ["What does an ISP provide?", ["Internet connectivity", "MAC addresses only", "Computer processors", "Network packets only"], "A"], ["Which is a logical address?", ["MAC address", "IP address", "NIC", "Port"], "B"], ["Which is associated with the physical network interface?", ["IP address", "DHCP", "MAC address", "NAT"], "C"], ["Which term describes a device that can send and receive network packets?", ["Node", "Port", "ISP", "NAT"], "A"], ["Which term describes data traveling across a network?", ["MAC address", "Network packet", "Router", "DHCP"], "B"], ["Which device manages and forwards network packets?", ["Router", "Port", "MAC address", "ISP"], "A"], ["A phone joins Wi-Fi and automatically receives an IP address. What is most directly involved?", ["NAT", "DHCP", "MAC replacement", "ISP hardware"], "B"], ["Several home devices use private IPs while accessing the internet through a public IP. What is involved?", ["NAT", "DHCP only", "MAC addressing only", "Closed system"], "A"], ["Which pair is correctly matched?", ["MAC—logical address", "DHCP—assigns IP addresses", "Port—provides internet service", "ISP—physical address"], "B"], ["Which pair is incorrectly matched?", ["IP—logical address", "MAC—physical interface identity", "Router—packet forwarding", "DHCP—physical hardware identity"], "D"], ["Which term is most closely related to a NIC?", ["MAC address", "Network packet", "ISP", "NAT"], "A"], ["A computer has no network connection. Which term best describes its network state?", ["Open system", "Closed system", "Router", "Node"], "B"], ["A computer connected to a network and ready to communicate is a:", ["Closed system", "Open system", "Packet", "Port"], "B"], ["Which item is NOT a computing device?", ["Computer", "Phone", "Network packet", "Network-connected device"], "C"], ["Which item is NOT an address?", ["IP address", "MAC address", "Port", "Both IP and MAC"], "C"], ["Which term is a company rather than a device or protocol?", ["Router", "DHCP", "ISP", "NAT"], "C"], ["Which technology can make private IP addresses usable for internet access through public addressing?", ["NAT", "MAC", "Port", "Node"], "A"], ["Which technology dynamically provides IP addresses?", ["DHCP", "NAT", "MAC", "ISP"], "A"], ["Which term identifies a communication channel?", ["Port", "Node", "Router", "ISP"], "A"], ["Which term identifies the physical network interface?", ["MAC address", "IP address", "Port", "NAT"], "A"], ["Which term identifies the logical network address?", ["MAC address", "IP address", "Router", "NIC"], "B"], ["Which term refers to hardware that directs network traffic?", ["Router", "DHCP", "Port", "ISP"], "A"], ["Which term refers to data sent between network devices?", ["Network packet", "MAC address", "Router", "Port"], "A"], ["Which technology is associated with private and public IP addresses?", ["NAT", "DHCP", "MAC", "Node"], "A"], ["Which service provider connects customers to the internet?", ["ISP", "Router", "Node", "Port"], "A"], ["Which statement about a MAC address is correct?", ["It is associated with the NIC", "It is assigned by NAT", "It is a packet", "It is an ISP"], "A"], ["Which statement about DHCP is correct?", ["It automatically assigns IP addresses", "It identifies physical hardware", "It forwards every packet", "It provides a MAC address"], "A"], ["Which statement about routers is correct?", ["They determine where packets should be sent", "They are network packets", "They are logical addresses", "They are ISPs"], "A"], ["Which statement about NAT is correct?", ["It can let multiple private-IP devices share public internet access", "It creates the NIC", "It replaces DHCP in every network", "It is a physical address"], "A"], ["Which statement about nodes is correct?", ["Nodes are computing devices that send or receive network packets", "Nodes are only IP addresses", "Nodes are only ports", "Nodes are ISPs"], "A"], ["Which sequence is most logical for a device joining a typical home network?", ["DHCP assigns an IP, device communicates, router forwards traffic, NAT may translate addressing", "MAC assigns an IP, ISP creates packets, DHCP becomes router", "Port assigns an IP, NAT creates hardware, ISP becomes node", "Router creates the MAC, packet creates the IP, DHCP becomes ISP"], "A"], ["A device's IP address changes while its hardware interface remains the same. Which concept best explains the hardware identity that remains associated with the interface?", ["MAC address", "Network packet", "ISP", "Port"], "A"], ["A user wants to know which company supplies their home internet connection. Which term should they identify?", ["ISP", "NAT", "DHCP", "MAC"], "A"], ["A network administrator needs to distinguish data traveling across the network from the devices sending it. Which pair is correct?", ["Network packets = data; nodes = devices", "Nodes = data; packets = devices", "Ports = devices; routers = addresses", "ISP = data; MAC = packets"], "A"], ["Which combination contains only concepts from the provided networking terms?", ["IP, MAC, DHCP, NAT", "CPU, RAM, GPU, SSD", "Keyboard, mouse, monitor, printer", "Browser, app, file, folder"], "A"], ["A home router has a public IP while devices behind it have private IPs. Which term best describes the technique involved?", ["NAT", "DHCP", "MAC", "Port"], "A"], ["A student says, 'My laptop gets an IP automatically, has a MAC address, sends packets, and uses a router to reach the internet.' Which set of terms is represented?", ["DHCP, MAC, network packets, router", "NAT, ISP, port, closed system only", "ISP, MAC, closed system, port only", "Port, packet, ISP, closed system only"], "A"]];
-let current=0;
-let answers=Array(questions.length).fill(null);
 
-function render(){
- const q=questions[current];
- document.getElementById('qNumber').textContent=`Question ${current+1} of ${questions.length}`;
- document.getElementById('question').textContent=q[0];
- const options=document.getElementById('options');
- options.innerHTML='';
- q[1].forEach((text,i)=>{
-   const b=document.createElement('button');
-   b.className='option'+(answers[current]===i?' selected':'');
-   b.textContent=String.fromCharCode(65+i)+'. '+text;
-   b.onclick=()=>{answers[current]=i;render()};
-   options.appendChild(b);
- });
- document.getElementById('prev').disabled=current===0;
- document.getElementById('next').style.display=current===questions.length-1?'none':'inline-block';
- document.getElementById('submit').style.display=current===questions.length-1?'inline-block':'none';
- document.getElementById('progress').style.width=((current+1)/questions.length*100)+'%';
- window.scrollTo({top:0,behavior:'smooth'});
+<header class="topbar">
+  <div class="brand">
+    <div class="logo">NV</div>
+    <div class="brand-text">
+      <strong>novavalues.com™</strong>
+      <span>YOUR TRADE SPACE. THE NUMBER ONE PLACE.</span>
+    </div>
+  </div>
+  <nav class="menu">
+    <button class="nav-btn" data-page="news">News</button>
+    <button class="nav-btn" data-page="servers">Servers</button>
+    <button class="nav-btn active" data-page="values">Values</button>
+    <button class="nav-btn" data-page="swap">Swap</button>
+  </nav>
+</header>
+
+<main class="page">
+
+<section id="news" class="page-section">
+  <div class="hero">
+    <h1>NOVA VALUES</h1>
+    <p>A clean community hub for values, servers and swapping.</p>
+  </div>
+  <div class="news-wrap">
+    <article class="news-card">
+      <span class="badge">⚡ SYSTEM UPDATE</span>
+      <h2>THE SWAP SYSTEM HAS ARRIVED</h2>
+      <p>Trade with a private bot experience. This page is a visual HTML layout only, ready for you to connect your own functions.</p>
+      <ul>
+        <li>All godlies with live value cards</li>
+        <li>Stack any item from your collection</li>
+        <li>Private trade layout</li>
+        <li>Instant swap confirmation</li>
+      </ul>
+      <button class="primary start-swap" style="height:38px">START SWAPPING</button>
+    </article>
+    <article class="news-card">
+      <span class="badge">📢 NEW ANNOUNCEMENT</span>
+      <h2>WELCOME TO NOVA VALUES</h2>
+      <p>Browse the value list and server layout below.</p>
+    </article>
+  </div>
+</section>
+
+<section id="servers" class="page-section">
+  <div class="hero"><h1>SERVERS</h1><p>Server list interface — connect your own data later.</p></div>
+  <div class="server-list">
+    <div class="server">
+      <div class="server-head">Asia <span>▼</span></div>
+      <div class="server-row"><b>🇯🇵 Japan - Tokyo</b><span class="ping">▮▮▮▮ 42ms</span><button class="join">Join</button></div>
+      <div class="server-row"><b>🇸🇬 Singapore</b><span class="ping">▮▮▮▮ 51ms</span><button class="join">Join</button></div>
+    </div>
+    <div class="server">
+      <div class="server-head">Europe <span>▼</span></div>
+      <div class="server-row"><b>🇮🇪 Ireland - Dublin</b><span class="ping">▮▮▮▮ 52ms</span><button class="join">Join</button></div>
+      <div class="server-row"><b>🇫🇷 France - Paris</b><span class="ping">▮▮▮▮ 39ms</span><button class="join">Join</button></div>
+      <div class="server-row"><b>🇬🇧 United Kingdom - London</b><span class="ping">▮▮▮▮ 46ms</span><button class="join">Join</button></div>
+      <div class="server-row"><b>🇩🇪 Germany - Frankfurt</b><span class="ping">▮▮▮▮ 49ms</span><button class="join">Join</button></div>
+    </div>
+    <div class="server">
+      <div class="server-head">North America <span>▼</span></div>
+    </div>
+    <div class="server">
+      <div class="server-head">South America <span>▼</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="values" class="page-section">
+  <div class="hero"><h1>VALUES</h1><p>Sample value cards. Replace images, names and values with your own data.</p></div>
+  <div class="searchbar">
+    <input placeholder="Search godlies...">
+    <button>Sort: Tiers</button>
+  </div>
+
+  <div class="section-title">Tier 5 <span class="count">12</span></div>
+  <div class="grid">
+    <div class="card"><div class="item-img">🗡️</div><div class="item-name">Swirly Blade</div><div class="item-value">💎 3159</div></div>
+    <div class="card"><div class="item-img">⚔️</div><div class="item-name">Nebula</div><div class="item-value">💎 1535</div></div>
+    <div class="card"><div class="item-img">🏹</div><div class="item-name">Harvester</div><div class="item-value">💎 1405</div></div>
+    <div class="card"><div class="item-img">🔫</div><div class="item-name">Jingle Gun</div><div class="item-value">💎 1315</div></div>
+    <div class="card"><div class="item-img">🌙</div><div class="item-name">Batwing</div><div class="item-value">💎 980</div></div>
+    <div class="card"><div class="item-img">🌈</div><div class="item-name">Sunset</div><div class="item-value">💎 810</div></div>
+    <div class="card"><div class="item-img">🗡️</div><div class="item-name">Ice Shard</div><div class="item-value">💎 805</div></div>
+    <div class="card"><div class="item-img">🗡️</div><div class="item-name">Spider</div><div class="item-value">💎 750</div></div>
+    <div class="card"><div class="item-img">⚔️</div><div class="item-name">Pixel</div><div class="item-value">💎 690</div></div>
+    <div class="card"><div class="item-img">⚔️</div><div class="item-name">Gemstone</div><div class="item-value">💎 670</div></div>
+    <div class="card"><div class="item-img">🔫</div><div class="item-name">Swirly Gun</div><div class="item-value">💎 665</div></div>
+    <div class="card"><div class="item-img">🗡️</div><div class="item-name">Eternal Cane</div><div class="item-value">💎 650</div></div>
+  </div>
+
+  <div class="section-title">Tier 4 <span class="count">10</span></div>
+  <div class="grid">
+    <div class="card"><div class="item-img">🌈</div><div class="item-name">Evergreen</div><div class="item-value">💎 495</div></div>
+    <div class="card"><div class="item-img">🌈</div><div class="item-name">Heat</div><div class="item-value">💎 485</div></div>
+    <div class="card"><div class="item-img">🗡️</div><div class="item-name">Slasher</div><div class="item-value">💎 475</div></div>
+    <div class="card"><div class="item-img">⚔️</div><div class="item-name">Clockwork</div><div class="item-value">💎 475</div></div>
+    <div class="card"><div class="item-img">🔵</div><div class="item-name">Old Glory</div><div class="item-value">💎 468</div></div>
+    <div class="card"><div class="item-img">🌈</div><div class="item-name">Gemstone</div><div class="item-value">💎 465</div></div>
+    <div class="card"><div class="item-img">🗡️</div><div class="item-name">Cookiecane</div><div class="item-value">💎 460</div></div>
+    <div class="card"><div class="item-img">🪓</div><div class="item-name">Battle Axe</div><div class="item-value">💎 435</div></div>
+    <div class="card"><div class="item-img">🔫</div><div class="item-name">Saw</div><div class="item-value">💎 430</div></div>
+    <div class="card"><div class="item-img">🗡️</div><div class="item-name">Chill</div><div class="item-value">💎 420</div></div>
+    <div class="card"><div class="item-img">🔫</div><div class="item-name">Blaster</div><div class="item-value">💎 370</div></div>
+    <div class="card"><div class="item-img">🗡️</div><div class="item-name">Tides</div><div class="item-value">💎 370</div></div>
+  </div>
+
+  <div class="section-title">Tier 3 <span class="count">8</span></div>
+  <div class="grid">
+    <div class="card"><div class="item-img">🌈</div><div class="item-name">Alienbeam</div><div class="item-value">💎 248</div></div>
+    <div class="card"><div class="item-img">🗡️</div><div class="item-name">Winter's Edge</div><div class="item-value">💎 248</div></div>
+    <div class="card"><div class="item-img">🗡️</div><div class="item-name">Gingerblade</div><div class="item-value">💎 240</div></div>
+    <div class="card"><div class="item-img">🔫</div><div class="item-name">Vampire's Gun</div><div class="item-value">💎 235</div></div>
+    <div class="card"><div class="item-img">🔫</div><div class="item-name">Luger Cane</div><div class="item-value">💎 230</div></div>
+    <div class="card"><div class="item-img">🗡️</div><div class="item-name">Ghostblade</div><div class="item-value">💎 222</div></div>
+    <div class="card"><div class="item-img">🗡️</div><div class="item-name">Seer</div><div class="item-value">💎 211</div></div>
+    <div class="card"><div class="item-img">🌸</div><div class="item-name">Bloom</div><div class="item-value">💎 205</div></div>
+    <div class="card"><div class="item-img">🔫</div><div class="item-name">Raygun</div><div class="item-value">💎 179</div></div>
+    <div class="card"><div class="item-img">🌊</div><div class="item-name">Waves</div><div class="item-value">💎 175</div></div>
+    <div class="card"><div class="item-img">💗</div><div class="item-name">Heart Wand</div><div class="item-value">💎 172</div></div>
+    <div class="card"><div class="item-img">🌳</div><div class="item-name">Evergreen</div><div class="item-value">💎 165</div></div>
+  </div>
+
+  <div class="section-title">Tier 2 <span class="count">8</span></div>
+  <div class="grid">
+    <div class="card"><div class="item-img">⚔️</div><div class="item-name">Hallow's Edge</div><div class="item-value">💎 100</div></div>
+    <div class="card"><div class="item-img">❄️</div><div class="item-name">Snowstorm</div><div class="item-value">💎 100</div></div>
+    <div class="card"><div class="item-img">🌈</div><div class="item-name">Elderwood Blade</div><div class="item-value">💎 99</div></div>
+    <div class="card"><div class="item-img">🪄</div><div class="item-name">Elderwood Scythe</div><div class="item-value">💎 97</div></div>
+    <div class="card"><div class="item-img">🌙</div><div class="item-name">Hallow's Scythe</div><div class="item-value">💎 96</div></div>
+    <div class="card"><div class="item-img">🔫</div><div class="item-name">Flowerwood Gun</div><div class="item-value">💎 95</div></div>
+    <div class="card"><div class="item-img">❄️</div><div class="item-name">Ice Dragon</div><div class="item-value">💎 92</div></div>
+    <div class="card"><div class="item-img">☄️</div><div class="item-name">Blizzard</div><div class="item-value">💎 90</div></div>
+  </div>
+
+  <div class="section-title">Tier 1 <span class="count">4</span></div>
+  <div class="grid">
+    <div class="card"><div class="item-img">🧊</div><div class="item-name">Icebreaker</div><div class="item-value">💎 48</div></div>
+    <div class="card"><div class="item-img">🌙</div><div class="item-name">Icewing</div><div class="item-value">💎 42</div></div>
+    <div class="card"><div class="item-img">🪶</div><div class="item-name">Boneblade</div><div class="item-value">💎 33</div></div>
+    <div class="card"><div class="item-img">💛</div><div class="item-name">Yellow Seer</div><div class="item-value">💎 14</div></div>
+  </div>
+</section>
+
+<section id="swap" class="page-section">
+  <div class="hero"><h1>JACE SWAP</h1><p>Select items from the value list and build both sides of the trade.</p></div>
+  <div class="swap-grid">
+    <div class="trade-box selected" id="giveBox" data-side="give">
+      <span class="trade-title">YOU GIVE</span>
+      <span class="trade-value" id="giveTotal">💎 0</span>
+      <div class="slots" id="giveSlots">
+        <div class="slot add-slot">＋</div><div class="slot add-slot">＋</div>
+        <div class="slot add-slot">＋</div><div class="slot add-slot">＋</div>
+      </div>
+    </div>
+    <div class="swap-middle">
+      <div class="swap-icon">⇄</div>
+      <button class="swap-btn" id="swapAction">SWAP</button>
+      <div class="hint">Choose a side, then click an item below</div>
+    </div>
+    <div class="trade-box" id="botBox" data-side="bot">
+      <span class="trade-title">BOT GIVE</span>
+      <span class="trade-value" id="botTotal">💎 0</span>
+      <div class="slots" id="botSlots">
+        <div class="slot add-slot">＋</div><div class="slot add-slot">＋</div>
+        <div class="slot add-slot">＋</div><div class="slot add-slot">＋</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="swap-picker">
+    <div class="picker-head"><strong>CHOOSE FROM VALUES</strong><span>Click an item to add it to the selected side · click a filled slot to remove it</span></div>
+    <div class="picker-grid" id="swapPicker"></div>
+  </div>
+</section>
+
+
+<div class="modal-backdrop" id="loginModal" aria-hidden="true">
+  <div class="login-modal" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+    <div class="modal-icon">↗</div>
+    <h2 id="loginTitle">CONNECT TO SWAP</h2>
+    <p>Sign in through Roblox's official website to continue. This layout does not collect or store Roblox passwords.</p>
+    <a class="roblox-link" href="https://www.roblox.com/login" target="_blank" rel="noopener noreferrer">CONTINUE TO ROBLOX</a>
+    <button class="cancel-btn" id="closeLogin">CANCEL</button>
+    <p class="login-note">After your account connection is implemented, you can return here and continue the swap.</p>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="godlyModal" aria-hidden="true">
+  <div class="godly-modal" role="dialog" aria-modal="true" aria-labelledby="godlyTitle">
+    <div class="picker-head">
+      <strong id="godlyTitle">CHOOSE AN ITEM</strong>
+      <span>Click an item to add it to this slot</span>
+    </div>
+    <div id="godlyScroll"></div>
+    <button class="cancel-btn" id="closeGodly">CANCEL</button>
+  </div>
+</div>
+
+<footer>© 2026 Nova Values. All rights reserved. · HTML/CSS layout only.</footer>
+</main>
+
+<script>
+const pages = document.querySelectorAll('.page-section');
+const buttons = document.querySelectorAll('.nav-btn');
+
+function showPage(name) {
+  pages.forEach(page => {
+    page.classList.toggle('active-page', page.id === name);
+  });
+
+  buttons.forEach(button => {
+    button.classList.toggle('active', button.dataset.page === name);
+  });
 }
-function nextQuestion(){if(answers[current]===null){alert('Please choose an answer first.');return}current++;render()}
-function previousQuestion(){if(current>0){current--;render()}}
-function finishQuiz(){
- if(answers[current]===null){alert('Please choose an answer first.');return}
- let score=0;
- questions.forEach((q,i)=>{if(String.fromCharCode(65+answers[i])===q[2])score++});
- document.getElementById('quizCard').style.display='none';
- document.getElementById('result').style.display='block';
- document.getElementById('score').textContent=`${score} / ${questions.length}`;
- let pct=score/questions.length*100;
- document.getElementById('message').textContent=pct>=90?'Excellent!':pct>=75?'Great job!':pct>=60?'Good effort—review the missed terms.':'Keep studying and try again!';
- let review='';
- questions.forEach((q,i)=>{
-   const yours=answers[i]===null?'Not answered':String.fromCharCode(65+answers[i]);
-   const correct=q[2];
-   if(yours!==correct) review+=`<div class="review-item"><b>Q${i+1}</b> — Your answer: ${yours} | Correct: ${correct}<br><span class="small">${q[1][correct.charCodeAt(0)-65]}</span></div>`;
- });
- document.getElementById('review').innerHTML=review||'<p>Perfect score! 🎉</p>';
- window.scrollTo({top:0,behavior:'smooth'});
+
+buttons.forEach(button => {
+  button.addEventListener('click', () => showPage(button.dataset.page));
+});
+
+const loginModal = document.getElementById('loginModal');
+const startSwap = document.querySelector('.start-swap');
+const closeLogin = document.getElementById('closeLogin');
+
+function openLogin(){
+  loginModal.classList.add('show');
+  loginModal.setAttribute('aria-hidden','false');
 }
-function restartQuiz(){current=0;answers=Array(questions.length).fill(null);document.getElementById('quizCard').style.display='block';document.getElementById('result').style.display='none';render()}
-render();
+function closeLoginModal(){
+  loginModal.classList.remove('show');
+  loginModal.setAttribute('aria-hidden','true');
+}
+startSwap?.addEventListener('click', () => showPage('swap'));
+closeLogin?.addEventListener('click', closeLoginModal);
+loginModal?.addEventListener('click', e => { if(e.target === loginModal) closeLoginModal(); });
+
+
+// Swap builder: uses the same value cards shown on the Values page.
+const giveBox=document.getElementById('giveBox');
+const botBox=document.getElementById('botBox');
+const picker=document.getElementById('swapPicker');
+let selectedSide='give';
+const tradeState={give:[],bot:[]};
+
+// Tag every value card with its tier (from the section-title just above its grid)
+// so we can filter down to Godly (Tier 5) items later.
+(function tagTiers(){
+  document.querySelectorAll('#values .section-title').forEach(title=>{
+    const m=title.textContent.match(/Tier\s*(\d+)/i);
+    if(!m) return;
+    const tier=m[1];
+    const grid=title.nextElementSibling;
+    if(grid && grid.classList.contains('grid')){
+      grid.querySelectorAll('.card').forEach(card=>card.dataset.tier=tier);
+    }
+  });
+})();
+
+function getValueCards(){
+  return [...document.querySelectorAll('#values .card')].map(card=>({
+    name:card.querySelector('.item-name')?.textContent.trim()||'Item',
+    value:Number((card.querySelector('.item-value')?.textContent||'0').replace(/[^0-9]/g,''))||0,
+    icon:card.querySelector('.item-img')?.textContent.trim()||'◆',
+    tier:Number(card.dataset.tier)||0
+  }));
+}
+function renderPicker(){
+  const items=getValueCards();
+  picker.innerHTML=items.map((item,i)=>`<div class="pick-card" data-index="${i}"><div class="pick-img">${item.icon}</div><div class="pick-name">${item.name}</div><div class="pick-val">💎 ${item.value}</div></div>`).join('');
+}
+
+// All-tiers popup (Tier 5 down to Tier 1) — opens when a "＋" add-slot is clicked
+const godlyModal=document.getElementById('godlyModal');
+const godlyScroll=document.getElementById('godlyScroll');
+const closeGodly=document.getElementById('closeGodly');
+let godlySlotSide=null;
+
+function openGodlyModal(side){
+  godlySlotSide=side;
+  selectSide(side);
+  const items=getValueCards();
+  let html='';
+  for(let tier=5;tier>=1;tier--){
+    const tierItems=items.map((item,i)=>({...item,i})).filter(item=>item.tier===tier);
+    if(!tierItems.length) continue;
+    html+=`<div class="godly-tier-title">TIER ${tier}</div><div class="picker-grid">`;
+    html+=tierItems.map(item=>`<div class="pick-card" data-index="${item.i}"><div class="pick-img">${item.icon}</div><div class="pick-name">${item.name}</div><div class="pick-val">💎 ${item.value}</div></div>`).join('');
+    html+='</div>';
+  }
+  godlyScroll.innerHTML=html;
+  godlyModal.classList.add('show');
+  godlyModal.setAttribute('aria-hidden','false');
+}
+function closeGodlyModal(){
+  godlyModal.classList.remove('show');
+  godlyModal.setAttribute('aria-hidden','true');
+  godlySlotSide=null;
+}
+closeGodly?.addEventListener('click',closeGodlyModal);
+godlyModal?.addEventListener('click',e=>{if(e.target===godlyModal) closeGodlyModal();});
+godlyScroll?.addEventListener('click',e=>{
+  const card=e.target.closest('.pick-card'); if(!card||!godlySlotSide)return;
+  const idx=Number(card.dataset.index);
+  const side=godlySlotSide;
+  if(tradeState[side].length<4 && !tradeState[side].includes(idx)){
+    tradeState[side].push(idx); renderTrade();
+  }
+  closeGodlyModal();
+});
+function selectSide(side){
+  selectedSide=side;
+  giveBox.classList.toggle('selected',side==='give');
+  botBox.classList.toggle('selected',side==='bot');
+}
+giveBox.addEventListener('click',e=>{if(!e.target.closest('.filled')) selectSide('give')});
+botBox.addEventListener('click',e=>{if(!e.target.closest('.filled')) selectSide('bot')});
+function renderTrade(){
+  const items=getValueCards();
+  for(const side of ['give','bot']){
+    const wrap=document.getElementById(side==='give'?'giveSlots':'botSlots');
+    wrap.innerHTML='';
+    for(let i=0;i<4;i++){
+      const idx=tradeState[side][i];
+      const slot=document.createElement('div'); slot.className='slot add-slot';
+      if(idx!==undefined){
+        const item=items[idx]; slot.className='slot filled';
+        slot.innerHTML=`<b>${item.icon} ${item.name}</b><small>💎 ${item.value}</small>`;
+        slot.title='Click to remove';
+        slot.addEventListener('click',e=>{e.stopPropagation();tradeState[side].splice(i,1);renderTrade()});
+      } else {slot.textContent='＋';slot.addEventListener('click',()=>openGodlyModal(side));}
+      wrap.appendChild(slot);
+    }
+    const total=tradeState[side].reduce((sum,idx)=>sum+(items[idx]?.value||0),0);
+    document.getElementById(side==='give'?'giveTotal':'botTotal').textContent='💎 '+total;
+  }
+}
+picker.addEventListener('click',e=>{
+  const card=e.target.closest('.pick-card'); if(!card)return;
+  const idx=Number(card.dataset.index);
+  if(tradeState[selectedSide].length<4 && !tradeState[selectedSide].includes(idx)){
+    tradeState[selectedSide].push(idx); renderTrade();
+  }
+});
+renderPicker(); renderTrade();
+
+// SWAP button: once items are added, send them to Roblox to complete the trade
+const swapAction=document.getElementById('swapAction');
+swapAction?.addEventListener('click',()=>{
+  if(tradeState.give.length===0 && tradeState.bot.length===0){
+    alert('Add at least one item to the trade before swapping.');
+    return;
+  }
+  window.open('https://www.roblox.com/login','_blank','noopener,noreferrer');
+});
+showPage('values');
 </script>
 </body>
 </html>
