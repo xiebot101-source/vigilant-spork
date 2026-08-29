@@ -129,12 +129,20 @@ body:before{
   background:rgba(13,24,40,.92);border:1px solid #20344d;
   border-radius:12px;margin-bottom:10px;overflow:hidden;
 }
-.server-head{padding:14px 16px;font-weight:800;display:flex;justify-content:space-between}
+.server-head{padding:14px 16px;font-weight:800;display:flex;justify-content:space-between;cursor:pointer;user-select:none}
+.server-head span{transition:transform .2s ease}
+.server.collapsed .server-head span{transform:rotate(-90deg)}
+.server-body{overflow:hidden;max-height:600px;transition:max-height .25s ease}
+.server.collapsed .server-body{max-height:0}
 .server-row{
-  display:grid;grid-template-columns:1fr 75px 55px;align-items:center;
+  display:grid;grid-template-columns:minmax(0,1fr) 75px 55px;align-items:center;
   padding:10px 15px;border-top:1px solid #20344d;font-size:11px;
 }
-.ping{color:#39df87}
+.server-row b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.ping{color:#39df87;display:inline-flex;align-items:center;gap:4px;font-variant-numeric:tabular-nums}
+.ping-bars{letter-spacing:1px}
+.ping.ping-lag{color:#f5b942}
+.ping.ping-bad{color:#ff5d5d}
 .join{border:0;border-radius:7px;background:var(--cyan);padding:5px 11px;font-weight:900;font-size:10px}
 
 .news-card{
@@ -170,6 +178,23 @@ body:before{
 }
 .hint{font-size:9px;color:#667890;margin-top:12px}
 
+.swap-warning{
+  display:flex;align-items:center;gap:9px;
+  margin:14px auto 0;max-width:900px;
+  background:linear-gradient(135deg,rgba(255,107,53,.16),rgba(255,61,129,.13));
+  border:1px solid rgba(255,138,61,.4);
+  border-radius:12px;padding:12px 16px;
+  color:#ffd6b8;font-size:12px;font-weight:700;line-height:1.4;
+}
+.swap-warning-icon{font-size:15px;flex:0 0 auto;color:#ffb066}
+.swap-warning.shake{animation:swapShake .4s}
+@keyframes swapShake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+.swap-warning b{color:#fff}
+@media(max-width:560px){
+ .swap-warning{padding:10px 12px;gap:7px;font-size:10.5px;border-radius:10px}
+ .swap-warning-icon{font-size:13px}
+}
+
 .swap-picker{
   margin:18px auto 0;max-width:900px;background:linear-gradient(145deg,#101b2e,#0e1628);
   border:1px solid #203652;border-radius:16px;padding:14px;
@@ -182,10 +207,12 @@ body:before{
 .pick-card:hover{transform:translateY(-1px);border-color:#35d8c8}
 .pick-card .pick-img{font-size:20px}.pick-card .pick-name{font-size:8px;color:#d6c7ee;font-weight:800;margin-top:3px}.pick-card .pick-val{font-size:8px;color:#40cfff;font-weight:900;margin-top:3px}
 .trade-box{cursor:pointer}.trade-box.selected{border-color:#35d8c8;box-shadow:0 0 0 1px #35d8c8aa}
-.slot.filled{display:flex;flex-direction:column;gap:3px;padding:8px;color:#dfe8f5;font-size:10px;text-align:center;background:#13223a;border-style:solid}
-.slot.filled b{font-size:10px}.slot.filled small{color:#40cfff;font-weight:900}
+.slot.filled{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:8px;color:#dfe8f5;font-size:10px;text-align:center;background:#13223a;border-style:solid;overflow:hidden}
+.slot.filled .slot-img-wrap{display:flex;align-items:center;justify-content:center;height:58px;flex:0 0 auto}
+.slot-icon{width:56px;height:56px;font-size:56px;max-width:100%}
+.slot.filled b{font-size:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}.slot.filled small{color:#40cfff;font-weight:900}
 @media(max-width:850px){.picker-grid{grid-template-columns:repeat(4,1fr)}}
-@media(max-width:520px){.picker-grid{grid-template-columns:repeat(3,1fr)}.swap-grid{gap:8px}.slot{height:105px}}
+@media(max-width:520px){.picker-grid{grid-template-columns:repeat(3,1fr)}}
 
 footer{text-align:center;color:#5e6d84;font-size:10px;margin-top:45px}
 
@@ -196,48 +223,47 @@ html, body {
   overflow: hidden;
 }
 
+body{
+  display:flex;
+  flex-direction:column;
+}
+
 .topbar {
-  position: fixed;
-  left: 0;
-  right: 0;
-  top: 0;
+  flex: 0 0 auto;
 }
 
 .page {
+  flex: 1 1 auto;
+  min-height: 0;
   width: 100%;
-  height: 100vh;
   margin: 0;
-  padding: 92px 30px 25px;
+  padding: 20px 30px 25px;
   overflow: hidden;
 }
 
 .page-section {
   display: none;
   width: 100%;
-  height: calc(100vh - 117px);
-  overflow: hidden;
-  padding: 0 !important;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0 10px 0 0 !important;
 }
 
 .page-section.active-page {
   display: block;
 }
 
-.page-section .hero {
-  margin-bottom: 22px;
-}
-
-.page-section#values {
-  overflow: hidden;
-  padding-right: 10px !important;
-}
-
-.page-section#values::-webkit-scrollbar {
+.page-section::-webkit-scrollbar {
   width: 5px;
 }
-.page-section#values::-webkit-scrollbar-thumb {
+.page-section::-webkit-scrollbar-thumb {
   background: #263653;
   border-radius: 10px;
+}
+
+.page-section .hero {
+  margin-bottom: 22px;
 }
 
 .menu .nav-btn {
@@ -263,17 +289,42 @@ html, body {
 
 @media(max-width:850px){
  .grid{grid-template-columns:repeat(4,1fr)}
- .swap-grid{grid-template-columns:1fr}
- .swap-middle{order:2}
+ .swap-grid{grid-template-columns:1fr 90px 1fr;gap:10px}
+ .slots{grid-template-columns:1fr}
+ .slot{height:82px;font-size:18px}
+ .slot.filled{gap:2px;padding:6px}
+ .slot.filled .slot-img-wrap{height:38px}
+ .slot-icon{width:36px;height:36px;font-size:36px}
+ .trade-box{padding:12px}
+ .trade-title{font-size:16px}
+ .swap-icon{font-size:26px;margin-bottom:8px}
+ .swap-btn{height:38px;font-size:13px}
+ .hint{font-size:8px;margin-top:8px}
 }
 @media(max-width:560px){
- .topbar{height:auto;gap:10px;flex-wrap:wrap}
- .brand{min-width:auto}.menu{width:100%;justify-content:space-between}.menu a{flex:1;text-align:center;padding:9px 5px;font-size:11px}
- .page{width:100%;height:100vh;padding:82px 10px 15px}
+ .topbar{height:auto;gap:10px;flex-wrap:wrap;padding:10px 12px}
+ .brand{min-width:auto}.menu{width:100%;justify-content:space-between}
+ .menu .nav-btn{flex:1;text-align:center;padding:9px 5px;font-size:11px}
+ .page{width:100%;padding:16px 12px 15px}
  .hero h1{font-size:34px}
  .grid{grid-template-columns:repeat(2,1fr)}
  .card{min-height:120px}
- .server-row{grid-template-columns:1fr 58px 48px}
+ .server-row{grid-template-columns:minmax(0,1fr) auto 44px;gap:6px;padding:10px 10px;font-size:10px}
+ .ping{gap:2px;white-space:nowrap}
+ .ping-bars{display:none}
+ .join{padding:5px 8px;font-size:9px;white-space:nowrap}
+ .swap-grid{grid-template-columns:1fr 70px 1fr;gap:6px}
+ .trade-box{padding:8px;border-radius:12px}
+ .trade-title{font-size:13px}
+ .trade-value{font-size:11px}
+ .slot{height:68px;font-size:15px;border-radius:10px}
+ .slot.filled{font-size:8px;padding:4px;gap:1px}
+ .slot.filled b{font-size:8px}
+ .slot.filled .slot-img-wrap{height:26px}
+ .slot-icon{width:24px;height:24px;font-size:24px}
+ .swap-icon{font-size:20px;margin-bottom:5px}
+ .swap-btn{height:32px;font-size:11px;border-radius:9px}
+ .hint{font-size:7px;margin-top:6px;line-height:1.3}
 }
 
 /* Safe account-connect modal */
@@ -285,17 +336,19 @@ html, body {
 .login-modal p{margin:0 auto 20px;color:var(--muted);font-size:13px;line-height:1.6;max-width:340px}
 .login-modal .roblox-link{display:flex;align-items:center;justify-content:center;width:100%;height:46px;border-radius:11px;text-decoration:none;color:#fff;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent2));box-shadow:0 10px 28px rgba(255,61,129,.18)}
 .login-modal .cancel-btn{margin-top:10px;width:100%;height:42px;border:1px solid #293b57;border-radius:10px;background:#0b1526;color:#9aa8bd;font-weight:700;cursor:pointer}
-.godly-modal{width:min(560px,100%);background:linear-gradient(160deg,#111d33,#0c1425);border:1px solid #29405f;border-radius:20px;padding:22px;box-shadow:0 25px 80px rgba(0,0,0,.5);text-align:left}
-.godly-modal .picker-head{margin-bottom:14px}
+.godly-modal{width:min(560px,100%);max-height:80vh;display:flex;flex-direction:column;background:linear-gradient(160deg,#111d33,#0c1425);border:1px solid #29405f;border-radius:20px;padding:22px;box-shadow:0 25px 80px rgba(0,0,0,.5);text-align:left}
+.godly-search{width:100%;flex:0 0 auto;margin-bottom:12px;padding:11px 14px;border-radius:9px;border:1px solid #263653;outline:none;background:#0b1426;color:#fff;font-size:13px}
+.godly-search::placeholder{color:#5e6d84}
+.godly-modal .picker-head{margin-bottom:14px;flex:0 0 auto}
 .godly-modal .picker-head strong{font-size:16px;font-family:"Barlow Condensed",sans-serif;letter-spacing:1px}
-.godly-modal .picker-grid{grid-template-columns:repeat(6,1fr)}
-.godly-modal .cancel-btn{margin-top:14px;width:100%;height:42px;border:1px solid #293b57;border-radius:10px;background:#0b1526;color:#9aa8bd;font-weight:700;cursor:pointer}
-#godlyScroll{max-height:400px;overflow-y:auto;padding-right:6px}
+.godly-modal .picker-grid{grid-template-columns:repeat(6,1fr);max-height:none;overflow:visible}
+.godly-modal .cancel-btn{margin-top:14px;width:100%;height:42px;border:1px solid #293b57;border-radius:10px;background:#0b1526;color:#9aa8bd;font-weight:700;cursor:pointer;flex:0 0 auto}
+#godlyScroll{flex:1 1 auto;min-height:0;overflow-y:auto;padding-right:6px}
 #godlyScroll::-webkit-scrollbar{width:5px}
 #godlyScroll::-webkit-scrollbar-thumb{background:#263653;border-radius:10px}
 .godly-tier-title{font-size:11px;font-weight:800;letter-spacing:.5px;color:#40cfff;margin:14px 0 7px}
 .godly-tier-title:first-child{margin-top:0}
-@media(max-width:520px){.godly-modal .picker-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:520px){.godly-modal{max-height:88vh}.godly-modal .picker-grid{grid-template-columns:repeat(3,1fr)}}
 .login-note{font-size:11px!important;margin-top:12px!important;margin-bottom:0!important;color:#687890!important}
 </style>
 </head>
@@ -347,24 +400,41 @@ html, body {
 
 <section id="servers" class="page-section">
   <div class="hero"><h1>SERVERS</h1><p>Server list interface — connect your own data later.</p></div>
-  <div class="server-list">
+  <div class="server-list" id="serverList">
     <div class="server">
       <div class="server-head">Asia <span>▼</span></div>
-      <div class="server-row"><b>🇯🇵 Japan - Tokyo</b><span class="ping">▮▮▮▮ 42ms</span><button class="join">Join</button></div>
-      <div class="server-row"><b>🇸🇬 Singapore</b><span class="ping">▮▮▮▮ 51ms</span><button class="join">Join</button></div>
+      <div class="server-body">
+        <div class="server-row"><b>Japan - Tokyo</b><span class="ping" data-base="42">▮▮▮▮ 42ms</span><button class="join">Join</button></div>
+        <div class="server-row"><b>Singapore</b><span class="ping" data-base="51">▮▮▮▮ 51ms</span><button class="join">Join</button></div>
+      </div>
     </div>
     <div class="server">
       <div class="server-head">Europe <span>▼</span></div>
-      <div class="server-row"><b>🇮🇪 Ireland - Dublin</b><span class="ping">▮▮▮▮ 52ms</span><button class="join">Join</button></div>
-      <div class="server-row"><b>🇫🇷 France - Paris</b><span class="ping">▮▮▮▮ 39ms</span><button class="join">Join</button></div>
-      <div class="server-row"><b>🇬🇧 United Kingdom - London</b><span class="ping">▮▮▮▮ 46ms</span><button class="join">Join</button></div>
-      <div class="server-row"><b>🇩🇪 Germany - Frankfurt</b><span class="ping">▮▮▮▮ 49ms</span><button class="join">Join</button></div>
+      <div class="server-body">
+        <div class="server-row"><b>Ireland - Dublin</b><span class="ping" data-base="52">▮▮▮▮ 52ms</span><button class="join">Join</button></div>
+        <div class="server-row"><b>France - Paris</b><span class="ping" data-base="39">▮▮▮▮ 39ms</span><button class="join">Join</button></div>
+        <div class="server-row"><b>United Kingdom - London</b><span class="ping" data-base="46">▮▮▮▮ 46ms</span><button class="join">Join</button></div>
+        <div class="server-row"><b>Germany - Frankfurt</b><span class="ping" data-base="49">▮▮▮▮ 49ms</span><button class="join">Join</button></div>
+      </div>
     </div>
-    <div class="server">
+    <div class="server collapsed">
       <div class="server-head">North America <span>▼</span></div>
+      <div class="server-body">
+        <div class="server-row"><b>United States - New York</b><span class="ping" data-base="18">▮▮▮▮ 18ms</span><button class="join">Join</button></div>
+        <div class="server-row"><b>United States - Los Angeles</b><span class="ping" data-base="27">▮▮▮▮ 27ms</span><button class="join">Join</button></div>
+        <div class="server-row"><b>United States - Chicago</b><span class="ping" data-base="22">▮▮▮▮ 22ms</span><button class="join">Join</button></div>
+        <div class="server-row"><b>Canada - Toronto</b><span class="ping" data-base="25">▮▮▮▮ 25ms</span><button class="join">Join</button></div>
+        <div class="server-row"><b>Mexico - Mexico City</b><span class="ping" data-base="35">▮▮▮▮ 35ms</span><button class="join">Join</button></div>
+      </div>
     </div>
-    <div class="server">
+    <div class="server collapsed">
       <div class="server-head">South America <span>▼</span></div>
+      <div class="server-body">
+        <div class="server-row"><b>Brazil - São Paulo</b><span class="ping" data-base="58">▮▮▮▮ 58ms</span><button class="join">Join</button></div>
+        <div class="server-row"><b>Argentina - Buenos Aires</b><span class="ping" data-base="64">▮▮▮▮ 64ms</span><button class="join">Join</button></div>
+        <div class="server-row"><b>Chile - Santiago</b><span class="ping" data-base="67">▮▮▮▮ 67ms</span><button class="join">Join</button></div>
+        <div class="server-row"><b>Colombia - Bogotá</b><span class="ping" data-base="61">▮▮▮▮ 61ms</span><button class="join">Join</button></div>
+      </div>
     </div>
   </div>
 </section>
@@ -372,81 +442,220 @@ html, body {
 <section id="values" class="page-section">
   <div class="hero"><h1>VALUES</h1><p>Sample value cards. Replace images, names and values with your own data.</p></div>
   <div class="searchbar">
-    <input placeholder="Search godlies...">
-    <button>Sort: Tiers</button>
+    <input id="valuesSearch" placeholder="Search godlies...">
+    <button id="sortBtn">Sort: Tiers</button>
   </div>
 
-  <div class="section-title">Tier 5 <span class="count">12</span></div>
+  <div id="tiersView"></div>
+  <div id="valueView" class="grid" style="display:none"></div>
+
+  <div id="tiersSource" style="display:none">
+  <div class="section-title">Tier 5 <span class="count">36</span></div>
   <div class="grid">
-    <div class="card"><div class="item-img">🗡️</div><div class="item-name">Swirly Blade</div><div class="item-value">💎 3159</div></div>
-    <div class="card"><div class="item-img">⚔️</div><div class="item-name">Nebula</div><div class="item-value">💎 1535</div></div>
-    <div class="card"><div class="item-img">🏹</div><div class="item-name">Harvester</div><div class="item-value">💎 1405</div></div>
-    <div class="card"><div class="item-img">🔫</div><div class="item-name">Jingle Gun</div><div class="item-value">💎 1315</div></div>
-    <div class="card"><div class="item-img">🌙</div><div class="item-name">Batwing</div><div class="item-value">💎 980</div></div>
-    <div class="card"><div class="item-img">🌈</div><div class="item-name">Sunset</div><div class="item-value">💎 810</div></div>
-    <div class="card"><div class="item-img">🗡️</div><div class="item-name">Ice Shard</div><div class="item-value">💎 805</div></div>
-    <div class="card"><div class="item-img">🗡️</div><div class="item-name">Spider</div><div class="item-value">💎 750</div></div>
-    <div class="card"><div class="item-img">⚔️</div><div class="item-name">Pixel</div><div class="item-value">💎 690</div></div>
-    <div class="card"><div class="item-img">⚔️</div><div class="item-name">Gemstone</div><div class="item-value">💎 670</div></div>
-    <div class="card"><div class="item-img">🔫</div><div class="item-name">Swirly Gun</div><div class="item-value">💎 665</div></div>
-    <div class="card"><div class="item-img">🗡️</div><div class="item-name">Eternal Cane</div><div class="item-value">💎 650</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/SwirlyBladeUP.png" alt="Swirly Blade"><div class="item-name">Swirly Blade</div><div class="item-value">💎 3159</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/NebulaUp.png" alt="Nebula"><div class="item-name">Nebula</div><div class="item-value">💎 1535</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/harvester.png" alt="Harvester"><div class="item-name">Harvester</div><div class="item-value">💎 1405</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/JinglegunUP.png" alt="Jingle Gun"><div class="item-name">Jingle Gun</div><div class="item-value">💎 1315</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/BatwingUpdated.png" alt="Batwing"><div class="item-name">Batwing</div><div class="item-value">💎 980</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/ChromaSunsetKnife.png" alt="Sunset"><div class="item-name">Sunset</div><div class="item-value">💎 810</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/IceShardUP.png" alt="Ice Shard"><div class="item-name">Ice Shard</div><div class="item-value">💎 805</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/SpiderUP.png" alt="Spider"><div class="item-name">Spider</div><div class="item-value">💎 750</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/PixelUp.png" alt="Pixel"><div class="item-name">Pixel</div><div class="item-value">💎 690</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/GemstoneUP.png" alt="Gemstone"><div class="item-name">Gemstone</div><div class="item-value">💎 670</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/chromaswirlygun.png" alt="Swirly Gun"><div class="item-name">Swirly Gun</div><div class="item-value">💎 665</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/eternalcane.png" alt="Eternal Cane"><div class="item-name">Eternal Cane</div><div class="item-value">💎 650</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Chroma_Gingerblade.png" alt="Gingerblade"><div class="item-name">Gingerblade</div><div class="item-value">💎 645</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/SwirlGunUP.png" alt="Swirly Gun"><div class="item-name">Swirly Gun</div><div class="item-value">💎 640</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Gingermint.png" alt="Gingermint"><div class="item-name">Gingermint</div><div class="item-value">💎 630</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/redseer.png" alt="Red Seer"><div class="item-name">Red Seer</div><div class="item-value">💎 625</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/chromads.png" alt="Death Shard"><div class="item-name">Death Shard</div><div class="item-value">💎 610</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/purpleseer.png" alt="Purple Seer"><div class="item-name">Purple Seer</div><div class="item-value">💎 610</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Plasmablade.png" alt="Plasmablade"><div class="item-name">Plasmablade</div><div class="item-value">💎 605</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/CBauble.png" alt="Bauble"><div class="item-name">Bauble</div><div class="item-value">💎 595</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Plasmabeam.png" alt="Plasmabeam"><div class="item-name">Plasmabeam</div><div class="item-value">💎 585</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Bauble.png" alt="Bauble"><div class="item-name">Bauble</div><div class="item-value">💎 575</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/DeathshardUp.png" alt="Death Shard"><div class="item-name">Death Shard</div><div class="item-value">💎 560</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/LogchopperUp.png" alt="Logchopper"><div class="item-name">Logchopper</div><div class="item-value">💎 560</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/BattleAxe2UP.png" alt="Battle Axe II"><div class="item-name">Battle Axe II</div><div class="item-value">💎 555</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/MintyUp.png" alt="Minty"><div class="item-name">Minty</div><div class="item-value">💎 550</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/SwirlAxe.png" alt="Swirly Axe"><div class="item-name">Swirly Axe</div><div class="item-value">💎 545</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/chromacandle.png" alt="Candleflame"><div class="item-name">Candleflame</div><div class="item-value">💎 540</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/ChromaTravGun.png" alt="Traveler's Gun"><div class="item-name">Traveler's Gun</div><div class="item-value">💎 539</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Spectre.png" alt="Spectre"><div class="item-name">Spectre</div><div class="item-value">💎 530</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Phantom_Shop.png" alt="Phantom"><div class="item-name">Phantom</div><div class="item-value">💎 520</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Ginger_LugerUP.png" alt="Ginger Luger"><div class="item-name">Ginger Luger</div><div class="item-value">💎 515</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/LugerUpdated.png" alt="Luger"><div class="item-name">Luger</div><div class="item-value">💎 512</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/HeartBladeUp.png" alt="Heart Blade"><div class="item-name">Heart Blade</div><div class="item-value">💎 505</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/BlossomGun.png"><div class="item-name">Blossom</div><div class="item-value">💎 502</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Sakura.png" alt="Sakura"><div class="item-name">Sakura</div><div class="item-value">💎 501</div></div>
   </div>
 
-  <div class="section-title">Tier 4 <span class="count">10</span></div>
+  <div class="section-title">Tier 4 <span class="count">52</span></div>
   <div class="grid">
-    <div class="card"><div class="item-img">🌈</div><div class="item-name">Evergreen</div><div class="item-value">💎 495</div></div>
-    <div class="card"><div class="item-img">🌈</div><div class="item-name">Heat</div><div class="item-value">💎 485</div></div>
-    <div class="card"><div class="item-img">🗡️</div><div class="item-name">Slasher</div><div class="item-value">💎 475</div></div>
-    <div class="card"><div class="item-img">⚔️</div><div class="item-name">Clockwork</div><div class="item-value">💎 475</div></div>
-    <div class="card"><div class="item-img">🔵</div><div class="item-name">Old Glory</div><div class="item-value">💎 468</div></div>
-    <div class="card"><div class="item-img">🌈</div><div class="item-name">Gemstone</div><div class="item-value">💎 465</div></div>
-    <div class="card"><div class="item-img">🗡️</div><div class="item-name">Cookiecane</div><div class="item-value">💎 460</div></div>
-    <div class="card"><div class="item-img">🪓</div><div class="item-name">Battle Axe</div><div class="item-value">💎 435</div></div>
-    <div class="card"><div class="item-img">🔫</div><div class="item-name">Saw</div><div class="item-value">💎 430</div></div>
-    <div class="card"><div class="item-img">🗡️</div><div class="item-name">Chill</div><div class="item-value">💎 420</div></div>
-    <div class="card"><div class="item-img">🔫</div><div class="item-name">Blaster</div><div class="item-value">💎 370</div></div>
-    <div class="card"><div class="item-img">🗡️</div><div class="item-name">Tides</div><div class="item-value">💎 370</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Chroma_Evergreen.png" alt="Evergreen"><div class="item-name">Evergreen</div><div class="item-value">💎 495</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/chromaheat.png" alt="Heat"><div class="item-name">Heat</div><div class="item-value">💎 495</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/HeatUP.png" alt="Heat"><div class="item-name">Heat</div><div class="item-value">💎 485</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/chromaslasher.png" alt="Slasher"><div class="item-name">Slasher</div><div class="item-value">💎 485</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/SlasherUP.png" alt="Slasher"><div class="item-name">Slasher</div><div class="item-value">💎 475</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/ClockworkUp.png" alt="Clockwork"><div class="item-name">Clockwork</div><div class="item-value">💎 475</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/OldGloryUp.png" alt="Old Glory"><div class="item-name">Old Glory</div><div class="item-value">💎 468</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/chromagem.png" alt="Gemstone"><div class="item-name">Gemstone</div><div class="item-value">💎 465</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/ChromaCookiecane.png" alt="Cookiecane"><div class="item-name">Cookiecane</div><div class="item-value">💎 460</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Cookiecane.png" alt="Cookiecane"><div class="item-name">Cookiecane</div><div class="item-value">💎 450</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/VampiresedgeUP.png" alt="Vampire's Edge"><div class="item-name">Vampire's Edge</div><div class="item-value">💎 440</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Battleaxe1UP.png" alt="Battle Axe"><div class="item-name">Battle Axe</div><div class="item-value">💎 435</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/chromasaw.png" alt="Saw"><div class="item-name">Saw</div><div class="item-value">💎 430</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/ChillUpdated4.png" alt="Chill"><div class="item-name">Chill</div><div class="item-value">💎 420</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/VirtualUP.png" alt="Virtual"><div class="item-name">Virtual</div><div class="item-value">💎 415</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/SawUP.png" alt="Saw"><div class="item-name">Saw</div><div class="item-value">💎 410</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Chroma_Lightbringer.png" alt="Lightbringer"><div class="item-name">Lightbringer</div><div class="item-value">💎 395</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Handsaw_Png.png" alt="Handsaw"><div class="item-name">Handsaw</div><div class="item-value">💎 385</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/LightbringerUpdated.png" alt="Lightbringer"><div class="item-name">Lightbringer</div><div class="item-value">💎 380</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/chromafang.png" alt="Fang"><div class="item-name">Fang</div><div class="item-value">💎 380</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/BlasterUP.png" alt="Blaster"><div class="item-name">Blaster</div><div class="item-value">💎 370</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/chromatides.png" alt="Tides"><div class="item-name">Tides</div><div class="item-value">💎 370</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/chromalaser.png" alt="Laser"><div class="item-name">Laser</div><div class="item-value">💎 365</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Eternal4UP.png" alt="Eternal IV"><div class="item-name">Eternal IV</div><div class="item-value">💎 355</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Celestial.png" alt="Celestial"><div class="item-name">Celestial</div><div class="item-value">💎 355</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/LaserUpdated.png" alt="Laser"><div class="item-name">Laser</div><div class="item-value">💎 352</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/FangUp.png" alt="Fang"><div class="item-name">Fang</div><div class="item-value">💎 348</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/candleflame.png" alt="Candleflame"><div class="item-name">Candleflame</div><div class="item-value">💎 345</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/TidesUP.png" alt="Tides"><div class="item-name">Tides</div><div class="item-value">💎 342</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/chromashark.png" alt="Shark"><div class="item-name">Shark</div><div class="item-value">💎 340</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/IceFlakeUP.png" alt="Iceflake"><div class="item-name">Iceflake</div><div class="item-value">💎 322</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/SharkUP.png" alt="Shark"><div class="item-name">Shark</div><div class="item-value">💎 315</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Icepiercer.png" alt="Icepiercer"><div class="item-name">Icepiercer</div><div class="item-value">💎 310</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/PumpkingUP.png" alt="Pumpking"><div class="item-name">Pumpking</div><div class="item-value">💎 310</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/CookiebladeUP.png" alt="Cookieblade"><div class="item-name">Cookieblade</div><div class="item-value">💎 305</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/SnowflakeUP.png" alt="Snowflake"><div class="item-name">Snowflake</div><div class="item-value">💎 300</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/NightBladeUp.png" alt="Night Blade"><div class="item-name">Night Blade</div><div class="item-value">💎 298</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/eternal3.png" alt="Eternal III"><div class="item-name">Eternal III</div><div class="item-value">💎 295</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Chroma_Snowcannon.png" alt="Snowcannon"><div class="item-name">Snowcannon</div><div class="item-value">💎 1550</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/FrostsaberUP.png" alt="Frostsaber"><div class="item-name">Frostsaber</div><div class="item-value">💎 288</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Mm2bioblade.png" alt="Bioblade"><div class="item-name">Bioblade</div><div class="item-value">💎 284</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/AmeriUP.png" alt="Amerilaser"><div class="item-name">Amerilaser</div><div class="item-value">💎 280</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/IceBeamUP.png" alt="Icebeam"><div class="item-name">Icebeam</div><div class="item-value">💎 278</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/PrismaticUp.png" alt="Prismatic"><div class="item-name">Prismatic</div><div class="item-value">💎 276</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Eternal_2UP.png" alt="Eternal II"><div class="item-name">Eternal II</div><div class="item-value">💎 272</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Chroma_Ornament.png" alt="Ornament"><div class="item-name">Ornament</div><div class="item-value">💎 270</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Snowcannon.png" alt="Snowcannon"><div class="item-name">Snowcannon</div><div class="item-value">💎 268</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/EternalUpdated.png" alt="Eternal"><div class="item-name">Eternal</div><div class="item-value">💎 262</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/ornagodly.png" alt="Ornament"><div class="item-name">Ornament</div><div class="item-value">💎 260</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/XmasUP.png" alt="Xmas"><div class="item-name">Xmas</div><div class="item-value">💎 258</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/EggbladeUP.png" alt="Eggblade"><div class="item-name">Eggblade</div><div class="item-value">💎 258</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Green_Luger.png" alt="Green Luger"><div class="item-name">Green Luger</div><div class="item-value">💎 255</div></div>
   </div>
 
-  <div class="section-title">Tier 3 <span class="count">8</span></div>
+  <div class="section-title">Tier 3 <span class="count">48</span></div>
   <div class="grid">
-    <div class="card"><div class="item-img">🌈</div><div class="item-name">Alienbeam</div><div class="item-value">💎 248</div></div>
-    <div class="card"><div class="item-img">🗡️</div><div class="item-name">Winter's Edge</div><div class="item-value">💎 248</div></div>
-    <div class="card"><div class="item-img">🗡️</div><div class="item-name">Gingerblade</div><div class="item-value">💎 240</div></div>
-    <div class="card"><div class="item-img">🔫</div><div class="item-name">Vampire's Gun</div><div class="item-value">💎 235</div></div>
-    <div class="card"><div class="item-img">🔫</div><div class="item-name">Luger Cane</div><div class="item-value">💎 230</div></div>
-    <div class="card"><div class="item-img">🗡️</div><div class="item-name">Ghostblade</div><div class="item-value">💎 222</div></div>
-    <div class="card"><div class="item-img">🗡️</div><div class="item-name">Seer</div><div class="item-value">💎 211</div></div>
-    <div class="card"><div class="item-img">🌸</div><div class="item-name">Bloom</div><div class="item-value">💎 205</div></div>
-    <div class="card"><div class="item-img">🔫</div><div class="item-name">Raygun</div><div class="item-value">💎 179</div></div>
-    <div class="card"><div class="item-img">🌊</div><div class="item-name">Waves</div><div class="item-value">💎 175</div></div>
-    <div class="card"><div class="item-img">💗</div><div class="item-name">Heart Wand</div><div class="item-value">💎 172</div></div>
-    <div class="card"><div class="item-img">🌳</div><div class="item-name">Evergreen</div><div class="item-value">💎 165</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/ChromaAlienbeam.png" alt="Alienbeam"><div class="item-name">Alienbeam</div><div class="item-value">💎 248</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/WinterEdgeUP.png" alt="Winter's Edge"><div class="item-name">Winter's Edge</div><div class="item-value">💎 248</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/GingerbladeUP.png" alt="Gingerblade"><div class="item-name">Gingerblade</div><div class="item-value">💎 240</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/chromavampsgun.png" alt="Vampire's Gun"><div class="item-name">Vampire's Gun</div><div class="item-value">💎 235</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/LugerCaneUP.png" alt="Luger Cane"><div class="item-name">Luger Cane</div><div class="item-value">💎 230</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/ghostblade.png" alt="Ghostblade"><div class="item-name">Ghostblade</div><div class="item-value">💎 222</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Seer.png" alt="Seer"><div class="item-name">Seer</div><div class="item-value">💎 211</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Bloom_Knife.png" alt="Bloom"><div class="item-name">Bloom</div><div class="item-value">💎 205</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Chroma_Evergun.png" alt="Evergun"><div class="item-name">Evergun</div><div class="item-value">💎 200</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Gingerscope.png" alt="Gingerscope"><div class="item-name">Gingerscope</div><div class="item-value">💎 7850</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Pearlshine.png" alt="Pearlshine"><div class="item-name">Pearlshine</div><div class="item-value">💎 195</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Pearl.png" alt="Pearl"><div class="item-name">Pearl</div><div class="item-value">💎 185</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/blueseer.png" alt="Blue Seer"><div class="item-name">Blue Seer</div><div class="item-value">💎 182</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Updated_Candy.png" alt="Candy"><div class="item-name">Candy</div><div class="item-value">💎 180</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/ChromaRaygun.png"><div class="item-name">Raygun</div><div class="item-value">💎 650</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/peppermint.png" alt="Peppermint"><div class="item-name">Peppermint</div><div class="item-value">💎 178</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Waves_knife.png" alt="Waves"><div class="item-name">Waves</div><div class="item-value">💎 175</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Chroma_Darkbringer.png" alt="Darkbringer"><div class="item-name">Darkbringer</div><div class="item-value">💎 175</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/CHeartwand.png" alt="Heart Wand"><div class="item-name">Heart Wand</div><div class="item-value">💎 172</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Ocean_gun.png" alt="Ocean"><div class="item-name">Ocean</div><div class="item-value">💎 170</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Evergreen.png" alt="Evergreen"><div class="item-name">Evergreen</div><div class="item-value">💎 1950</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/DarkbringerUpdated.png" alt="Darkbringer"><div class="item-name">Darkbringer</div><div class="item-value">💎 165</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Flowerwood_Knife.png" alt="Flowerwood Knife"><div class="item-name">Flowerwood Knife</div><div class="item-value">💎 165</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/chromaluger.png" alt="Luger"><div class="item-name">Luger</div><div class="item-value">💎 165</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/CSands%20(1).png" alt="Sands"><div class="item-name">Sands</div><div class="item-value">💎 750</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Heartwand.png" alt="Heart Wand"><div class="item-name">Heart Wand</div><div class="item-value">💎 350</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/CorruptUp.png" alt="Corrupt"><div class="item-name">Corrupt</div><div class="item-value">💎 530</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/vampsgun.png" alt="Vampire's Gun"><div class="item-name">Vampire's Gun</div><div class="item-value">💎 1550</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/SandsGodly2026%20(1).png" alt="Sands"><div class="item-name">Sands</div><div class="item-value">💎 155</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/vampsaxe.png" alt="Vampire's Axe"><div class="item-name">Vampire's Axe</div><div class="item-value">💎 1555</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/orangeseer.png" alt="Orange Seer"><div class="item-name">Orange Seer</div><div class="item-value">💎 155</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Darkshot.png" alt="Darkshot"><div class="item-name">Darkshot</div><div class="item-value">💎 150</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Darksword.png" alt="Darksword"><div class="item-name">Darksword</div><div class="item-value">💎 150</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Flora_Gun.png" alt="Flora"><div class="item-name">Flora</div><div class="item-value">💎 150</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/CBeachy%20(1).png" alt="Beachy"><div class="item-name">Beachy</div><div class="item-value">💎 148</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/2024Australis.png" alt="Australis"><div class="item-name">Australis</div><div class="item-value">💎 145</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/BeachyGodly2026%20(1).png" alt="Beachy"><div class="item-name">Beachy</div><div class="item-value">💎 140</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/2024Borealis.png" alt="Borealis"><div class="item-name">Borealis</div><div class="item-value">💎 130</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/ChromaConstellation.png" alt="Constellation"><div class="item-name">Constellation</div><div class="item-value">💎 2990</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Sugar_v2.png" alt="Sugar"><div class="item-name">Sugar</div><div class="item-value">💎 125</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/ChromaBlizzard.png" alt="Blizzard"><div class="item-name">Blizzard</div><div class="item-value">💎 120</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/C_Icecream%20(2).png" alt="Icecream"><div class="item-name">Icecream</div><div class="item-value">💎 120</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Csweet.png" alt="Sweet"><div class="item-name">Sweet</div><div class="item-value">💎 118</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Chroma_Watergun.png" alt="Watergun"><div class="item-name">Watergun</div><div class="item-value">💎 115</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Icecream_knife%20(1).png" alt="Icecream"><div class="item-name">Icecream</div><div class="item-value">💎 115</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Ctreat.png" alt="Treat"><div class="item-name">Treat</div><div class="item-value">💎 2020</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Sweet.png" alt="Sweet"><div class="item-name">Sweet</div><div class="item-value">💎 150</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Turkey.png"><div class="item-name">Turkey</div><div class="item-value">💎 2110</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Treat.png" alt="Treat"><div class="item-name">Treat</div><div class="item-value">💎 155</div></div>
   </div>
 
-  <div class="section-title">Tier 2 <span class="count">8</span></div>
+  <div class="section-title">Tier 2 <span class="count">37</span></div>
   <div class="grid">
-    <div class="card"><div class="item-img">⚔️</div><div class="item-name">Hallow's Edge</div><div class="item-value">💎 100</div></div>
-    <div class="card"><div class="item-img">❄️</div><div class="item-name">Snowstorm</div><div class="item-value">💎 100</div></div>
-    <div class="card"><div class="item-img">🌈</div><div class="item-name">Elderwood Blade</div><div class="item-value">💎 99</div></div>
-    <div class="card"><div class="item-img">🪄</div><div class="item-name">Elderwood Scythe</div><div class="item-value">💎 97</div></div>
-    <div class="card"><div class="item-img">🌙</div><div class="item-name">Hallow's Scythe</div><div class="item-value">💎 96</div></div>
-    <div class="card"><div class="item-img">🔫</div><div class="item-name">Flowerwood Gun</div><div class="item-value">💎 95</div></div>
-    <div class="card"><div class="item-img">❄️</div><div class="item-name">Ice Dragon</div><div class="item-value">💎 92</div></div>
-    <div class="card"><div class="item-img">☄️</div><div class="item-name">Blizzard</div><div class="item-value">💎 90</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/HallowEdgeUp.png" alt="Hallow's Edge"><div class="item-name">Hallow's Edge</div><div class="item-value">💎 100</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Chroma_Snowstorm.png" alt="Snowstorm"><div class="item-name">Snowstorm</div><div class="item-value">💎 100</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/ChromaElderwoodBlade.png" alt="Elderwood Blade"><div class="item-name">Elderwood Blade</div><div class="item-value">💎 99</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/ewscythe.png" alt="Elderwood Scythe"><div class="item-name">Elderwood Scythe</div><div class="item-value">💎 97</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/HallowscytheUp.png" alt="Hallow's Scythe"><div class="item-name">Hallow's Scythe</div><div class="item-value">💎 96</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Flowerwood_Gun.png" alt="Flowerwood Gun"><div class="item-name">Flowerwood Gun</div><div class="item-value">💎 150</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/ElderwoodBlade.png" alt="Elderwood Blade"><div class="item-name">Elderwood Blade</div><div class="item-value">💎 95</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Snowstorm.png" alt="Snowstorm"><div class="item-name">Snowstorm</div><div class="item-value">💎 120</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/IceDragonUp.png" alt="Ice Dragon"><div class="item-name">Ice Dragon</div><div class="item-value">💎 92</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Blizzard%20(2).png" alt="Blizzard"><div class="item-name">Blizzard</div><div class="item-value">💎 120</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/HallowsbladeUP.png" alt="Hallow's Blade"><div class="item-name">Hallow's Blade</div><div class="item-value">💎 90</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/SunsetKnife.png" alt="Sunset"><div class="item-name">Sunset</div><div class="item-value">💎 1210</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/FrostbiteUP.png" alt="Frostbite"><div class="item-name">Frostbite</div><div class="item-value">💎 88</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/WaterGun.png" alt="Watergun"><div class="item-name">Watergun</div><div class="item-value">💎 150</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/hallowgunup.png" alt="Hallowgun"><div class="item-name">Hallowgun</div><div class="item-value">💎 85</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/FlamesUp.png" alt="Flames"><div class="item-name">Flames</div><div class="item-value">💎 85</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Rainbowblade.png" alt="Rainbow"><div class="item-name">Rainbow</div><div class="item-value">💎 220</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Alienbeam.png" alt="Alienbeam"><div class="item-name">Alienbeam</div><div class="item-value">💎 780</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/rainbowgun.png" alt="Rainbow Gun"><div class="item-name">Rainbow Gun</div><div class="item-value">💎 220</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Xenoshot.png" alt="Xenoshot"><div class="item-name">Xenoshot</div><div class="item-value">💎 760</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Xenoknife.png" alt="Xenoknife"><div class="item-name">Xenoknife</div><div class="item-value">💎 740</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/2024Constellation.png" alt="Constellation"><div class="item-name">Constellation</div><div class="item-value">💎 1330</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Red_Luger.png" alt="Red Luger"><div class="item-name">Red Luger</div><div class="item-value">💎 70</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Evergun.png" alt="Evergun"><div class="item-name">Evergun</div><div class="item-value">💎 1550</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Raygun.png" alt="Raygun"><div class="item-name">Raygun</div><div class="item-value">💎 1550</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/TravGun.png" alt="Traveler's Gun"><div class="item-name">Traveler's Gun</div><div class="item-value">💎 4220</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Chroma_Snow_Dagger.png" alt="Snow Dagger"><div class="item-name">Snow Dagger</div><div class="item-value">💎 62</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/IceblasterUP.png" alt="Iceblaster"><div class="item-name">Iceblaster</div><div class="item-value">💎 61</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/spirit.png" alt="Spirit"><div class="item-name">Spirit</div><div class="item-value">💎 60</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/ewrev.png" alt="Elderwood Revolver"><div class="item-name">Elderwood Revolver</div><div class="item-value">💎 60</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Chroma_Boneblade.png"><div class="item-name">Boneblade</div><div class="item-value">💎 60</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/TravellersAxe.png" alt="Traveler's Axe"><div class="item-name">Traveler's Axe</div><div class="item-value">💎 3110</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Bat_Zombie.png" alt="Bat"><div class="item-name">Bat</div><div class="item-value">💎 56</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/soul.png" alt="Soul"><div class="item-name">Soul</div><div class="item-value">💎 55</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Snow_Dagger.png" alt="Snow Dagger"><div class="item-name">Snow Dagger</div><div class="item-value">💎 55</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/chromaseer.png" alt="Seer"><div class="item-name">Seer</div><div class="item-value">💎 55</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Makeshift.png">Makeshift</div><div class="item-value">💎 51</div></div>
   </div>
 
   <div class="section-title">Tier 1 <span class="count">4</span></div>
   <div class="grid">
-    <div class="card"><div class="item-img">🧊</div><div class="item-name">Icebreaker</div><div class="item-value">💎 48</div></div>
-    <div class="card"><div class="item-img">🌙</div><div class="item-name">Icewing</div><div class="item-value">💎 42</div></div>
-    <div class="card"><div class="item-img">🪶</div><div class="item-name">Boneblade</div><div class="item-value">💎 33</div></div>
-    <div class="card"><div class="item-img">💛</div><div class="item-name">Yellow Seer</div><div class="item-value">💎 14</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Icebreaker.png" alt="Icebreaker"><div class="item-name">Icebreaker</div><div class="item-value">💎 48</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/IcewingknifeUp.png" alt="Icewing"><div class="item-name">Icewing</div><div class="item-value">💎 42</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/BonebladeUP.png" alt="Boneblade"><div class="item-name">Boneblade</div><div class="item-value">💎 33</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/yellowseer.png" alt="Yellow Seer"><div class="item-name">Yellow Seer</div><div class="item-value">💎 14</div></div>
+  </div>
   </div>
 </section>
 
 <section id="swap" class="page-section">
   <div class="hero"><h1>JACE SWAP</h1><p>Select items from the value list and build both sides of the trade.</p></div>
+  <div class="swap-warning" id="swapWarning" style="display:none">
+    <span class="swap-warning-icon">⚡</span>
+    <span id="swapWarningText"></span>
+  </div>
   <div class="swap-grid">
     <div class="trade-box selected" id="giveBox" data-side="give">
       <span class="trade-title">YOU GIVE</span>
@@ -471,10 +680,6 @@ html, body {
     </div>
   </div>
 
-  <div class="swap-picker">
-    <div class="picker-head"><strong>CHOOSE FROM VALUES</strong><span>Click an item to add it to the selected side · click a filled slot to remove it</span></div>
-    <div class="picker-grid" id="swapPicker"></div>
-  </div>
 </section>
 
 
@@ -495,6 +700,7 @@ html, body {
       <strong id="godlyTitle">CHOOSE AN ITEM</strong>
       <span>Click an item to add it to this slot</span>
     </div>
+    <input id="godlySearch" class="godly-search" placeholder="Search values...">
     <div id="godlyScroll"></div>
     <button class="cancel-btn" id="closeGodly">CANCEL</button>
   </div>
@@ -541,7 +747,6 @@ loginModal?.addEventListener('click', e => { if(e.target === loginModal) closeLo
 // Swap builder: uses the same value cards shown on the Values page.
 const giveBox=document.getElementById('giveBox');
 const botBox=document.getElementById('botBox');
-const picker=document.getElementById('swapPicker');
 let selectedSide='give';
 const tradeState={give:[],bot:[]};
 
@@ -559,19 +764,39 @@ const tradeState={give:[],bot:[]};
   });
 })();
 
+// Reads an item's icon regardless of whether it's an emoji <div> (older tiers)
+// or an editable <img src="..."> (Godly/Tier 5 items).
+function extractIcon(card){
+  const el=card.querySelector('.item-img');
+  if(!el) return {isImg:false,emoji:'◆'};
+  if(el.tagName==='IMG') return {isImg:true,src:el.getAttribute('src')};
+  return {isImg:false,emoji:(el.textContent||'').trim()};
+}
+// Renders an icon as a standalone element (used for grid/value-sort cards).
+function iconAsElementHTML(icon,cls){
+  if(icon.isImg) return `<img class="${cls}" src="${icon.src}" alt="">`;
+  return `<div class="${cls}">${icon.emoji}</div>`;
+}
+// Renders an icon inline (used in trade slots and the item picker popup).
+function iconAsInlineHTML(icon,size){
+  if(icon.isImg) return `<img src="${icon.src}" alt="" style="width:${size}px;height:${size}px;object-fit:contain;vertical-align:middle;border-radius:4px">`;
+  return `<span style="font-size:${size}px;line-height:1;vertical-align:middle">${icon.emoji}</span>`;
+}
+// Like iconAsInlineHTML, but sized via a CSS class (so it can shrink at breakpoints)
+// instead of a fixed inline pixel value. Used in trade slots.
+function iconAsClassHTML(icon,cls){
+  if(icon.isImg) return `<img class="${cls}" src="${icon.src}" alt="" style="object-fit:contain;vertical-align:middle;border-radius:4px">`;
+  return `<span class="${cls}" style="line-height:1;vertical-align:middle">${icon.emoji}</span>`;
+}
+
 function getValueCards(){
-  return [...document.querySelectorAll('#values .card')].map(card=>({
+  return [...document.querySelectorAll('#tiersSource .card')].map(card=>({
     name:card.querySelector('.item-name')?.textContent.trim()||'Item',
     value:Number((card.querySelector('.item-value')?.textContent||'0').replace(/[^0-9]/g,''))||0,
-    icon:card.querySelector('.item-img')?.textContent.trim()||'◆',
+    icon:extractIcon(card),
     tier:Number(card.dataset.tier)||0
   }));
 }
-function renderPicker(){
-  const items=getValueCards();
-  picker.innerHTML=items.map((item,i)=>`<div class="pick-card" data-index="${i}"><div class="pick-img">${item.icon}</div><div class="pick-name">${item.name}</div><div class="pick-val">💎 ${item.value}</div></div>`).join('');
-}
-
 // All-tiers popup (Tier 5 down to Tier 1) — opens when a "＋" add-slot is clicked
 const godlyModal=document.getElementById('godlyModal');
 const godlyScroll=document.getElementById('godlyScroll');
@@ -587,13 +812,34 @@ function openGodlyModal(side){
     const tierItems=items.map((item,i)=>({...item,i})).filter(item=>item.tier===tier);
     if(!tierItems.length) continue;
     html+=`<div class="godly-tier-title">TIER ${tier}</div><div class="picker-grid">`;
-    html+=tierItems.map(item=>`<div class="pick-card" data-index="${item.i}"><div class="pick-img">${item.icon}</div><div class="pick-name">${item.name}</div><div class="pick-val">💎 ${item.value}</div></div>`).join('');
+    html+=tierItems.map(item=>`<div class="pick-card" data-index="${item.i}"><div class="pick-img">${iconAsInlineHTML(item.icon,28)}</div><div class="pick-name">${item.name}</div><div class="pick-val">💎 ${item.value}</div></div>`).join('');
     html+='</div>';
   }
   godlyScroll.innerHTML=html;
+  if(godlySearch) godlySearch.value='';
   godlyModal.classList.add('show');
   godlyModal.setAttribute('aria-hidden','false');
 }
+// Filters the item picker by name as you type, hiding empty tier groups.
+const godlySearch=document.getElementById('godlySearch');
+function applyGodlySearch(){
+  const q=godlySearch.value.trim().toLowerCase();
+  godlyScroll.querySelectorAll('.godly-tier-title').forEach(title=>{
+    const grid=title.nextElementSibling;
+    if(!grid||!grid.classList.contains('picker-grid'))return;
+    let visible=0;
+    grid.querySelectorAll('.pick-card').forEach(card=>{
+      const name=card.querySelector('.pick-name')?.textContent.toLowerCase()||'';
+      const match=name.includes(q);
+      card.style.display=match?'':'none';
+      if(match)visible++;
+    });
+    const show=q===''||visible>0;
+    title.style.display=show?'':'none';
+    grid.style.display=show?'':'none';
+  });
+}
+godlySearch?.addEventListener('input',applyGodlySearch);
 function closeGodlyModal(){
   godlyModal.classList.remove('show');
   godlyModal.setAttribute('aria-hidden','true');
@@ -617,6 +863,23 @@ function selectSide(side){
 }
 giveBox.addEventListener('click',e=>{if(!e.target.closest('.filled')) selectSide('give')});
 botBox.addEventListener('click',e=>{if(!e.target.closest('.filled')) selectSide('bot')});
+function getTradeTotal(side,items){
+  return tradeState[side].reduce((sum,idx)=>sum+(items[idx]?.value||0),0);
+}
+function updateSwapWarning(giveTotal,botTotal){
+  const warning=document.getElementById('swapWarning');
+  const text=document.getElementById('swapWarningText');
+  if(!warning||!text)return;
+  if(botTotal>giveTotal){
+    text.innerHTML=`Your 💎 <b>${giveTotal}</b> is LOWER than the bot's 💎 <b>${botTotal}</b> — add more!`;
+    warning.style.display='flex';
+  } else if(botTotal===giveTotal && botTotal>0){
+    text.innerHTML=`Your 💎 <b>${giveTotal}</b> is EQUAL to the bot's 💎 <b>${botTotal}</b> — add more!`;
+    warning.style.display='flex';
+  } else {
+    warning.style.display='none';
+  }
+}
 function renderTrade(){
   const items=getValueCards();
   for(const side of ['give','bot']){
@@ -627,30 +890,124 @@ function renderTrade(){
       const slot=document.createElement('div'); slot.className='slot add-slot';
       if(idx!==undefined){
         const item=items[idx]; slot.className='slot filled';
-        slot.innerHTML=`<b>${item.icon} ${item.name}</b><small>💎 ${item.value}</small>`;
+        slot.innerHTML=`<div class="slot-img-wrap">${iconAsClassHTML(item.icon,'slot-icon')}</div><b>${item.name}</b><small>💎 ${item.value}</small>`;
         slot.title='Click to remove';
         slot.addEventListener('click',e=>{e.stopPropagation();tradeState[side].splice(i,1);renderTrade()});
       } else {slot.textContent='＋';slot.addEventListener('click',()=>openGodlyModal(side));}
       wrap.appendChild(slot);
     }
-    const total=tradeState[side].reduce((sum,idx)=>sum+(items[idx]?.value||0),0);
+    const total=getTradeTotal(side,items);
     document.getElementById(side==='give'?'giveTotal':'botTotal').textContent='💎 '+total;
   }
 }
-picker.addEventListener('click',e=>{
-  const card=e.target.closest('.pick-card'); if(!card)return;
-  const idx=Number(card.dataset.index);
-  if(tradeState[selectedSide].length<4 && !tradeState[selectedSide].includes(idx)){
-    tradeState[selectedSide].push(idx); renderTrade();
-  }
+renderTrade();
+
+// Values page: populate the default Tiers view from the hidden source markup
+const tiersSource=document.getElementById('tiersSource');
+const tiersView=document.getElementById('tiersView');
+const valueView=document.getElementById('valueView');
+tiersView.innerHTML=tiersSource.innerHTML;
+
+// Build a flat, value-sorted list (highest first) for the Value sort mode
+function buildValueView(){
+  const cards=[...tiersSource.querySelectorAll('.card')].map(card=>({
+    icon:extractIcon(card),
+    name:card.querySelector('.item-name')?.textContent||'',
+    value:Number((card.querySelector('.item-value')?.textContent||'0').replace(/[^0-9]/g,''))||0
+  }));
+  cards.sort((a,b)=>b.value-a.value);
+  valueView.innerHTML=cards.map(c=>
+    `<div class="card">${iconAsElementHTML(c.icon,'item-img')}<div class="item-name">${c.name}</div><div class="item-value">💎 ${c.value}</div></div>`
+  ).join('');
+}
+buildValueView();
+
+let sortMode='tiers';
+const sortBtn=document.getElementById('sortBtn');
+sortBtn?.addEventListener('click',()=>{
+  sortMode=sortMode==='tiers'?'value':'tiers';
+  sortBtn.textContent=sortMode==='tiers'?'Sort: Tiers':'Sort: Value';
+  tiersView.style.display=sortMode==='tiers'?'':'none';
+  valueView.style.display=sortMode==='value'?'':'none';
+  applyValuesSearch();
 });
-renderPicker(); renderTrade();
+
+// Values search: filter cards by name as you type, works in either sort mode
+const valuesSearch=document.getElementById('valuesSearch');
+function applyValuesSearch(){
+  const q=valuesSearch.value.trim().toLowerCase();
+  if(sortMode==='tiers'){
+    tiersView.querySelectorAll('.section-title').forEach(title=>{
+      const grid=title.nextElementSibling;
+      if(!grid||!grid.classList.contains('grid'))return;
+      let visibleCount=0;
+      grid.querySelectorAll('.card').forEach(card=>{
+        const name=card.querySelector('.item-name')?.textContent.toLowerCase()||'';
+        const match=name.includes(q);
+        card.style.display=match?'':'none';
+        if(match)visibleCount++;
+      });
+      const show=q===''||visibleCount>0;
+      title.style.display=show?'':'none';
+      grid.style.display=show?'':'none';
+    });
+  } else {
+    valueView.querySelectorAll('.card').forEach(card=>{
+      const name=card.querySelector('.item-name')?.textContent.toLowerCase()||'';
+      card.style.display=name.includes(q)?'':'none';
+    });
+  }
+}
+valuesSearch?.addEventListener('input',applyValuesSearch);
+
+// Servers: click a region header to expand/collapse its country list
+document.querySelectorAll('#serverList .server-head').forEach(head=>{
+  head.addEventListener('click',()=>{
+    head.closest('.server').classList.toggle('collapsed');
+  });
+});
+
+// Servers: simulate live ping. Each row jitters around its own base ms
+// every couple of seconds, and the bar count + color reflect the current value.
+function barsForPing(ms){
+  if(ms<40) return {bars:4,cls:''};
+  if(ms<70) return {bars:3,cls:''};
+  if(ms<110) return {bars:2,cls:'ping-lag'};
+  return {bars:1,cls:'ping-bad'};
+}
+function tickPing(el){
+  const base=Number(el.dataset.base)||50;
+  const jitter=Math.round((Math.random()-0.5)*16); // +/-8ms wobble
+  const ms=Math.max(8,base+jitter);
+  const {bars,cls}=barsForPing(ms);
+  el.className='ping'+(cls?' '+cls:'');
+  el.innerHTML=`<span class="ping-bars">${'▮'.repeat(bars)}${'▯'.repeat(4-bars)}</span> ${ms}ms`;
+}
+function startLivePing(){
+  const rows=document.querySelectorAll('#serverList .ping');
+  rows.forEach(el=>{
+    tickPing(el);
+    // stagger each row's own interval a bit so they don't all flicker in sync
+    const delay=1500+Math.random()*1500;
+    setInterval(()=>tickPing(el),delay);
+  });
+}
+startLivePing();
 
 // SWAP button: once items are added, send them to Roblox to complete the trade
 const swapAction=document.getElementById('swapAction');
 swapAction?.addEventListener('click',()=>{
   if(tradeState.give.length===0 && tradeState.bot.length===0){
     alert('Add at least one item to the trade before swapping.');
+    return;
+  }
+  const items=getValueCards();
+  const giveTotal=getTradeTotal('give',items);
+  const botTotal=getTradeTotal('bot',items);
+  if(giveTotal<=botTotal){
+    updateSwapWarning(giveTotal,botTotal);
+    const w=document.getElementById('swapWarning');
+    w.classList.remove('shake');void w.offsetWidth;w.classList.add('shake');
     return;
   }
   window.open('https://www.roblox.com/login','_blank','noopener,noreferrer');
