@@ -1050,6 +1050,30 @@ showPage('values');
 </body>
 </html>
 
+<!-- ================= SWAP ================= -->
+<section id="swap">
+  <div class="swap-box">
+    <h2>Jace Swap</h2>
+    <div class="sub">Your value must be equal or greater than bot's value</div>
+    <div class="swap-cols">
+      <div class="swap-col">
+        <h4>YOU GIVE</h4>
+        <div class="gem">💎 0</div>
+        <div class="plus">++++</div>
+      </div>
+      <div class="swap-arrow">⇄</div>
+      <div class="swap-col">
+        <h4>BOT GIVE</h4>
+        <div class="gem">💎 0</div>
+        <div class="plus">▲▼</div>
+      </div>
+    </div>
+    <div style="margin-top:26px;">
+      <button class="btn-primary" onclick="openTicketFlow()">SWAP IT</button>
+    </div>
+  </div>
+</section>
+
 <!-- ================= MODALS ================= -->
 
 <!-- Searching server -->
@@ -1094,5 +1118,51 @@ showPage('values');
       <img src="https://jacevalues.com/images/headshot.png" style="width:36px; height:36px; border-radius:50%;" alt="">
       <button class="btn-primary" onclick="closeOverlay('ovJoinBot'); openOverlay('ovConfirm');">Join</button>
     </div>
+  </div>
+</div>
+
+<!-- Confirm your Roblox account -->
+<div class="overlay" id="ovConfirm">
+  <div class="modal">
+    <button class="close" onclick="closeOverlay('ovConfirm')">✕</button>
+    <h3>Confirm your Roblox account</h3>
+    <p>Type your Roblox username so the bot can find you and complete the swap.</p>
+    <div class="err" id="confirmErr">Username not found. Check spelling and try again.</div>
+    <input class="rolox" type="text" id="roloxInput" placeholder="Roblox username" autocomplete="off">
+    <button class="btn-primary" id="searchBtn" onclick="searchRoblox()">SEARCH</button>
+  </div>
+</div>
+
+<!-- Looking up account -->
+<div class="overlay" id="ovLooking">
+  <div class="modal">
+    <div class="spinner"></div>
+    <p class="searching">Looking up your account...</p>
+  </div>
+</div>
+
+<!-- Is this you? -->
+<div class="overlay" id="ovIsYou">
+  <div class="modal confirm-user">
+    <button class="close" onclick="closeOverlay('ovIsYou'); openOverlay('ovConfirm');">✕</button>
+    <h3>Is this you?</h3>
+    <img id="userHeadshot" src="" alt="">
+    <div class="uname" id="userName"></div>
+    <div class="udisp" id="userDisp"></div>
+    <div class="btn-row">
+      <button class="btn-primary" id="yesBtn">YES, THAT'S ME</button>
+      <button class="btn-ghost" onclick="closeOverlay('ovIsYou'); openOverlay('ovConfirm');">NO, RETRY</button>
+    </div>
+  </div>
+</div>
+
+<!-- Swap it (final) -->
+<div class="overlay" id="ovSwapIt">
+  <div class="modal">
+    <button class="close" onclick="closeOverlay('ovSwapIt')">✕</button>
+    <img class="check" src="https://jacevalues.com/images/checkmark_white.png" alt="">
+    <h3>SWAP IT</h3>
+    <p id="swapSummary"></p>
+    <button class="btn-primary" onclick="closeOverlay('ovSwapIt'); openOverlay('ovRate');">CONTINUE</button>
   </div>
 </div>
